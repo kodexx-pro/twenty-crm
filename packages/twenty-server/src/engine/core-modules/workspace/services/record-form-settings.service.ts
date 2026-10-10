@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import {
@@ -42,6 +42,7 @@ export class RecordFormSettingsService {
       presentation:
         settings?.presentation ??
         (objectMetadataId ? null : RecordFormPresentation.SIDE_PANEL),
+      steps: settings?.steps ?? null,
     };
   }
 
@@ -49,7 +50,28 @@ export class RecordFormSettingsService {
     workspaceId: string,
     input: UpdateRecordFormSettingsInput,
   ): Promise<RecordFormSettingsDTO> {
-    const settings = { presentation: input.presentation ?? null };
+    if (!input.objectMetadataId && input.steps?.length) {
+      throw new BadRequestException(
+        'Field groups must be configured for an object',
+      );
+    }
+    const fieldMetadataIds = (input.steps ?? []).flatMap(
+      (step) => step.fieldMetadataIds,
+    );
+    if (new Set(fieldMetadataIds).size !== fieldMetadataIds.length) {
+      throw new BadRequestException('A field can only belong to one step');
+    }
+    const previousSettings = await this.find(
+      workspaceId,
+      input.objectMetadataId,
+    );
+    const settings = {
+      presentation:
+        input.presentation === undefined
+          ? previousSettings.presentation
+          : input.presentation,
+      steps: input.steps === undefined ? previousSettings.steps : input.steps,
+    };
     await this.repository.upsert(
       {
         workspaceId,
