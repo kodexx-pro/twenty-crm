@@ -1,4 +1,5 @@
 import { getToastOptionsFromError } from '@/error-handler/utils/getToastOptionsFromError';
+import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
 import { ObjectMetadataIcon } from '@/object-metadata/components/ObjectMetadataIcon';
 import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
 import { PageCardHeader } from '@/ui/layout/page/components/PageCardHeader';
@@ -40,7 +41,6 @@ import { LightButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconChevronUp, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
-import isEqual from 'lodash.isequal';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -261,7 +261,9 @@ const SidePanelRecordCreationForm = ({
               ? Object.fromEntries(
                   Object.entries(draftRecord).filter(
                     ([fieldName, value]) =>
-                      !isEqual(value, initialDraftRecord[fieldName]),
+                      !isDeeplyEqual(value, initialDraftRecord[fieldName], {
+                        strict: true,
+                      }),
                   ),
                 )
               : draftRecord,

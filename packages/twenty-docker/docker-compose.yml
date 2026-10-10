@@ -2,7 +2,7 @@ name: twenty
 
 services:
   server:
-    image: twentycrm/twenty:${TAG:-latest}
+    image: ${IMAGE_REPOSITORY:-ghcr.io/kodexx-pro/twenty-crm}:${TAG:-edge}
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
     ports:
@@ -63,7 +63,7 @@ services:
     restart: always
 
   worker:
-    image: twentycrm/twenty:${TAG:-latest}
+    image: ${IMAGE_REPOSITORY:-ghcr.io/kodexx-pro/twenty-crm}:${TAG:-edge}
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
     command: ["yarn", "worker:prod"]

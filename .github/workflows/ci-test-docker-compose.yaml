@@ -39,7 +39,10 @@ jobs:
       - name: Run compose
         run: |
           echo "Patching docker-compose.yml..."
-          yq eval 'del(.services.server.image)' -i docker-compose.yml
+          yq eval '.services.server.image = "twenty-fork-compose:test"' -i docker-compose.yml
+          yq eval '.services.worker.image = "twenty-fork-compose:test"' -i docker-compose.yml
+          yq eval '.services.server.pull_policy = "never"' -i docker-compose.yml
+          yq eval '.services.worker.pull_policy = "never"' -i docker-compose.yml
           yq eval '.services.server.build.context = "../../"' -i docker-compose.yml
           yq eval '.services.server.build.dockerfile = "./packages/twenty-docker/twenty/Dockerfile"' -i docker-compose.yml
           yq eval '.services.server.build.target = "twenty"' -i docker-compose.yml
@@ -53,8 +56,11 @@ jobs:
           echo "APP_SECRET=$(openssl rand -base64 32)" >>.env
           echo "PGPASSWORD_SUPERUSER=$(openssl rand -hex 16)" >>.env
 
+          echo "Building the shared server and worker image..."
+          docker compose build server
+
           echo "Docker compose up..."
-          docker compose up -d || {
+          docker compose up -d --no-build || {
               echo "Docker compose failed to start"
               docker compose logs
               exit 1
