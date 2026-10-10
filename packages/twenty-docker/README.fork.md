@@ -36,8 +36,8 @@ Both services default to the fork's `edge` image. To deploy a release, set
 tag for server and worker. `IMAGE_REPOSITORY` can select another registry image.
 
 Run `docker compose pull` and then `docker compose up -d` from this directory
-after publishing the selected image. The original Twenty deployment dispatch
-workflows are skipped on the fork.
+after publishing the selected image. Jobs that dispatch deployment, preview,
+review and translation work to Twenty-hosted repositories are skipped on the fork.
 
 The workflow's artifact check verifies the server entrypoint, worker entrypoint,
 frontend HTML and runtime user. It does not exercise database migrations or a
