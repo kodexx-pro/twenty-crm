@@ -26,6 +26,20 @@ import {
 } from '~/generated-metadata/graphql';
 
 const PAGE_ID = 'record-creation-form-settings-page';
+const mockSaveSettings = jest.fn();
+const mockEnqueueToast = jest.fn();
+jest.mock('twenty-ui/components/feedback', () => ({
+  ...jest.requireActual('twenty-ui/components/feedback'),
+  useToast: () => ({ enqueueToast: mockEnqueueToast }),
+}));
+jest.mock('@/object-record/record-form/hooks/useRecordFormSettings', () => ({
+  useRecordFormSettings: () => ({
+    objectSettings: { presentation: null },
+    workspaceSettings: { presentation: 'SIDE_PANEL' },
+    saveSettings: mockSaveSettings,
+    loading: false,
+  }),
+}));
 const CREATION_FORM_PAGE_ID = 'record-creation-form-page';
 const OBJECT_METADATA_ID = 'company-object';
 const PAGE_LAYOUT_ID = 'company-record-form';
@@ -238,6 +252,38 @@ describe('SidePanelRecordCreationFormSettingsPage', () => {
       { widgetId: 'widget-field-nickname', isActive: true },
     ]);
     expect(getNavigationStackPageIds()).toEqual([CREATION_FORM_PAGE_ID]);
+  });
+
+  it('saves an object presentation override', async () => {
+    renderPage();
+    await userEvent.click(screen.getByText('Use workspace default'));
+    await userEvent.click(screen.getByText('Centered dialog'));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(mockSaveSettings).toHaveBeenCalledWith({ presentation: 'DIALOG' });
+  });
+
+  it('saves the workspace default separately from the object override', async () => {
+    renderPage();
+    await userEvent.click(screen.getByText('Side panel'));
+    await userEvent.click(screen.getByText('Centered dialog'));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(mockSaveSettings).toHaveBeenCalledWith(
+      { presentation: 'DIALOG' },
+      true,
+    );
+  });
+
+  it('keeps settings open and shows a notification when saving presentation fails', async () => {
+    mockSaveSettings.mockRejectedValueOnce(new Error('Save failed'));
+    renderPage();
+    await userEvent.click(screen.getByText('Use workspace default'));
+    await userEvent.click(screen.getByText('Centered dialog'));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(mockEnqueueToast).toHaveBeenCalledWith(
+      expect.objectContaining({ variant: 'error' }),
+    );
+    expect(removePageFromSidePanelHistory).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
   });
 
   it('discards the changes on cancel', async () => {

@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
+import { KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
+import { RecordFormSettingsResolver } from 'src/engine/core-modules/workspace/record-form-settings.resolver';
+import { RecordFormSettingsService } from 'src/engine/core-modules/workspace/services/record-form-settings.service';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { ApplicationManifestModule } from 'src/engine/core-modules/application/application-manifest/application-manifest.module';
 import { PreInstalledAppsModule } from 'src/engine/core-modules/application/pre-installed-apps/pre-installed-apps.module';
@@ -44,6 +47,7 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
   imports: [
     TypeORMModule,
     TypeOrmModule.forFeature([
+      KeyValuePairEntity,
       WorkspaceEntity,
       UserEntity,
       UserWorkspaceEntity,
@@ -78,6 +82,8 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
   ],
   exports: [WorkspaceService, CheckCustomDomainValidRecordsCronCommand],
   providers: [
+    RecordFormSettingsResolver,
+    RecordFormSettingsService,
     WorkspaceResolver,
     WorkspaceService,
     WorkspaceGaugeService,

@@ -6,6 +6,7 @@ export type RecordCreationFormRequest = {
   requestId: string;
   objectMetadataId: string;
   initialDraftRecord: Partial<ObjectRecord>;
+  mode?: 'create' | 'edit';
 };
 
 export const recordCreationFormRequestComponentState =

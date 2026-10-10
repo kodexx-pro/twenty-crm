@@ -40,11 +40,13 @@ import { LightButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconChevronUp, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import isEqual from 'lodash.isequal';
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
 `;
 
 const StyledValidationRuleError = styled.div`
@@ -79,7 +81,10 @@ const StyledHiddenFieldsToggle = styled.div`
   display: flex;
 `;
 
-export const SidePanelRecordCreationFormPage = () => {
+export const SidePanelRecordCreationFormPage = ({
+  onEditSettings,
+  onCancel,
+}: { onEditSettings?: () => void; onCancel?: () => void } = {}) => {
   const recordCreationFormRequest = useAtomComponentStateValue(
     recordCreationFormRequestComponentState,
   );
@@ -93,6 +98,9 @@ export const SidePanelRecordCreationFormPage = () => {
       requestId={recordCreationFormRequest.requestId}
       objectMetadataId={recordCreationFormRequest.objectMetadataId}
       initialDraftRecord={recordCreationFormRequest.initialDraftRecord}
+      mode={recordCreationFormRequest.mode ?? 'create'}
+      onEditSettings={onEditSettings}
+      onCancel={onCancel}
     />
   );
 };
@@ -101,10 +109,16 @@ const SidePanelRecordCreationForm = ({
   requestId,
   objectMetadataId,
   initialDraftRecord,
+  mode,
+  onEditSettings,
+  onCancel,
 }: {
   requestId: string;
   objectMetadataId: string;
   initialDraftRecord: Partial<ObjectRecord>;
+  mode: 'create' | 'edit';
+  onEditSettings?: () => void;
+  onCancel?: () => void;
 }) => {
   const { objectMetadataItem } = useObjectMetadataItemById({
     objectId: objectMetadataId,
@@ -242,9 +256,18 @@ const SidePanelRecordCreationForm = ({
       const { error } = await settleRecordCreationDraft({
         requestId,
         draftRecord: computeRecordFormCreateRecordInput({
-          draftRecord,
+          draftRecord:
+            mode === 'edit'
+              ? Object.fromEntries(
+                  Object.entries(draftRecord).filter(
+                    ([fieldName, value]) =>
+                      !isEqual(value, initialDraftRecord[fieldName]),
+                  ),
+                )
+              : draftRecord,
           fieldMetadataItems: objectMetadataItem.fields,
           objectMetadataItems,
+          isForUpdate: mode === 'edit',
         }),
       });
 
@@ -288,7 +311,11 @@ const SidePanelRecordCreationForm = ({
                 stroke={theme.icon.stroke.sm}
               />
             }
-            title={t`Create ${objectMetadataItem.labelSingular}`}
+            title={
+              mode === 'edit'
+                ? t`Edit ${objectMetadataItem.labelSingular}`
+                : t`Create ${objectMetadataItem.labelSingular}`
+            }
           />
         }
       />
@@ -343,15 +370,27 @@ const SidePanelRecordCreationForm = ({
       )}
       <SidePanelFooter
         actions={[
+          ...(onCancel
+            ? [
+                <Button
+                  key="cancel"
+                  size="sm"
+                  disabled={isSubmitting}
+                  onClick={onCancel}
+                >{t`Cancel`}</Button>,
+              ]
+            : []),
           ...(hasLayoutsPermission
             ? [
                 <Button
                   key="edit-form"
                   size="sm"
                   onClick={() =>
-                    openRecordCreationFormSettingsInSidePanel(
-                      objectMetadataItem,
-                    )
+                    onEditSettings
+                      ? onEditSettings()
+                      : openRecordCreationFormSettingsInSidePanel(
+                          objectMetadataItem,
+                        )
                   }
                 >{t`Edit`}</Button>,
               ]
@@ -366,7 +405,9 @@ const SidePanelRecordCreationForm = ({
             data-testid="record-creation-form-create-button"
             variant="solid"
             color="accent"
-          >{t`Create`}</Button>,
+          >
+            {mode === 'edit' ? t`Save` : t`Create`}
+          </Button>,
         ]}
       />
     </StyledContainer>

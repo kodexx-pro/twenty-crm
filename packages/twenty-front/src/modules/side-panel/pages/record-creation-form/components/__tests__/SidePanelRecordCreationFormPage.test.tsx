@@ -291,6 +291,34 @@ describe('SidePanelRecordCreationFormPage', () => {
     expect(screen.queryByLabelText('Nickname')).not.toBeInTheDocument();
   });
 
+  it('edits existing values and submits only the changed fields', async () => {
+    jotaiStore.set(
+      recordCreationFormRequestComponentState.atomFamily({
+        instanceId: REQUEST_ID,
+      }),
+      {
+        requestId: REQUEST_ID,
+        objectMetadataId: OBJECT_METADATA_ID,
+        initialDraftRecord: {
+          id: 'existing-company',
+          name: 'Apple',
+          domain: 'apple.com',
+        },
+        mode: 'edit',
+      },
+    );
+    renderPage();
+    expect(screen.getByLabelText('Name')).toHaveValue('Apple');
+    expect(screen.getByLabelText('Domain')).toHaveValue('apple.com');
+    await userEvent.clear(screen.getByLabelText('Name'));
+    await userEvent.type(screen.getByLabelText('Name'), 'Acme');
+    await userEvent.click(screen.getByRole('button', { name: /Save/ }));
+    expect(settleRecordCreationDraft).toHaveBeenCalledWith({
+      requestId: REQUEST_ID,
+      draftRecord: { name: 'Acme' },
+    });
+  });
+
   it('reveals the hidden fields the user can update on demand', async () => {
     const user = userEvent.setup();
 
