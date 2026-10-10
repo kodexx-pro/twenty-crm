@@ -4,6 +4,7 @@ import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { useCallback } from 'react';
 import { FeatureFlagKey } from '~/generated-metadata/graphql';
+import { useRecordFormSettings } from '@/object-record/record-form/hooks/useRecordFormSettings';
 
 export const useRecordCreationForm = ({
   objectMetadataItem,
@@ -16,9 +17,13 @@ export const useRecordCreationForm = ({
   const isRecordCreationFormEnabled = useIsFeatureEnabled(
     FeatureFlagKey.IS_RECORD_CREATION_FORM_ENABLED,
   );
+  const { loadSettings } = useRecordFormSettings(
+    objectMetadataItem.id,
+    !isRecordCreationFormEnabled,
+  );
 
   const requestRecordCreation = useCallback(
-    ({
+    async ({
       initialDraftRecord,
       createRecord,
     }: {
@@ -26,13 +31,19 @@ export const useRecordCreationForm = ({
       createRecord: (
         draftRecord: Partial<ObjectRecord>,
       ) => Promise<ObjectRecord>;
-    }) =>
-      requestRecordCreationInContext({
+    }) => {
+      const settings = await loadSettings();
+      return requestRecordCreationInContext({
         objectMetadataItem,
         initialDraftRecord,
         createRecord,
-      }),
-    [requestRecordCreationInContext, objectMetadataItem],
+        presentation:
+          settings?.object.presentation ??
+          settings?.workspace.presentation ??
+          'SIDE_PANEL',
+      });
+    },
+    [requestRecordCreationInContext, objectMetadataItem, loadSettings],
   );
 
   return { isRecordCreationFormEnabled, requestRecordCreation };

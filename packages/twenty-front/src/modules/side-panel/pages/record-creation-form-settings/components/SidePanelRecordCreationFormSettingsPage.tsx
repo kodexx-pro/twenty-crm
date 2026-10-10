@@ -22,6 +22,10 @@ import { MenuItem } from 'twenty-ui/components/navigation';
 import { IconEye, IconEyeOff, useIcons } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
+import { Select } from '@/ui/input/components/Select';
+import { useRecordFormSettings } from '@/object-record/record-form/hooks/useRecordFormSettings';
+import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
+import { useToast } from 'twenty-ui/components/feedback';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -54,12 +58,22 @@ export const SidePanelRecordCreationFormSettingsPage = () => {
   );
 };
 
-const SidePanelRecordCreationFormSettings = ({
+export const SidePanelRecordCreationFormSettings = ({
   objectMetadataId,
+  onClose,
 }: {
   objectMetadataId: string;
+  onClose?: () => void;
 }) => {
   const { t } = useLingui();
+  const { enqueueToast } = useToast();
+  const { objectSettings, workspaceSettings, saveSettings, loading, error } =
+    useRecordFormSettings(objectMetadataId);
+  const [presentationDraft, setPresentationDraft] = useState<
+    RecordFormPresentation | 'INHERIT'
+  >();
+  const [workspacePresentationDraft, setWorkspacePresentationDraft] =
+    useState<RecordFormPresentation>();
   const { getIcon } = useIcons();
   const { objectMetadataItem } = useObjectMetadataItemById({
     objectId: objectMetadataId,
@@ -111,20 +125,69 @@ const SidePanelRecordCreationFormSettings = ({
 
     setIsSaving(true);
 
-    const { status } = await updatePageLayoutWidgetsIsActive(
-      pageLayoutWidgetIsActiveUpdates,
-    );
+    try {
+      if (presentationDraft !== undefined)
+        await saveSettings({
+          presentation:
+            presentationDraft === 'INHERIT' ? null : presentationDraft,
+        });
+      if (workspacePresentationDraft !== undefined)
+        await saveSettings({ presentation: workspacePresentationDraft }, true);
+      const { status } = await updatePageLayoutWidgetsIsActive(
+        pageLayoutWidgetIsActiveUpdates,
+      );
 
-    setIsSaving(false);
-
-    if (status === 'successful') {
-      removePageFromSidePanelHistory(sidePanelPageId);
+      if (status === 'successful') {
+        if (onClose) onClose();
+        else removePageFromSidePanelHistory(sidePanelPageId);
+      }
+    } catch {
+      enqueueToast({
+        variant: 'error',
+        children: t`Could not save form settings. Please try again.`,
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
 
   return (
     <StyledContainer>
       <StyledContent>
+        <SidePanelGroup heading={t`Presentation`}>
+          <Select
+            dropdownId={`record-form-presentation-${objectMetadataId}`}
+            label={t`This object`}
+            disabled={loading || isSaving || Boolean(error)}
+            value={
+              presentationDraft ?? objectSettings?.presentation ?? 'INHERIT'
+            }
+            onChange={setPresentationDraft}
+            options={[
+              { value: 'INHERIT' as const, label: t`Use workspace default` },
+              { value: 'SIDE_PANEL' as const, label: t`Side panel` },
+              { value: 'DIALOG' as const, label: t`Centered dialog` },
+            ]}
+            fullWidth
+          />
+          <Select
+            dropdownId={`record-form-workspace-presentation-${objectMetadataId}`}
+            label={t`Workspace default`}
+            disabled={loading || isSaving || Boolean(error)}
+            value={
+              workspacePresentationDraft ??
+              workspaceSettings?.presentation ??
+              'SIDE_PANEL'
+            }
+            onChange={setWorkspacePresentationDraft}
+            options={[
+              { value: 'SIDE_PANEL' as const, label: t`Side panel` },
+              { value: 'DIALOG' as const, label: t`Centered dialog` },
+            ]}
+            fullWidth
+          />
+          {error && <div role="alert">{t`Could not load form settings.`}</div>}
+        </SidePanelGroup>
         <SidePanelGroup heading={t`Fields`}>
           {configurableRecordFormFields.map((recordFormField) => {
             const { fieldMetadataItem } = recordFormField;
@@ -168,7 +231,7 @@ const SidePanelRecordCreationFormSettings = ({
           <Button
             key="cancel"
             size="sm"
-            onClick={goBackFromSidePanel}
+            onClick={onClose ?? goBackFromSidePanel}
           >{t`Cancel`}</Button>,
           <Button
             key="save"

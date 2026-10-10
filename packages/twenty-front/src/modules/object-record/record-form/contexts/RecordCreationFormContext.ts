@@ -1,11 +1,14 @@
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
+import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
 import { createRequiredContext } from '~/utils/createRequiredContext';
 
 export type RecordCreationFormContextValue = {
   requestRecordCreation: (params: {
     objectMetadataItem: EnrichedObjectMetadataItem;
     initialDraftRecord?: Partial<ObjectRecord>;
+    presentation?: RecordFormPresentation;
+    mode?: 'create' | 'edit';
     createRecord: (draftRecord: Partial<ObjectRecord>) => Promise<ObjectRecord>;
   }) => Promise<ObjectRecord | null>;
   settleRecordCreationDraft: (params: {

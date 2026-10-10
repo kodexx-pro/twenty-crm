@@ -72,4 +72,40 @@ describe('computeRecordFormCreateRecordInput', () => {
 
     expect(createRecordInput).toEqual({ name: 'Rex', position: 'first' });
   });
+
+  it('clears old polymorphic targets when used for an edit', () => {
+    const input = computeRecordFormCreateRecordInput({
+      draftRecord: { polymorphicOwner: null },
+      fieldMetadataItems: petObjectMetadataItem.fields,
+      objectMetadataItems,
+      isForUpdate: true,
+    });
+    expect(input).toEqual(
+      expect.objectContaining({
+        polymorphicOwnerRocketId: null,
+        polymorphicOwnerSurveyResultId: null,
+      }),
+    );
+    expect(input).not.toHaveProperty('polymorphicOwner');
+  });
+
+  it('sets the selected polymorphic target and clears other targets during an edit', () => {
+    const input = computeRecordFormCreateRecordInput({
+      draftRecord: {
+        polymorphicOwner: {
+          targetObjectMetadataId: rocketObjectMetadataId,
+          id: 'record-id',
+        },
+      },
+      fieldMetadataItems: petObjectMetadataItem.fields,
+      objectMetadataItems,
+      isForUpdate: true,
+    });
+    expect(input).toEqual(
+      expect.objectContaining({
+        polymorphicOwnerRocketId: 'record-id',
+        polymorphicOwnerSurveyResultId: null,
+      }),
+    );
+  });
 });

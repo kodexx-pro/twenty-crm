@@ -15,12 +15,16 @@ import { SidePanelPages } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { IconPlus } from 'twenty-ui/icon';
 import { v4 } from 'uuid';
+import { RecordFormDialog } from '@/object-record/record-form/components/RecordFormDialog';
+import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
+import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 
 type PendingRecordCreation = {
   requestId: string;
   createRecord: (draftRecord: Partial<ObjectRecord>) => Promise<ObjectRecord>;
   resolve: (createdRecord: ObjectRecord | null) => void;
   isSettling: boolean;
+  presentation: RecordFormPresentation;
 };
 
 type RecordCreationFormProviderProps = {
@@ -31,6 +35,7 @@ export const RecordCreationFormProvider = ({
   children,
 }: RecordCreationFormProviderProps) => {
   const store = useStore();
+  const { openDialog, closeDialog } = useDialog();
   const { removePageFromSidePanelHistory } = useSidePanelHistory();
   const { navigateSidePanelMenu } = useSidePanelMenu();
 
@@ -58,6 +63,8 @@ export const RecordCreationFormProvider = ({
       }
 
       if (draftRecord === null) {
+        if (pendingRecordCreation.isSettling) return {};
+        closeDialog(requestId);
         pendingRecordCreation.resolve(null);
 
         setPendingRecordCreations((previousPendingRecordCreations) =>
@@ -94,6 +101,7 @@ export const RecordCreationFormProvider = ({
       }
 
       removePageFromSidePanelHistory(requestId);
+      closeDialog(requestId);
 
       pendingRecordCreation.resolve(createdRecord);
 
@@ -105,7 +113,7 @@ export const RecordCreationFormProvider = ({
 
       return {};
     },
-    [pendingRecordCreations, removePageFromSidePanelHistory],
+    [pendingRecordCreations, removePageFromSidePanelHistory, closeDialog],
   );
 
   const requestRecordCreation = useCallback(
@@ -113,9 +121,13 @@ export const RecordCreationFormProvider = ({
       objectMetadataItem,
       initialDraftRecord,
       createRecord,
+      presentation = 'SIDE_PANEL',
+      mode = 'create',
     }: {
       objectMetadataItem: EnrichedObjectMetadataItem;
       initialDraftRecord?: Partial<ObjectRecord>;
+      presentation?: RecordFormPresentation;
+      mode?: 'create' | 'edit';
       createRecord: (
         draftRecord: Partial<ObjectRecord>,
       ) => Promise<ObjectRecord>;
@@ -130,6 +142,7 @@ export const RecordCreationFormProvider = ({
           requestId,
           objectMetadataId: objectMetadataItem.id,
           initialDraftRecord: initialDraftRecord ?? {},
+          mode,
         },
       );
 
@@ -141,18 +154,27 @@ export const RecordCreationFormProvider = ({
             createRecord,
             resolve,
             isSettling: false,
+            presentation,
           },
         ]);
 
+        if (presentation !== 'SIDE_PANEL') {
+          openDialog(requestId);
+          return;
+        }
+
         navigateSidePanelMenu({
           page: SidePanelPages.RecordCreationForm,
-          pageTitle: t`Create ${objectMetadataItem.labelSingular}`,
+          pageTitle:
+            mode === 'edit'
+              ? t`Edit ${objectMetadataItem.labelSingular}`
+              : t`Create ${objectMetadataItem.labelSingular}`,
           pageIcon: IconPlus,
           pageId: requestId,
         });
       });
     },
-    [navigateSidePanelMenu, store],
+    [navigateSidePanelMenu, store, openDialog],
   );
 
   const cancelPendingRecordCreation = useCallback(
@@ -170,13 +192,22 @@ export const RecordCreationFormProvider = ({
   return (
     <RecordCreationFormContextProvider value={contextValue}>
       {children}
-      {pendingRecordCreations.map(({ requestId }) => (
-        <RecordCreationFormCancellationEffect
-          key={requestId}
-          requestId={requestId}
-          onCancel={cancelPendingRecordCreation}
-        />
-      ))}
+      {pendingRecordCreations.map(({ requestId, presentation, isSettling }) =>
+        presentation === 'SIDE_PANEL' ? (
+          <RecordCreationFormCancellationEffect
+            key={requestId}
+            requestId={requestId}
+            onCancel={cancelPendingRecordCreation}
+          />
+        ) : (
+          <RecordFormDialog
+            key={requestId}
+            requestId={requestId}
+            isSubmitting={isSettling}
+            onCancel={() => cancelPendingRecordCreation({ requestId })}
+          />
+        ),
+      )}
     </RecordCreationFormContextProvider>
   );
 };

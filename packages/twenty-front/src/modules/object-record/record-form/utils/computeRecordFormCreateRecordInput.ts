@@ -26,13 +26,15 @@ export const computeRecordFormCreateRecordInput = ({
   draftRecord,
   fieldMetadataItems,
   objectMetadataItems,
+  isForUpdate = false,
 }: {
   draftRecord: Partial<ObjectRecord>;
   fieldMetadataItems: FieldMetadataItem[];
   objectMetadataItems: EnrichedObjectMetadataItem[];
+  isForUpdate?: boolean;
 }): Partial<ObjectRecord> => {
   const gqlFieldNamesToOmit = new Set<string>();
-  const morphJoinColumnValuesToSet: Record<string, string> = {};
+  const morphJoinColumnValuesToSet: Record<string, string | null> = {};
 
   for (const fieldMetadataItem of fieldMetadataItems) {
     if (fieldMetadataItem.type !== FieldMetadataType.MORPH_RELATION) {
@@ -72,7 +74,7 @@ export const computeRecordFormCreateRecordInput = ({
     )) {
       gqlFieldNamesToOmit.add(joinColumnName);
 
-      if (isDefined(joinColumnValue)) {
+      if (isDefined(joinColumnValue) || isForUpdate) {
         morphJoinColumnValuesToSet[joinColumnName] = joinColumnValue;
       }
     }
