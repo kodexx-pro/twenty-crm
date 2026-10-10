@@ -96,6 +96,10 @@ const runCongratulate = async () => {
   });
 };
 
-if (danger.github && danger.github.pr.merged) {
+if (
+  process.env.GITHUB_REPOSITORY === 'twentyhq/twenty' &&
+  danger.github &&
+  danger.github.pr.merged
+) {
   runCongratulate();
 }
