@@ -24,7 +24,11 @@ import { Button } from 'twenty-ui/primitives/input';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { Select } from '@/ui/input/components/Select';
 import { useRecordFormSettings } from '@/object-record/record-form/hooks/useRecordFormSettings';
-import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
+import {
+  type RecordFormPresentation,
+  type RecordFormStep,
+} from '@/object-record/record-form/types/RecordFormSettings';
+import { RecordFormStepsEditor } from '@/object-record/record-form/components/RecordFormStepsEditor';
 import { useToast } from 'twenty-ui/components/feedback';
 
 const StyledContainer = styled.div`
@@ -74,6 +78,15 @@ export const SidePanelRecordCreationFormSettings = ({
   >();
   const [workspacePresentationDraft, setWorkspacePresentationDraft] =
     useState<RecordFormPresentation>();
+  const [stepsDraft, setStepsDraft] = useState<RecordFormStep[]>();
+  const effectiveObjectPresentation =
+    presentationDraft === 'INHERIT'
+      ? null
+      : (presentationDraft ?? objectSettings?.presentation);
+  const isWizard =
+    (effectiveObjectPresentation ??
+      workspacePresentationDraft ??
+      workspaceSettings?.presentation) === 'WIZARD';
   const { getIcon } = useIcons();
   const { objectMetadataItem } = useObjectMetadataItemById({
     objectId: objectMetadataId,
@@ -126,10 +139,13 @@ export const SidePanelRecordCreationFormSettings = ({
     setIsSaving(true);
 
     try {
-      if (presentationDraft !== undefined)
+      if (presentationDraft !== undefined || stepsDraft !== undefined)
         await saveSettings({
           presentation:
-            presentationDraft === 'INHERIT' ? null : presentationDraft,
+            presentationDraft === 'INHERIT'
+              ? null
+              : (presentationDraft ?? objectSettings?.presentation ?? null),
+          ...(stepsDraft !== undefined ? { steps: stepsDraft } : {}),
         });
       if (workspacePresentationDraft !== undefined)
         await saveSettings({ presentation: workspacePresentationDraft }, true);
@@ -167,6 +183,7 @@ export const SidePanelRecordCreationFormSettings = ({
               { value: 'INHERIT' as const, label: t`Use workspace default` },
               { value: 'SIDE_PANEL' as const, label: t`Side panel` },
               { value: 'DIALOG' as const, label: t`Centered dialog` },
+              { value: 'WIZARD' as const, label: t`Multi-step dialog` },
             ]}
             fullWidth
           />
@@ -183,11 +200,22 @@ export const SidePanelRecordCreationFormSettings = ({
             options={[
               { value: 'SIDE_PANEL' as const, label: t`Side panel` },
               { value: 'DIALOG' as const, label: t`Centered dialog` },
+              { value: 'WIZARD' as const, label: t`Multi-step dialog` },
             ]}
             fullWidth
           />
           {error && <div role="alert">{t`Could not load form settings.`}</div>}
         </SidePanelGroup>
+        {isWizard && (
+          <SidePanelGroup heading={t`Steps`}>
+            <RecordFormStepsEditor
+              steps={stepsDraft ?? objectSettings?.steps ?? []}
+              fields={configurableRecordFormFields}
+              disabled={isSaving || loading || Boolean(error)}
+              onChange={setStepsDraft}
+            />
+          </SidePanelGroup>
+        )}
         <SidePanelGroup heading={t`Fields`}>
           {configurableRecordFormFields.map((recordFormField) => {
             const { fieldMetadataItem } = recordFormField;
@@ -239,6 +267,9 @@ export const SidePanelRecordCreationFormSettings = ({
             variant="solid"
             color="accent"
             loading={isSaving}
+            disabled={(stepsDraft ?? []).some(
+              (step) => step.title.trim().length === 0,
+            )}
             onClick={handleSave}
           >{t`Save`}</Button>,
         ]}

@@ -28,9 +28,11 @@ describe('RecordFormSettingsService', () => {
     findOne.mockResolvedValue(null);
     expect(await service.find('workspace-a')).toEqual({
       presentation: 'SIDE_PANEL',
+      steps: null,
     });
     expect(await service.find('workspace-a', 'object-a')).toEqual({
       presentation: null,
+      steps: null,
     });
   });
 
@@ -38,6 +40,7 @@ describe('RecordFormSettingsService', () => {
     findOne.mockResolvedValue({ value: { presentation: 'DIALOG' } });
     expect(await service.find('workspace-a', 'object-a')).toEqual({
       presentation: 'DIALOG',
+      steps: null,
     });
     expect(findOne).toHaveBeenCalledWith({
       where: expect.objectContaining({
@@ -61,7 +64,7 @@ describe('RecordFormSettingsService', () => {
         userId: null,
         applicationId: null,
         key: 'record-form-settings:workspace',
-        value: { presentation: 'DIALOG' },
+        value: { presentation: 'DIALOG', steps: null },
       }),
       expect.objectContaining({ conflictPaths: ['key', 'workspaceId'] }),
     );
@@ -74,13 +77,44 @@ describe('RecordFormSettingsService', () => {
         objectMetadataId: 'object-a',
         presentation: null,
       }),
-    ).toEqual({ presentation: null });
+    ).toEqual({ presentation: null, steps: null });
     expect(upsert).toHaveBeenCalledWith(
       expect.objectContaining({
         key: 'record-form-settings:object-a',
-        value: { presentation: null },
+        value: { presentation: null, steps: null },
       }),
       expect.anything(),
     );
+  });
+
+  it('preserves field groups when changing presentation', async () => {
+    const steps = [{ title: 'Details', fieldMetadataIds: ['field-a'] }];
+    findOne.mockResolvedValue({ value: { presentation: 'WIZARD', steps } });
+    await service.update('workspace-a', {
+      objectMetadataId: 'object-a',
+      presentation: RecordFormPresentation.DIALOG,
+    });
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ value: { presentation: 'DIALOG', steps } }),
+      expect.anything(),
+    );
+  });
+
+  it('rejects duplicate field assignments and workspace-wide field groups', async () => {
+    await expect(
+      service.update('workspace-a', {
+        objectMetadataId: 'object-a',
+        steps: [
+          { title: 'First', fieldMetadataIds: ['field-a'] },
+          { title: 'Second', fieldMetadataIds: ['field-a'] },
+        ],
+      }),
+    ).rejects.toThrow('A field can only belong to one step');
+    await expect(
+      service.update('workspace-a', {
+        steps: [{ title: 'Details', fieldMetadataIds: ['field-a'] }],
+      }),
+    ).rejects.toThrow('Field groups must be configured for an object');
+    expect(upsert).not.toHaveBeenCalled();
   });
 });

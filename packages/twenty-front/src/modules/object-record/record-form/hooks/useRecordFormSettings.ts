@@ -24,6 +24,15 @@ export const useRecordFormSettings = (
         input: {
           objectMetadataId: isWorkspaceDefault ? null : objectMetadataId,
           ...settings,
+          ...(settings.steps !== undefined
+            ? {
+                steps:
+                  settings.steps?.map(({ title, fieldMetadataIds }) => ({
+                    title,
+                    fieldMetadataIds,
+                  })) ?? null,
+              }
+            : {}),
         },
       },
     });
