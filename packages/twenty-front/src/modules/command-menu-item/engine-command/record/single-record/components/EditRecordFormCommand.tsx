@@ -4,7 +4,10 @@ import { useFindOneRecord } from '@/object-record/hooks/useFindOneRecord';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
 import { useRecordCreationFormContextOrThrow } from '@/object-record/record-form/contexts/RecordCreationFormContext';
 import { computeRecordFormInitialDraftRecord } from '@/object-record/record-form/utils/computeRecordFormInitialDraftRecord';
-import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
+import {
+  type RecordFormPresentation,
+  type RecordFormStep,
+} from '@/object-record/record-form/types/RecordFormSettings';
 import { t } from '@lingui/core/macro';
 import { useToast } from 'twenty-ui/components/feedback';
 
@@ -12,12 +15,14 @@ type EditRecordFormCommandProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
   recordId: string;
   presentation: RecordFormPresentation;
+  steps?: RecordFormStep[] | null;
 };
 
 export const EditRecordFormCommand = ({
   objectMetadataItem,
   recordId,
   presentation,
+  steps,
 }: EditRecordFormCommandProps) => {
   const { record, loading, error } = useFindOneRecord({
     objectNameSingular: objectMetadataItem.nameSingular,
@@ -47,6 +52,7 @@ export const EditRecordFormCommand = ({
           }),
           presentation,
           mode: 'edit',
+          steps,
           createRecord: (draftRecord) =>
             updateOneRecord({
               objectNameSingular: objectMetadataItem.nameSingular,

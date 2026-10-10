@@ -12,7 +12,7 @@ export const UpdateMultipleRecordsCommand = () => {
   const isRecordFormEnabled = useIsFeatureEnabled(
     FeatureFlagKey.IS_RECORD_CREATION_FORM_ENABLED,
   );
-  const { presentation, loading } = useRecordFormSettings(
+  const { presentation, loading, objectSettings } = useRecordFormSettings(
     objectMetadataItem?.id ?? '',
     !isRecordFormEnabled || !objectMetadataItem || selectedRecords.length !== 1,
   );
@@ -38,6 +38,7 @@ export const UpdateMultipleRecordsCommand = () => {
           objectMetadataItem={objectMetadataItem}
           recordId={selectedRecords[0].id}
           presentation={presentation}
+          steps={objectSettings?.steps}
         />
       );
   }

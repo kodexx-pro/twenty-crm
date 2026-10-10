@@ -16,7 +16,10 @@ import { isDefined } from 'twenty-shared/utils';
 import { IconPlus } from 'twenty-ui/icon';
 import { v4 } from 'uuid';
 import { RecordFormDialog } from '@/object-record/record-form/components/RecordFormDialog';
-import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
+import {
+  type RecordFormPresentation,
+  type RecordFormStep,
+} from '@/object-record/record-form/types/RecordFormSettings';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 
 type PendingRecordCreation = {
@@ -123,11 +126,13 @@ export const RecordCreationFormProvider = ({
       createRecord,
       presentation = 'SIDE_PANEL',
       mode = 'create',
+      steps,
     }: {
       objectMetadataItem: EnrichedObjectMetadataItem;
       initialDraftRecord?: Partial<ObjectRecord>;
       presentation?: RecordFormPresentation;
       mode?: 'create' | 'edit';
+      steps?: RecordFormStep[] | null;
       createRecord: (
         draftRecord: Partial<ObjectRecord>,
       ) => Promise<ObjectRecord>;
@@ -143,6 +148,8 @@ export const RecordCreationFormProvider = ({
           objectMetadataId: objectMetadataItem.id,
           initialDraftRecord: initialDraftRecord ?? {},
           mode,
+          presentation,
+          steps,
         },
       );
 

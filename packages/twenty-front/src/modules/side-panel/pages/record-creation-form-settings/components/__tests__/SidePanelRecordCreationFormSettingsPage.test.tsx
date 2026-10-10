@@ -262,6 +262,24 @@ describe('SidePanelRecordCreationFormSettingsPage', () => {
     expect(mockSaveSettings).toHaveBeenCalledWith({ presentation: 'DIALOG' });
   });
 
+  it('saves named wizard groups and field assignments', async () => {
+    renderPage();
+    await userEvent.click(screen.getByText('Use workspace default'));
+    await userEvent.click(screen.getByText('Multi-step dialog'));
+    await userEvent.click(screen.getByRole('button', { name: 'Add step' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Add step' }));
+    await userEvent.click(screen.getAllByText('Last step (automatic)')[0]);
+    await userEvent.click(screen.getByText('Step 1'));
+    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(mockSaveSettings).toHaveBeenCalledWith({
+      presentation: 'WIZARD',
+      steps: [
+        { title: 'Step 1', fieldMetadataIds: [NAME_FIELD.id] },
+        { title: 'Step 2', fieldMetadataIds: [] },
+      ],
+    });
+  });
+
   it('saves the workspace default separately from the object override', async () => {
     renderPage();
     await userEvent.click(screen.getByText('Side panel'));
