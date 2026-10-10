@@ -1,0 +1,153 @@
+name: Fork container image
+
+on:
+  push:
+    branches:
+      - main
+      - ci/ghcr-images
+    tags:
+      - 'v*'
+  pull_request:
+    paths:
+      - '.github/workflows/ci-fork-images.yaml'
+      - '.dockerignore'
+      - '.yarn/**'
+      - '.yarnrc.yml'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'nx.json'
+      - 'tsconfig.base.json'
+      - 'packages/twenty-docker/**'
+      - 'packages/twenty-front/**'
+      - 'packages/twenty-front-component-renderer/**'
+      - 'packages/twenty-server/**'
+      - 'packages/twenty-shared/**'
+      - 'packages/twenty-ui/**'
+      - 'packages/twenty-emails/**'
+      - 'packages/twenty-sdk/**'
+      - 'packages/twenty-client-sdk/**'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish this branch or tag to GHCR after validation
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fork-image-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  image:
+    if: github.repository == 'kodexx-pro/twenty-crm'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    env:
+      PUBLISH_IMAGE: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))) || (github.event_name == 'workflow_dispatch' && inputs.publish) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Read image name and application version
+        id: config
+        env:
+          REPOSITORY: ${{ github.repository }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          node <<'NODE'
+          try {
+            const fs = require('node:fs');
+            const source = fs.readFileSync('packages/twenty-server/src/engine/core-modules/upgrade/constants/twenty-current-version.constant.ts', 'utf8');
+            const version = source.match(/TWENTY_CURRENT_VERSION = '([^']+)'/)?.[1];
+            if (!version) throw new Error('TWENTY_CURRENT_VERSION could not be read');
+            const stableRelease = /^v\d+\.\d+\.\d+$/.test(process.env.REF_NAME ?? '');
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `image=ghcr.io/${process.env.REPOSITORY.toLowerCase()}\nversion=${version}\nstable_release=${stableRelease}\n`);
+          } catch (error) {
+            console.error(error.message);
+            process.exitCode = 1;
+          }
+          NODE
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        with:
+          images: ${{ steps.config.outputs.image }}
+          flavor: latest=false
+          tags: |
+            type=sha,format=long
+            type=raw,value=edge,enable=${{ github.ref == 'refs/heads/main' }}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=ref,event=tag
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') && steps.config.outputs.stable_release == 'true' }}
+
+      - name: Build and load image for validation
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: packages/twenty-docker/twenty/Dockerfile
+          target: twenty
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: twenty-fork:test
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: APP_VERSION=${{ steps.config.outputs.version }}
+          cache-from: type=gha,scope=twenty-fork-amd64
+          cache-to: type=gha,mode=max,scope=twenty-fork-amd64
+
+      - name: Check server, worker and frontend artifacts
+        run: |
+          docker run --rm --entrypoint node twenty-fork:test -e '
+            const fs = require("node:fs");
+            for (const file of ["dist/main.js", "dist/queue-worker/queue-worker.js", "dist/front/index.html"]) {
+              if (!fs.statSync(file).isFile()) throw new Error(`Missing runtime artifact: ${file}`);
+            }
+            if (process.getuid() !== 1000) throw new Error("The application must run as user 1000");
+            console.log("Server, worker and frontend artifacts are present");
+          '
+
+      - name: Log in to GHCR
+        if: env.PUBLISH_IMAGE == 'true'
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish validated image
+        id: publish
+        if: env.PUBLISH_IMAGE == 'true'
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: packages/twenty-docker/twenty/Dockerfile
+          target: twenty
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: APP_VERSION=${{ steps.config.outputs.version }}
+          cache-from: type=gha,scope=twenty-fork-amd64
+
+      - name: Write image summary
+        env:
+          IMAGE: ${{ steps.config.outputs.image }}
+          DIGEST: ${{ steps.publish.outputs.digest }}
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          if [ "$PUBLISH_IMAGE" = 'true' ]; then
+            printf 'Published `%s@%s`\n\nTags:\n```\n%s\n```\n' "$IMAGE" "$DIGEST" "$TAGS" >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf 'Image built and runtime artifacts checked. Publication was disabled.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
