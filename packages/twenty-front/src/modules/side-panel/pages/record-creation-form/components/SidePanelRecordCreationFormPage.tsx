@@ -41,6 +41,8 @@ import { LightButton } from 'twenty-ui/components/input';
 import { IconChevronDown, IconChevronUp, IconPlus } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
+import { computeRecordFormSteps } from '@/object-record/record-form/utils/computeRecordFormSteps';
+import { type RecordFormStep } from '@/object-record/record-form/types/RecordFormSettings';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -101,6 +103,8 @@ export const SidePanelRecordCreationFormPage = ({
       mode={recordCreationFormRequest.mode ?? 'create'}
       onEditSettings={onEditSettings}
       onCancel={onCancel}
+      isWizard={recordCreationFormRequest.presentation === 'WIZARD'}
+      configuredSteps={recordCreationFormRequest.steps}
     />
   );
 };
@@ -112,6 +116,8 @@ const SidePanelRecordCreationForm = ({
   mode,
   onEditSettings,
   onCancel,
+  isWizard,
+  configuredSteps,
 }: {
   requestId: string;
   objectMetadataId: string;
@@ -119,6 +125,8 @@ const SidePanelRecordCreationForm = ({
   mode: 'create' | 'edit';
   onEditSettings?: () => void;
   onCancel?: () => void;
+  isWizard: boolean;
+  configuredSteps?: RecordFormStep[] | null;
 }) => {
   const { objectMetadataItem } = useObjectMetadataItemById({
     objectId: objectMetadataId,
@@ -141,6 +149,7 @@ const SidePanelRecordCreationForm = ({
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [draftValidationRuleViolations, setDraftValidationRuleViolations] =
     useState<ValidationRuleViolation[]>([]);
   const [serverValidationRuleViolations, setServerValidationRuleViolations] =
@@ -177,7 +186,27 @@ const SidePanelRecordCreationForm = ({
     .filter((recordFormField) => !recordFormField.isVisible)
     .map((recordFormField) => recordFormField.fieldMetadataItem);
 
-  const hiddenFieldsCount = hiddenFieldMetadataItems.length;
+  const steps = computeRecordFormSteps({
+    recordFormFields: editableRecordFormFields,
+    configuredSteps,
+  });
+  const currentStepIndex = Math.min(activeStepIndex, steps.length - 1);
+  const currentStep = steps[currentStepIndex];
+  const isLastStep = !isWizard || currentStepIndex === steps.length - 1;
+  const currentStepFieldMetadataIds = new Set(
+    currentStep.fields.map((field) => field.fieldMetadataItem.id),
+  );
+  const renderedVisibleFieldMetadataItems = isWizard
+    ? visibleFieldMetadataItems.filter((field) =>
+        currentStepFieldMetadataIds.has(field.id),
+      )
+    : visibleFieldMetadataItems;
+  const renderedHiddenFieldMetadataItems = isWizard
+    ? hiddenFieldMetadataItems.filter((field) =>
+        currentStepFieldMetadataIds.has(field.id),
+      )
+    : hiddenFieldMetadataItems;
+  const hiddenFieldsCount = renderedHiddenFieldMetadataItems.length;
 
   const validationRuleViolations = [
     ...draftValidationRuleViolations,
@@ -220,6 +249,14 @@ const SidePanelRecordCreationForm = ({
   const revealHiddenFieldsIfTargeted = (
     targetedFieldMetadataIds: (string | null)[],
   ) => {
+    if (isWizard) {
+      const targetedStepIndex = steps.findIndex((step) =>
+        step.fields.some((field) =>
+          targetedFieldMetadataIds.includes(field.fieldMetadataItem.id),
+        ),
+      );
+      if (targetedStepIndex >= 0) setActiveStepIndex(targetedStepIndex);
+    }
     const isAnyHiddenFieldTargeted = hiddenFieldMetadataItems.some(
       (fieldMetadataItem) =>
         targetedFieldMetadataIds.includes(fieldMetadataItem.id),
@@ -228,6 +265,24 @@ const SidePanelRecordCreationForm = ({
     if (isAnyHiddenFieldTargeted) {
       setRecordCreationFormAreHiddenFieldsShown(true);
     }
+  };
+
+  const handleNextClick = () => {
+    if (isSubmitting) return;
+    const currentStepViolations = computeViolations(draftRecord).filter(
+      (violation) =>
+        isDefined(violation.fieldMetadataId) &&
+        currentStepFieldMetadataIds.has(violation.fieldMetadataId),
+    );
+    setServerValidationRuleViolations([]);
+    setDraftValidationRuleViolations(currentStepViolations);
+    if (currentStepViolations.length > 0) {
+      revealHiddenFieldsIfTargeted(
+        currentStepViolations.map((violation) => violation.fieldMetadataId),
+      );
+      return;
+    }
+    setActiveStepIndex(currentStepIndex + 1);
   };
 
   const handleCreateClick = async () => {
@@ -297,8 +352,13 @@ const SidePanelRecordCreationForm = ({
   const containerRef = useHotkeysOnFocusedElement({
     keys: [`${Key.Meta}+${Key.Enter}`, `${Key.Control}+${Key.Enter}`],
     focusId: currentFocusId ?? SIDE_PANEL_FOCUS_ID,
-    callback: handleCreateClick,
-    dependencies: [currentFocusId, handleCreateClick],
+    callback: isLastStep ? handleCreateClick : handleNextClick,
+    dependencies: [
+      currentFocusId,
+      handleCreateClick,
+      handleNextClick,
+      isLastStep,
+    ],
   });
 
   return (
@@ -322,9 +382,15 @@ const SidePanelRecordCreationForm = ({
         }
       />
       <StyledContent>
+        {isWizard && (
+          <div role="status" aria-live="polite">
+            {t`Step ${currentStepIndex + 1} of ${steps.length}`}
+            {currentStep.title ? `: ${currentStep.title}` : ''}
+          </div>
+        )}
         <RecordFormFieldInputs
           objectMetadataItem={objectMetadataItem}
-          fieldMetadataItems={visibleFieldMetadataItems}
+          fieldMetadataItems={renderedVisibleFieldMetadataItems}
           draftRecord={draftRecord}
           onFieldValueChange={handleFieldValueChange}
           onFieldValueClear={handleFieldValueClear}
@@ -354,7 +420,7 @@ const SidePanelRecordCreationForm = ({
         {recordCreationFormAreHiddenFieldsShown && hiddenFieldsCount > 0 && (
           <RecordFormFieldInputs
             objectMetadataItem={objectMetadataItem}
-            fieldMetadataItems={hiddenFieldMetadataItems}
+            fieldMetadataItems={renderedHiddenFieldMetadataItems}
             draftRecord={draftRecord}
             onFieldValueChange={handleFieldValueChange}
             onFieldValueClear={handleFieldValueClear}
@@ -372,6 +438,20 @@ const SidePanelRecordCreationForm = ({
       )}
       <SidePanelFooter
         actions={[
+          ...(isWizard && currentStepIndex > 0
+            ? [
+                <Button
+                  key="back"
+                  size="sm"
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    setActiveStepIndex(currentStepIndex - 1);
+                    setDraftValidationRuleViolations([]);
+                    setServerValidationRuleViolations([]);
+                  }}
+                >{t`Back`}</Button>,
+              ]
+            : []),
           ...(onCancel
             ? [
                 <Button
@@ -399,16 +479,16 @@ const SidePanelRecordCreationForm = ({
             : []),
           <Button
             key="create-record"
-            startIcon={<IconPlus />}
+            startIcon={isLastStep ? <IconPlus /> : undefined}
             size="sm"
-            onClick={handleCreateClick}
+            onClick={isLastStep ? handleCreateClick : handleNextClick}
             loading={isSubmitting}
             shortcut={['Mod', 'Enter']}
             data-testid="record-creation-form-create-button"
             variant="solid"
             color="accent"
           >
-            {mode === 'edit' ? t`Save` : t`Create`}
+            {!isLastStep ? t`Next` : mode === 'edit' ? t`Save` : t`Create`}
           </Button>,
         ]}
       />

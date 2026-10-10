@@ -41,6 +41,7 @@ export const useRecordCreationForm = ({
           settings?.object.presentation ??
           settings?.workspace.presentation ??
           'SIDE_PANEL',
+        steps: settings?.object.steps,
       });
     },
     [requestRecordCreationInContext, objectMetadataItem, loadSettings],

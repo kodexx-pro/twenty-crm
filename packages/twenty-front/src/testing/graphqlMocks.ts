@@ -111,6 +111,32 @@ export const metadataGraphql = graphql.link(
 
 export const graphqlMocks = {
   handlers: [
+    graphql.query('RecordFormSettings', () =>
+      HttpResponse.json({
+        data: {
+          workspace: {
+            __typename: 'RecordFormSettings',
+            presentation: 'SIDE_PANEL',
+            steps: [],
+          },
+          object: {
+            __typename: 'RecordFormSettings',
+            presentation: null,
+            steps: [],
+          },
+        },
+      }),
+    ),
+    graphql.query('FindOneWorkspaceMember', ({ variables }) =>
+      HttpResponse.json({
+        data: {
+          workspaceMember:
+            mockedWorkspaceMemberRecords.find(
+              (member) => member.id === variables.objectRecordId,
+            ) ?? null,
+        },
+      }),
+    ),
     graphql.query('IntrospectionQuery', () => {
       return HttpResponse.json({
         data: {

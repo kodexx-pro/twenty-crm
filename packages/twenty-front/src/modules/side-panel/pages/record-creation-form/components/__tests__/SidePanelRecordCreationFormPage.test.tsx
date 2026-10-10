@@ -291,6 +291,105 @@ describe('SidePanelRecordCreationFormPage', () => {
     expect(screen.queryByLabelText('Nickname')).not.toBeInTheDocument();
   });
 
+  const enableWizard = () =>
+    jotaiStore.set(
+      recordCreationFormRequestComponentState.atomFamily({
+        instanceId: REQUEST_ID,
+      }),
+      {
+        requestId: REQUEST_ID,
+        objectMetadataId: OBJECT_METADATA_ID,
+        initialDraftRecord: {},
+        presentation: 'WIZARD',
+        steps: [
+          { title: 'Basics', fieldMetadataIds: [NAME_FIELD.id] },
+          {
+            title: 'Details',
+            fieldMetadataIds: [DOMAIN_FIELD.id, NICKNAME_FIELD.id],
+          },
+        ],
+      },
+    );
+
+  it('navigates steps without submitting early and preserves values on back', async () => {
+    enableWizard();
+    renderPage();
+    expect(screen.getByRole('status')).toHaveTextContent('Step 1 of 2: Basics');
+    expect(screen.queryByLabelText('Domain')).not.toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText('Name'), 'Acme');
+    await userEvent.click(screen.getByRole('button', { name: /Next/ }));
+    expect(settleRecordCreationDraft).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Step 2 of 2: Details',
+    );
+    await userEvent.type(screen.getByLabelText('Domain'), 'acme.com');
+    await userEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(screen.getByLabelText('Name')).toHaveValue('Acme');
+    await userEvent.click(screen.getByRole('button', { name: /Next/ }));
+    expect(screen.getByLabelText('Domain')).toHaveValue('acme.com');
+    await userEvent.click(
+      screen.getByTestId('record-creation-form-create-button'),
+    );
+    expect(settleRecordCreationDraft).toHaveBeenCalledWith({
+      requestId: REQUEST_ID,
+      draftRecord: { name: 'Acme', domain: 'acme.com' },
+    });
+  });
+
+  it('validates the current step before advancing', async () => {
+    enableWizard();
+    mockValidationRules = [
+      {
+        ...NICKNAME_RULE,
+        errorFieldMetadataId: NAME_FIELD.id,
+        expression: 'isNonEmptyString(name)',
+        message: 'A company needs a name',
+      },
+    ];
+    renderPage();
+    await userEvent.click(screen.getByRole('button', { name: /Next/ }));
+    expect(screen.getByRole('status')).toHaveTextContent('Step 1 of 2');
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'A company needs a name',
+    );
+    await userEvent.type(screen.getByLabelText('Name'), 'Acme');
+    await userEvent.click(screen.getByRole('button', { name: /Next/ }));
+    expect(screen.getByRole('status')).toHaveTextContent('Step 2 of 2');
+  });
+
+  it('defers record-wide rules to final submission and reveals a hidden invalid field', async () => {
+    enableWizard();
+    mockValidationRules = [NICKNAME_RULE];
+    renderPage();
+    await userEvent.click(screen.getByRole('button', { name: /Next/ }));
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    await userEvent.click(
+      screen.getByTestId('record-creation-form-create-button'),
+    );
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'A company needs a nickname',
+    );
+    expect(screen.getByLabelText('Nickname')).toBeInTheDocument();
+    expect(settleRecordCreationDraft).not.toHaveBeenCalled();
+  });
+
+  it('returns to the step of a field rejected by the server', async () => {
+    enableWizard();
+    settleRecordCreationDraft.mockResolvedValue({
+      error: buildValidationRuleViolationError(NAME_FIELD.id),
+    });
+    renderPage();
+    await userEvent.click(screen.getByRole('button', { name: /Next/ }));
+    await userEvent.click(
+      screen.getByTestId('record-creation-form-create-button'),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Step 1 of 2');
+    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'A company needs a nickname',
+    );
+  });
+
   it('edits existing values and submits only the changed fields', async () => {
     jotaiStore.set(
       recordCreationFormRequestComponentState.atomFamily({

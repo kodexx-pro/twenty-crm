@@ -71,3 +71,22 @@ it('does not refresh or swallow a rejected settings write', async () => {
   ).rejects.toThrow('Forbidden');
   expect(mockRefetch).not.toHaveBeenCalled();
 });
+
+it('strips GraphQL response metadata from step inputs', async () => {
+  const { result } = renderHook(() => useRecordFormSettings('object-a'));
+  const step = {
+    __typename: 'RecordFormStep',
+    title: 'Details',
+    fieldMetadataIds: ['field-a'],
+  };
+  await result.current.saveSettings({ presentation: 'WIZARD', steps: [step] });
+  expect(mockUpdateSettings).toHaveBeenCalledWith({
+    variables: {
+      input: {
+        objectMetadataId: 'object-a',
+        presentation: 'WIZARD',
+        steps: [{ title: 'Details', fieldMetadataIds: ['field-a'] }],
+      },
+    },
+  });
+});

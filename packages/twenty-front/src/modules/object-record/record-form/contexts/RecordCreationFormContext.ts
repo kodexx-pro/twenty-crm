@@ -1,6 +1,9 @@
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
-import { type RecordFormPresentation } from '@/object-record/record-form/types/RecordFormSettings';
+import {
+  type RecordFormPresentation,
+  type RecordFormStep,
+} from '@/object-record/record-form/types/RecordFormSettings';
 import { createRequiredContext } from '~/utils/createRequiredContext';
 
 export type RecordCreationFormContextValue = {
@@ -9,6 +12,7 @@ export type RecordCreationFormContextValue = {
     initialDraftRecord?: Partial<ObjectRecord>;
     presentation?: RecordFormPresentation;
     mode?: 'create' | 'edit';
+    steps?: RecordFormStep[] | null;
     createRecord: (draftRecord: Partial<ObjectRecord>) => Promise<ObjectRecord>;
   }) => Promise<ObjectRecord | null>;
   settleRecordCreationDraft: (params: {
