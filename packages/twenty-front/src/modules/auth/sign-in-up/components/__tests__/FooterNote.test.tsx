@@ -17,13 +17,11 @@ describe('FooterNote on the fork', () => {
     jest.clearAllMocks();
     i18n.load('en', {});
     i18n.activate('en');
-    jest
-      .mocked(useWorkspaceBypass)
-      .mockReturnValue({
-        shouldOfferBypass: true,
-        shouldUseBypass: false,
-        enableBypass,
-      });
+    jest.mocked(useWorkspaceBypass).mockReturnValue({
+      shouldOfferBypass: true,
+      shouldUseBypass: false,
+      enableBypass,
+    });
     jest
       .mocked(useIsCurrentLocationOnAWorkspace)
       .mockReturnValue({ isOnAWorkspace: true });
@@ -53,13 +51,11 @@ describe('FooterNote on the fork', () => {
   });
 
   it('hides the bypass action when already enabled', () => {
-    jest
-      .mocked(useWorkspaceBypass)
-      .mockReturnValue({
-        shouldOfferBypass: true,
-        shouldUseBypass: true,
-        enableBypass,
-      });
+    jest.mocked(useWorkspaceBypass).mockReturnValue({
+      shouldOfferBypass: true,
+      shouldUseBypass: true,
+      enableBypass,
+    });
     const { container } = renderFooter();
     expect(container).toBeEmptyDOMElement();
   });
