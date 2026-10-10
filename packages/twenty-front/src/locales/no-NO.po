@@ -4538,6 +4538,7 @@ msgstr "Kan ikke skanne? Kopier "
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/spreadsheet-import/provider/components/SpreadsheetImport.tsx
 #: src/modules/spreadsheet-import/steps/components/ImportDataStep.tsx
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/MatchColumnsStep.tsx
@@ -4733,6 +4734,12 @@ msgstr "Cc/Bcc"
 #: src/modules/object-record/record-table/record-table-cell/components/RecordTableCellButtons.tsx
 msgid "Cell controls"
 msgstr "Cellekontroller"
+
+#. js-lingui-id: Lwq6pX
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Centered dialog"
+msgstr ""
 
 #. js-lingui-id: tHntRt
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
@@ -6336,10 +6343,20 @@ msgstr "Kunne ikke generere den signerte DPA-en. Prøv igjen."
 msgid "Could not grant media access. Please try again."
 msgstr "Kunne ikke gi medietilgang. Prøv igjen."
 
+#. js-lingui-id: gf1O39
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not load form settings."
+msgstr ""
+
 #. js-lingui-id: Ft89Ck
 #: src/modules/object-core/agents/components/CoreAgentRunsTab.tsx
 msgid "Could not load runs"
 msgstr "Kunne ikke laste inn kjøringer"
+
+#. js-lingui-id: Hf/vze
+#: src/modules/command-menu-item/engine-command/record/single-record/components/EditRecordFormCommand.tsx
+msgid "Could not load this record. Please try again."
+msgstr ""
 
 #. js-lingui-id: Tr0DHk
 #: src/modules/object-core/workflows/components/CoreWorkflowEditor.tsx
@@ -6396,6 +6413,11 @@ msgstr "Kunne ikke gjenopprette denne versjonen som utkast."
 #: src/pages/settings/applications/components/SettingsClaimApplicationSection.tsx
 msgid "Could not run the lookup"
 msgstr "Kunne ikke kjøre oppslaget."
+
+#. js-lingui-id: 8+46vg
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not save form settings. Please try again."
+msgstr ""
 
 #. js-lingui-id: 82UkUj
 #: src/modules/object-core/workflows/hooks/useRenameCoreWorkflow.ts
@@ -8747,6 +8769,13 @@ msgstr "eddy@gmail.com, @apple.com"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 msgid "Edit"
 msgstr "Rediger"
+
+#. js-lingui-id: N6j2JH
+#. placeholder {0}: objectMetadataItem.labelSingular
+#: src/modules/object-record/record-form/components/RecordCreationFormProvider.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
+msgid "Edit {0}"
+msgstr ""
 
 #. js-lingui-id: zQXUkv
 #: src/modules/settings/roles/role-permissions/object-level-permissions/object-form/components/SettingsRolePermissionsObjectLevelObjectFormObjectLevel.tsx
@@ -18277,6 +18306,11 @@ msgstr "Forbereder transkripsjon"
 msgid "Preparing…"
 msgstr "Forbereder…"
 
+#. js-lingui-id: FOoDGS
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Presentation"
+msgstr ""
+
 #. js-lingui-id: NwnQoz
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
 msgid "Preset link"
@@ -18902,6 +18936,11 @@ msgstr "Postopprettelse stoppet. {formattedCreatedRecordsCount} poster opprettet
 #: src/modules/object-record/advanced-filter/components/AdvancedFilterRecordFilterOptionsDropdown.tsx
 msgid "Record filter rule options"
 msgstr "Alternativer for oppføringsfilterregel"
+
+#. js-lingui-id: 4jo5mr
+#: src/modules/object-record/record-form/components/RecordFormDialog.tsx
+msgid "Record form"
+msgstr ""
 
 #. js-lingui-id: xSAYIn
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -20175,6 +20214,7 @@ msgstr "Lørdag"
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/validation-rules/components/SettingsValidationRulePageLayout.tsx
 #: src/pages/settings/data-model/new-field/SettingsObjectNewFieldConfigure.tsx
 msgid "Save"
@@ -21737,6 +21777,8 @@ msgstr "Vises over feltene, for eksempel hva som skal fylles ut og hvorfor"
 #: src/modules/navigation/constants/OpenRecordInOptions.ts
 #: src/modules/settings/data-model/object-details/components/tabs/ObjectOpenRecordInPicker.tsx
 #: src/modules/settings/experience/components/OpenRecordInPreferencePicker.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Side panel"
 msgstr "Sidepanel"
 
@@ -23730,6 +23772,7 @@ msgstr "Denne måneden"
 
 #. js-lingui-id: um21gF
 #: src/modules/command-menu-item/display/components/SidePanelCommandMenuItemDisplayPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "This object"
 msgstr "Dette objektet"
 
@@ -25586,6 +25629,11 @@ msgstr "Bruk denne e-posten"
 msgid "Use this name to find the answer in later workflow steps."
 msgstr "Bruk dette navnet til å finne svaret i senere arbeidsflytsteg."
 
+#. js-lingui-id: q94dlo
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Use workspace default"
+msgstr ""
+
 #. js-lingui-id: Z4/IP1
 #: src/modules/marketplace/utils/buildApplicationCapabilitySummary.ts
 msgid "Use your camera"
@@ -26834,6 +26882,7 @@ msgstr "Oppretting av arbeidsplass mislyktes"
 
 #. js-lingui-id: xM1hP9
 #: src/modules/object-core/agents/components/CoreAgentModelCell.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Workspace default"
 msgstr "Standard for arbeidsområde"
 

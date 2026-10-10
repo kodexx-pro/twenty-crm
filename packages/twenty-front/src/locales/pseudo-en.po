@@ -4533,6 +4533,7 @@ msgstr ""
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/spreadsheet-import/provider/components/SpreadsheetImport.tsx
 #: src/modules/spreadsheet-import/steps/components/ImportDataStep.tsx
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/MatchColumnsStep.tsx
@@ -4727,6 +4728,12 @@ msgstr ""
 #. js-lingui-id: utP26S
 #: src/modules/object-record/record-table/record-table-cell/components/RecordTableCellButtons.tsx
 msgid "Cell controls"
+msgstr ""
+
+#. js-lingui-id: Lwq6pX
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Centered dialog"
 msgstr ""
 
 #. js-lingui-id: tHntRt
@@ -6331,9 +6338,19 @@ msgstr ""
 msgid "Could not grant media access. Please try again."
 msgstr ""
 
+#. js-lingui-id: gf1O39
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not load form settings."
+msgstr ""
+
 #. js-lingui-id: Ft89Ck
 #: src/modules/object-core/agents/components/CoreAgentRunsTab.tsx
 msgid "Could not load runs"
+msgstr ""
+
+#. js-lingui-id: Hf/vze
+#: src/modules/command-menu-item/engine-command/record/single-record/components/EditRecordFormCommand.tsx
+msgid "Could not load this record. Please try again."
 msgstr ""
 
 #. js-lingui-id: Tr0DHk
@@ -6390,6 +6407,11 @@ msgstr ""
 #. js-lingui-id: 5PWKlr
 #: src/pages/settings/applications/components/SettingsClaimApplicationSection.tsx
 msgid "Could not run the lookup"
+msgstr ""
+
+#. js-lingui-id: 8+46vg
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not save form settings. Please try again."
 msgstr ""
 
 #. js-lingui-id: 82UkUj
@@ -8741,6 +8763,13 @@ msgstr ""
 #: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 msgid "Edit"
+msgstr ""
+
+#. js-lingui-id: N6j2JH
+#. placeholder {0}: objectMetadataItem.labelSingular
+#: src/modules/object-record/record-form/components/RecordCreationFormProvider.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
+msgid "Edit {0}"
 msgstr ""
 
 #. js-lingui-id: zQXUkv
@@ -18249,6 +18278,11 @@ msgstr ""
 msgid "Preparing…"
 msgstr ""
 
+#. js-lingui-id: FOoDGS
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Presentation"
+msgstr ""
+
 #. js-lingui-id: NwnQoz
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
 msgid "Preset link"
@@ -18873,6 +18907,11 @@ msgstr ""
 #. js-lingui-id: S2Kvcv
 #: src/modules/object-record/advanced-filter/components/AdvancedFilterRecordFilterOptionsDropdown.tsx
 msgid "Record filter rule options"
+msgstr ""
+
+#. js-lingui-id: 4jo5mr
+#: src/modules/object-record/record-form/components/RecordFormDialog.tsx
+msgid "Record form"
 msgstr ""
 
 #. js-lingui-id: xSAYIn
@@ -20147,6 +20186,7 @@ msgstr ""
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/validation-rules/components/SettingsValidationRulePageLayout.tsx
 #: src/pages/settings/data-model/new-field/SettingsObjectNewFieldConfigure.tsx
 msgid "Save"
@@ -21709,6 +21749,8 @@ msgstr ""
 #: src/modules/navigation/constants/OpenRecordInOptions.ts
 #: src/modules/settings/data-model/object-details/components/tabs/ObjectOpenRecordInPicker.tsx
 #: src/modules/settings/experience/components/OpenRecordInPreferencePicker.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Side panel"
 msgstr ""
 
@@ -23672,6 +23714,7 @@ msgstr ""
 
 #. js-lingui-id: um21gF
 #: src/modules/command-menu-item/display/components/SidePanelCommandMenuItemDisplayPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "This object"
 msgstr ""
 
@@ -25528,6 +25571,11 @@ msgstr ""
 msgid "Use this name to find the answer in later workflow steps."
 msgstr ""
 
+#. js-lingui-id: q94dlo
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Use workspace default"
+msgstr ""
+
 #. js-lingui-id: Z4/IP1
 #: src/modules/marketplace/utils/buildApplicationCapabilitySummary.ts
 msgid "Use your camera"
@@ -26776,6 +26824,7 @@ msgstr ""
 
 #. js-lingui-id: xM1hP9
 #: src/modules/object-core/agents/components/CoreAgentModelCell.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Workspace default"
 msgstr ""
 

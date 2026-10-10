@@ -4538,6 +4538,7 @@ msgstr "Ne možete da skenirate? Kopirajte"
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/spreadsheet-import/provider/components/SpreadsheetImport.tsx
 #: src/modules/spreadsheet-import/steps/components/ImportDataStep.tsx
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/MatchColumnsStep.tsx
@@ -4733,6 +4734,12 @@ msgstr "Cc/Bcc"
 #: src/modules/object-record/record-table/record-table-cell/components/RecordTableCellButtons.tsx
 msgid "Cell controls"
 msgstr "Kontrole ćelije"
+
+#. js-lingui-id: Lwq6pX
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Centered dialog"
+msgstr ""
 
 #. js-lingui-id: tHntRt
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
@@ -6336,10 +6343,20 @@ msgstr "Nije bilo moguće generisati potpisani DPA. Pokušajte ponovo."
 msgid "Could not grant media access. Please try again."
 msgstr "Nije moguće odobriti pristup medijima. Pokušajte ponovo."
 
+#. js-lingui-id: gf1O39
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not load form settings."
+msgstr ""
+
 #. js-lingui-id: Ft89Ck
 #: src/modules/object-core/agents/components/CoreAgentRunsTab.tsx
 msgid "Could not load runs"
 msgstr "Nije moguće učitati pokretanja"
+
+#. js-lingui-id: Hf/vze
+#: src/modules/command-menu-item/engine-command/record/single-record/components/EditRecordFormCommand.tsx
+msgid "Could not load this record. Please try again."
+msgstr ""
 
 #. js-lingui-id: Tr0DHk
 #: src/modules/object-core/workflows/components/CoreWorkflowEditor.tsx
@@ -6396,6 +6413,11 @@ msgstr "Nije moguće vratiti ovu verziju kao nacrt."
 #: src/pages/settings/applications/components/SettingsClaimApplicationSection.tsx
 msgid "Could not run the lookup"
 msgstr "Nije bilo moguće pokrenuti pretragu"
+
+#. js-lingui-id: 8+46vg
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not save form settings. Please try again."
+msgstr ""
 
 #. js-lingui-id: 82UkUj
 #: src/modules/object-core/workflows/hooks/useRenameCoreWorkflow.ts
@@ -8747,6 +8769,13 @@ msgstr "eddy@gmail.com, @apple.com"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 msgid "Edit"
 msgstr "Uredi"
+
+#. js-lingui-id: N6j2JH
+#. placeholder {0}: objectMetadataItem.labelSingular
+#: src/modules/object-record/record-form/components/RecordCreationFormProvider.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
+msgid "Edit {0}"
+msgstr ""
 
 #. js-lingui-id: zQXUkv
 #: src/modules/settings/roles/role-permissions/object-level-permissions/object-form/components/SettingsRolePermissionsObjectLevelObjectFormObjectLevel.tsx
@@ -18277,6 +18306,11 @@ msgstr "Priprema transkripta"
 msgid "Preparing…"
 msgstr "Priprema se…"
 
+#. js-lingui-id: FOoDGS
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Presentation"
+msgstr ""
+
 #. js-lingui-id: NwnQoz
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
 msgid "Preset link"
@@ -18902,6 +18936,11 @@ msgstr "Kreiranje zapisa zaustavljeno. {formattedCreatedRecordsCount} zapisa je 
 #: src/modules/object-record/advanced-filter/components/AdvancedFilterRecordFilterOptionsDropdown.tsx
 msgid "Record filter rule options"
 msgstr "Opcije pravila filtera zapisa"
+
+#. js-lingui-id: 4jo5mr
+#: src/modules/object-record/record-form/components/RecordFormDialog.tsx
+msgid "Record form"
+msgstr ""
 
 #. js-lingui-id: xSAYIn
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -20175,6 +20214,7 @@ msgstr "Subota"
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/validation-rules/components/SettingsValidationRulePageLayout.tsx
 #: src/pages/settings/data-model/new-field/SettingsObjectNewFieldConfigure.tsx
 msgid "Save"
@@ -21737,6 +21777,8 @@ msgstr "Prikazuje se iznad polja, na primer šta treba popuniti i zašto"
 #: src/modules/navigation/constants/OpenRecordInOptions.ts
 #: src/modules/settings/data-model/object-details/components/tabs/ObjectOpenRecordInPicker.tsx
 #: src/modules/settings/experience/components/OpenRecordInPreferencePicker.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Side panel"
 msgstr "Stranični panel"
 
@@ -23730,6 +23772,7 @@ msgstr "Ovaj mesec"
 
 #. js-lingui-id: um21gF
 #: src/modules/command-menu-item/display/components/SidePanelCommandMenuItemDisplayPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "This object"
 msgstr "Ovaj objekat"
 
@@ -25586,6 +25629,11 @@ msgstr "Koristi ovaj imejl"
 msgid "Use this name to find the answer in later workflow steps."
 msgstr "Koristite ovaj naziv da biste pronašli odgovor u kasnijim koracima radnog procesa."
 
+#. js-lingui-id: q94dlo
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Use workspace default"
+msgstr ""
+
 #. js-lingui-id: Z4/IP1
 #: src/modules/marketplace/utils/buildApplicationCapabilitySummary.ts
 msgid "Use your camera"
@@ -26834,6 +26882,7 @@ msgstr "Kreiranje radnog okruženja nije uspelo"
 
 #. js-lingui-id: xM1hP9
 #: src/modules/object-core/agents/components/CoreAgentModelCell.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Workspace default"
 msgstr "Podrazumevano za radni prostor"
 

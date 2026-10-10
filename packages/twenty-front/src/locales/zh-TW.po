@@ -4538,6 +4538,7 @@ msgstr "無法掃描？ 複製"
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/spreadsheet-import/provider/components/SpreadsheetImport.tsx
 #: src/modules/spreadsheet-import/steps/components/ImportDataStep.tsx
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/MatchColumnsStep.tsx
@@ -4733,6 +4734,12 @@ msgstr "副本/密件副本"
 #: src/modules/object-record/record-table/record-table-cell/components/RecordTableCellButtons.tsx
 msgid "Cell controls"
 msgstr "儲存格控制項"
+
+#. js-lingui-id: Lwq6pX
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Centered dialog"
+msgstr ""
 
 #. js-lingui-id: tHntRt
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
@@ -6336,10 +6343,20 @@ msgstr "無法產生已簽署的 DPA。請再試一次。"
 msgid "Could not grant media access. Please try again."
 msgstr "無法授予媒體存取權。請再試一次。"
 
+#. js-lingui-id: gf1O39
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not load form settings."
+msgstr ""
+
 #. js-lingui-id: Ft89Ck
 #: src/modules/object-core/agents/components/CoreAgentRunsTab.tsx
 msgid "Could not load runs"
 msgstr "無法載入執行項目"
+
+#. js-lingui-id: Hf/vze
+#: src/modules/command-menu-item/engine-command/record/single-record/components/EditRecordFormCommand.tsx
+msgid "Could not load this record. Please try again."
+msgstr ""
 
 #. js-lingui-id: Tr0DHk
 #: src/modules/object-core/workflows/components/CoreWorkflowEditor.tsx
@@ -6396,6 +6413,11 @@ msgstr "無法將此版本還原為草稿。"
 #: src/pages/settings/applications/components/SettingsClaimApplicationSection.tsx
 msgid "Could not run the lookup"
 msgstr "無法執行查詢"
+
+#. js-lingui-id: 8+46vg
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Could not save form settings. Please try again."
+msgstr ""
 
 #. js-lingui-id: 82UkUj
 #: src/modules/object-core/workflows/hooks/useRenameCoreWorkflow.ts
@@ -8747,6 +8769,13 @@ msgstr "eddy@gmail.com, @apple.com"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 msgid "Edit"
 msgstr "編輯"
+
+#. js-lingui-id: N6j2JH
+#. placeholder {0}: objectMetadataItem.labelSingular
+#: src/modules/object-record/record-form/components/RecordCreationFormProvider.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
+msgid "Edit {0}"
+msgstr ""
 
 #. js-lingui-id: zQXUkv
 #: src/modules/settings/roles/role-permissions/object-level-permissions/object-form/components/SettingsRolePermissionsObjectLevelObjectFormObjectLevel.tsx
@@ -18254,6 +18283,11 @@ msgstr "正在準備逐字稿"
 msgid "Preparing…"
 msgstr "正在準備…"
 
+#. js-lingui-id: FOoDGS
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Presentation"
+msgstr ""
+
 #. js-lingui-id: NwnQoz
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
 msgid "Preset link"
@@ -18879,6 +18913,11 @@ msgstr "紀錄創建中止，已創建 {formattedCreatedRecordsCount} 筆紀錄�
 #: src/modules/object-record/advanced-filter/components/AdvancedFilterRecordFilterOptionsDropdown.tsx
 msgid "Record filter rule options"
 msgstr "記錄篩選規則選項"
+
+#. js-lingui-id: 4jo5mr
+#: src/modules/object-record/record-form/components/RecordFormDialog.tsx
+msgid "Record form"
+msgstr ""
 
 #. js-lingui-id: xSAYIn
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -20152,6 +20191,7 @@ msgstr "星期六"
 #: src/modules/settings/config-variables/components/ConfigVariableEdit.tsx
 #: src/modules/settings/profile/components/EmailField.tsx
 #: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form/components/SidePanelRecordCreationFormPage.tsx
 #: src/modules/validation-rules/components/SettingsValidationRulePageLayout.tsx
 #: src/pages/settings/data-model/new-field/SettingsObjectNewFieldConfigure.tsx
 msgid "Save"
@@ -21714,6 +21754,8 @@ msgstr "顯示在欄位上方，例如要填寫的內容及原因"
 #: src/modules/navigation/constants/OpenRecordInOptions.ts
 #: src/modules/settings/data-model/object-details/components/tabs/ObjectOpenRecordInPicker.tsx
 #: src/modules/settings/experience/components/OpenRecordInPreferencePicker.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Side panel"
 msgstr "側邊面板"
 
@@ -23677,6 +23719,7 @@ msgstr "本月"
 
 #. js-lingui-id: um21gF
 #: src/modules/command-menu-item/display/components/SidePanelCommandMenuItemDisplayPage.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "This object"
 msgstr "此物件"
 
@@ -25533,6 +25576,11 @@ msgstr "使用此電子郵件"
 msgid "Use this name to find the answer in later workflow steps."
 msgstr "使用此名稱在後續工作流程步驟中尋找答案。"
 
+#. js-lingui-id: q94dlo
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
+msgid "Use workspace default"
+msgstr ""
+
 #. js-lingui-id: Z4/IP1
 #: src/modules/marketplace/utils/buildApplicationCapabilitySummary.ts
 msgid "Use your camera"
@@ -26781,6 +26829,7 @@ msgstr "工作區創建失敗"
 
 #. js-lingui-id: xM1hP9
 #: src/modules/object-core/agents/components/CoreAgentModelCell.tsx
+#: src/modules/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage.tsx
 msgid "Workspace default"
 msgstr "工作區預設值"
 
