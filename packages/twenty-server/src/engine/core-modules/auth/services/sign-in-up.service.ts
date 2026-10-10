@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 
 import { msg } from '@lingui/core/macro';
-import { TWENTY_ICONS_BASE_URL } from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import {
@@ -584,10 +583,16 @@ export class SignInUpService {
     workspaceId: string;
     applicationUniversalIdentifier: string;
   }): Promise<string | undefined> {
+    const logoApiUrl = this.twentyConfigService.get('COMPANY_LOGO_API_URL');
+
+    if (!logoApiUrl) {
+      return undefined;
+    }
+
     let uploadedLogoFileId: string | undefined;
 
     try {
-      const logoUrl = `${TWENTY_ICONS_BASE_URL}/${getDomainFromEmailOrThrow(email)}`;
+      const logoUrl = `${logoApiUrl.replace(/\/$/, '')}/${getDomainFromEmailOrThrow(email)}`;
       const logoFile =
         await this.fileCorePictureService.uploadWorkspaceLogoFromUrl({
           imageUrl: logoUrl,
@@ -764,7 +769,7 @@ export class SignInUpService {
           // Click-through DPA, recorded with the workspace as proof: only on managed cloud, where Twenty is the Processor
           // Billing is an independent flag and must not be used to detect cloud
           if (
-            this.twentyConfigService.get('IS_MULTIWORKSPACE_ENABLED') === true
+            this.twentyConfigService.get('IS_MANAGED_CLOUD_ENABLED') === true
           ) {
             await queryRunner.manager.save(
               DpaAgreementEntity,

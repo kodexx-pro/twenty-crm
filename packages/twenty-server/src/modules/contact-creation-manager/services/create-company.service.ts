@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { isNonEmptyString } from '@sniptt/guards';
-import { type AxiosInstance } from 'axios';
 import uniqBy from 'lodash.uniqby';
-import { TWENTY_COMPANIES_BASE_URL } from 'twenty-shared/constants';
 import {
   type ConnectedAccountProvider,
   type FieldActorSource,
@@ -12,6 +10,7 @@ import { isDefined, normalizeDomain } from 'twenty-shared/utils';
 import { type DeepPartial, In } from 'typeorm';
 
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
+import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace-repository';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
@@ -32,16 +31,11 @@ export type CompanyToCreate = {
 
 @Injectable()
 export class CreateCompanyService {
-  private readonly httpService: AxiosInstance;
-
   constructor(
     private readonly workspaceOrmManager: WorkspaceOrmManager,
     private readonly secureHttpClientService: SecureHttpClientService,
-  ) {
-    this.httpService = this.secureHttpClientService.getHttpClient({
-      baseURL: TWENTY_COMPANIES_BASE_URL,
-    });
-  }
+    private readonly twentyConfigService: TwentyConfigService,
+  ) {}
 
   async createOrRestoreCompanies(
     companies: CompanyToCreate[],
@@ -334,8 +328,20 @@ export class CreateCompanyService {
     name: string;
     city: string;
   }> {
+    const apiUrl = this.twentyConfigService.get('COMPANY_ENRICHMENT_API_URL');
+
+    if (!apiUrl) {
+      return {
+        name: getCompanyNameFromDomainName(domainName ?? ''),
+        city: '',
+      };
+    }
+
     try {
-      const response = await this.httpService.get(`/${domainName}`);
+      const httpClient = this.secureHttpClientService.getHttpClient({
+        baseURL: apiUrl,
+      });
+      const response = await httpClient.get(`/${domainName}`);
 
       const data = response.data;
 

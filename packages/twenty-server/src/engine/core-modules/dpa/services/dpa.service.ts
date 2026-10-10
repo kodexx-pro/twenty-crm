@@ -61,9 +61,8 @@ export class DpaService {
     private readonly twentyConfigService: TwentyConfigService,
   ) {}
 
-  // Keys off IS_MULTIWORKSPACE_ENABLED, not billing — using billing here misclassified cloud as self-hosted.
   private isSelfHosted(): boolean {
-    return this.twentyConfigService.get('IS_MULTIWORKSPACE_ENABLED') !== true;
+    return this.twentyConfigService.get('IS_MANAGED_CLOUD_ENABLED') !== true;
   }
 
   getPreviewForWorkspace(

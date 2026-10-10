@@ -314,6 +314,10 @@ export class EnterprisePlanService implements OnModuleInit {
     const apiUrl = this.twentyConfigService.get('ENTERPRISE_API_URL');
     const validateUrl = `${apiUrl}/validate`;
 
+    if (!apiUrl) {
+      return false;
+    }
+
     try {
       const instanceMetadata = await this.gatherInstanceMetadata();
 
@@ -407,6 +411,10 @@ export class EnterprisePlanService implements OnModuleInit {
     const apiUrl = this.twentyConfigService.get('ENTERPRISE_API_URL');
     const seatsUrl = `${apiUrl}/seats`;
 
+    if (!apiUrl) {
+      return false;
+    }
+
     try {
       const instanceMetadata = await this.gatherInstanceMetadata();
 
@@ -451,6 +459,10 @@ export class EnterprisePlanService implements OnModuleInit {
 
     const apiUrl = this.twentyConfigService.get('ENTERPRISE_API_URL');
     const releaseUrl = `${apiUrl}/release`;
+
+    if (!apiUrl) {
+      return false;
+    }
 
     try {
       const instanceMetadata = await this.gatherInstanceMetadata();
@@ -516,6 +528,10 @@ export class EnterprisePlanService implements OnModuleInit {
     const licenseInfo = await this.getLicenseInfo();
     const apiUrl = this.twentyConfigService.get('ENTERPRISE_API_URL');
     const statusUrl = `${apiUrl}/status`;
+
+    if (!apiUrl) {
+      return null;
+    }
 
     try {
       const response = await fetch(statusUrl, {

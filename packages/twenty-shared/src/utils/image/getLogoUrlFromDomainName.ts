@@ -6,9 +6,10 @@ export const sanitizeURL = (link: string | null | undefined) => {
 
 export const getLogoUrlFromDomainName = (
   domainName?: string,
+  logoApiUrl?: string,
 ): string | undefined => {
   const sanitizedDomain = sanitizeURL(domainName);
-  return sanitizedDomain
-    ? `https://twenty-icons.com/${sanitizedDomain}`
+  return sanitizedDomain && logoApiUrl
+    ? `${logoApiUrl.replace(/\/$/, '')}/${sanitizedDomain}`
     : undefined;
 };
