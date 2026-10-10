@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - ci/ghcr-images
     tags:
       - 'v*'
   pull_request:
