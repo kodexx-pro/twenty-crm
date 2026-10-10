@@ -18,7 +18,7 @@ const HELP_CENTER_REQUEST_RETRIES = 2;
 @Injectable()
 export class SearchHelpCenterTool implements Tool {
   description =
-    'Search Twenty documentation and help center to find information about features, setup, usage, and troubleshooting.';
+    'Search the configured documentation and help center for features, setup, usage, and troubleshooting.';
   inputSchema = SearchHelpCenterInputZodSchema;
 
   constructor(
@@ -41,7 +41,16 @@ export class SearchHelpCenterTool implements Tool {
 
       const endpoint = useDirectApi
         ? `https://api-dsc.mintlify.com/v1/search/${MINTLIFY_SUBDOMAIN}`
-        : 'https://twenty-help-search.com/search/twenty';
+        : this.twentyConfigService.get('HELP_CENTER_SEARCH_URL');
+
+      if (!endpoint) {
+        return {
+          success: false,
+          message: 'Help center search is not configured for this instance',
+          error:
+            'Configure HELP_CENTER_SEARCH_URL or your Mintlify credentials',
+        };
+      }
 
       const headers = {
         'Content-Type': 'application/json',

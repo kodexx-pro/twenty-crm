@@ -930,7 +930,39 @@ export class ConfigVariables {
     type: ConfigVariableType.BOOLEAN,
   })
   @IsOptional()
-  TELEMETRY_ENABLED = true;
+  TELEMETRY_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.LOGGING,
+    description: 'Optional operator-managed telemetry API URL',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  TELEMETRY_API_URL: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Optional operator-managed company enrichment API URL',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  COMPANY_ENRICHMENT_API_URL: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Optional operator-managed company logo API URL',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  COMPANY_LOGO_API_URL: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Optional operator-managed help center search endpoint',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  HELP_CENTER_SEARCH_URL: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LOGGING,
@@ -2126,7 +2158,16 @@ export class ConfigVariables {
     type: ConfigVariableType.BOOLEAN,
   })
   @IsOptional()
-  IS_MULTIWORKSPACE_ENABLED = false;
+  IS_MULTIWORKSPACE_ENABLED = true;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.SERVER_CONFIG,
+    description: 'Whether this deployment operates as the managed Twenty cloud',
+    type: ConfigVariableType.BOOLEAN,
+    isEnvOnly: true,
+  })
+  @IsOptional()
+  IS_MANAGED_CLOUD_ENABLED = false;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
@@ -2256,12 +2297,12 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'Base URL for the Enterprise API on twenty.com',
+    description: 'Optional configured Enterprise API base URL',
     isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
-  ENTERPRISE_API_URL: string = 'https://twenty.com/api/enterprise';
+  ENTERPRISE_API_URL: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,

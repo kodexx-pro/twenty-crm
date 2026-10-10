@@ -20,13 +20,15 @@ export class TelemetryService {
   ) {}
 
   async publish(payload: TelemetryEventPayload) {
-    if (!this.twentyConfigService.get('TELEMETRY_ENABLED')) {
+    const apiUrl = this.twentyConfigService.get('TELEMETRY_API_URL');
+
+    if (!this.twentyConfigService.get('TELEMETRY_ENABLED') || !apiUrl) {
       return { success: true };
     }
 
     try {
       const httpClient = this.secureHttpClientService.getHttpClient({
-        baseURL: 'https://twenty-telemetry.com/api/v2',
+        baseURL: apiUrl,
       });
 
       await Promise.all(

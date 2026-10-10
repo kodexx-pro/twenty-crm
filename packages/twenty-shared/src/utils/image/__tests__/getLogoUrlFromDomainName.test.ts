@@ -18,29 +18,19 @@ describe('sanitizeURL', () => {
 });
 
 describe('getLogoUrlFromDomainName', () => {
-  test('should return the correct logo URL for a given domain', () => {
-    expect(getLogoUrlFromDomainName('example.com')).toBe(
-      'https://twenty-icons.com/example.com',
-    );
+  test('does not request a third-party logo when no service is configured', () => {
+    expect(getLogoUrlFromDomainName('example.com')).toBeUndefined();
+  });
 
-    expect(getLogoUrlFromDomainName('http://example.com/')).toBe(
-      'https://twenty-icons.com/example.com',
-    );
-
-    expect(getLogoUrlFromDomainName('https://www.example.com/')).toBe(
-      'https://twenty-icons.com/example.com',
-    );
-
-    expect(getLogoUrlFromDomainName('www.example.com')).toBe(
-      'https://twenty-icons.com/example.com',
-    );
-
-    expect(getLogoUrlFromDomainName('example.com/')).toBe(
-      'https://twenty-icons.com/example.com',
-    );
-
-    expect(getLogoUrlFromDomainName('apple.com')).toBe(
-      'https://twenty-icons.com/apple.com',
+  test.each([
+    'example.com',
+    'http://example.com/',
+    'https://www.example.com/',
+    'www.example.com',
+    'example.com/',
+  ])('uses the configured logo service for %s', (domain) => {
+    expect(getLogoUrlFromDomainName(domain, 'https://logos.example.org/')).toBe(
+      'https://logos.example.org/example.com',
     );
   });
 
