@@ -1,4 +1,9 @@
-import { Injectable, type NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  type NestMiddleware,
+} from '@nestjs/common';
+import { isUUID } from 'class-validator';
 
 import { type NextFunction, type Request, type Response } from 'express';
 import { isDefined } from 'twenty-shared/utils';
@@ -25,6 +30,13 @@ export class WorkspaceAuthContextMiddleware implements NestMiddleware {
     }
 
     const authContext = this.buildAuthContext(req);
+    const selectedBranchId = req.headers['x-workspace-branch-id'];
+    if (isDefined(selectedBranchId)) {
+      if (typeof selectedBranchId !== 'string' || !isUUID(selectedBranchId)) {
+        throw new BadRequestException('Invalid branch selection');
+      }
+      authContext.selectedBranchId = selectedBranchId;
+    }
 
     applyWorkspaceSentryContext(authContext);
 

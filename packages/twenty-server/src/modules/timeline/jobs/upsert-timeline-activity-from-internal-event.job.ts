@@ -4,7 +4,7 @@ import { Process } from 'src/engine/core-modules/message-queue/decorators/proces
 import { Processor } from 'src/engine/core-modules/message-queue/decorators/processor.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
-import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
+import { buildDelegatedBranchSystemAuthContext } from 'src/engine/core-modules/workspace-branch/utils/build-delegated-branch-system-auth-context.util';
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { TimelineActivityService } from 'src/modules/timeline/services/timeline-activity.service';
 
@@ -26,7 +26,7 @@ export class UpsertTimelineActivityFromInternalEvent {
     await this.workspaceOrmManager.executeInWorkspaceContext(
       async () =>
         await this.timelineActivityService.upsertEvents(workspaceEventBatch),
-      buildSystemAuthContext(workspaceEventBatch.workspaceId),
+      buildDelegatedBranchSystemAuthContext(workspaceEventBatch.workspaceId, { principal: workspaceEventBatch.branchPrincipal, selectedBranchId: workspaceEventBatch.selectedBranchId }),
     );
   }
 }

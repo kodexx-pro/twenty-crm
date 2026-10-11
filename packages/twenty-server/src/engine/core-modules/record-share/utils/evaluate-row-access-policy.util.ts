@@ -114,6 +114,16 @@ const evaluateRowAccessExpression = async <TRecord extends RowAccessRecord>({
 
       return admittedIds;
     }
+    case 'branchFilter':
+      return new Set(
+        records
+          .filter((record) =>
+            expression.branchIds.includes(
+              String(record[expression.branchFieldName] ?? ''),
+            ),
+          )
+          .map((record) => record.id),
+      );
     case 'roleFilter': {
       const matchingRecordIds = records
         .filter((record) =>

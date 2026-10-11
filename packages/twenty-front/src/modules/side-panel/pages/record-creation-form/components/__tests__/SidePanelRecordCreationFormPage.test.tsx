@@ -16,6 +16,7 @@ import {
   resetJotaiStore,
 } from '@/ui/utilities/state/jotai/jotaiStore';
 import { type ValidationRule } from '@/validation-rules/types/ValidationRule';
+import { type WorkspaceBranch } from '@/workspace-branch/types/WorkspaceBranch';
 import {
   FieldMetadataType,
   PageLayoutTabLayoutMode,
@@ -101,6 +102,15 @@ let mockValidationRules: ValidationRule[] = [];
 const openRecordCreationFormSettingsInSidePanel = jest.fn();
 const mockHasPermissionFlag = jest.fn();
 const mockEnqueueToast = jest.fn();
+let mockBranchAccess: {
+  enabled: boolean;
+  branches: WorkspaceBranch[];
+  selectedBranchId: string | null;
+} = { enabled: false, branches: [], selectedBranchId: null };
+
+jest.mock('@/workspace-branch/hooks/useWorkspaceBranches', () => ({
+  useWorkspaceBranches: () => mockBranchAccess,
+}));
 
 jest.mock('twenty-ui/components/feedback', () => ({
   ...jest.requireActual('twenty-ui/components/feedback'),
@@ -267,6 +277,10 @@ describe('SidePanelRecordCreationFormPage', () => {
     jest.clearAllMocks();
     resetJotaiStore();
     mockValidationRules = [];
+    mockBranchAccess = { enabled: false, branches: [], selectedBranchId: null };
+    COMPANY_OBJECT.fields = COMPANY_OBJECT.fields.filter(
+      (field) => field.name !== 'branchId',
+    );
     settleRecordCreationDraft.mockResolvedValue({});
     mockHasPermissionFlag.mockReturnValue(true);
     seedRecordFormPageLayout();
@@ -289,6 +303,81 @@ describe('SidePanelRecordCreationFormPage', () => {
     expect(screen.getByLabelText('Domain')).toBeInTheDocument();
     expect(screen.queryByLabelText('Internal note')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Nickname')).not.toBeInTheDocument();
+  });
+
+  const enableBranches = () => {
+    COMPANY_OBJECT.fields.push({
+      ...buildTextField('branchId', 'Branch ID'),
+      isSystem: true,
+    });
+    mockBranchAccess = {
+      enabled: true,
+      branches: [
+        {
+          id: 'north',
+          name: 'North',
+          isActive: true,
+          operations: ['read', 'create', 'update'],
+        },
+      ],
+      selectedBranchId: 'north',
+    };
+  };
+
+  it('assigns the sole creatable branch in the shared record form', async () => {
+    enableBranches();
+    renderPage();
+    await userEvent.type(screen.getByLabelText('Name'), 'Acme');
+    await userEvent.click(
+      screen.getByTestId('record-creation-form-create-button'),
+    );
+    expect(settleRecordCreationDraft).toHaveBeenCalledWith({
+      requestId: REQUEST_ID,
+      draftRecord: { name: 'Acme', branchId: 'north' },
+    });
+    expect(screen.queryByLabelText('Branch ID')).not.toBeInTheDocument();
+  });
+
+  it('blocks creating from all permitted branches until a concrete branch is chosen', () => {
+    enableBranches();
+    mockBranchAccess.selectedBranchId = 'all';
+    mockBranchAccess.branches.push({
+      id: 'south',
+      name: 'South',
+      isActive: true,
+      operations: ['read', 'create'],
+    });
+    renderPage();
+    expect(
+      screen.getByTestId('record-creation-form-create-button'),
+    ).toBeDisabled();
+  });
+
+  it('retains actual record ownership when editing from another branch', async () => {
+    enableBranches();
+    mockBranchAccess.selectedBranchId = 'south';
+    jotaiStore.set(
+      recordCreationFormRequestComponentState.atomFamily({
+        instanceId: REQUEST_ID,
+      }),
+      {
+        requestId: REQUEST_ID,
+        objectMetadataId: OBJECT_METADATA_ID,
+        initialDraftRecord: { name: 'Apple', branchId: 'north' },
+        mode: 'edit',
+      },
+    );
+    renderPage();
+    expect(screen.getByText('Branch: North')).toBeInTheDocument();
+    await userEvent.clear(screen.getByLabelText('Name'));
+    await userEvent.type(screen.getByLabelText('Name'), 'Acme');
+    await userEvent.click(
+      screen.getByTestId('record-creation-form-create-button'),
+    );
+    expect(settleRecordCreationDraft).toHaveBeenCalledWith({
+      requestId: REQUEST_ID,
+      draftRecord: { name: 'Acme' },
+    });
   });
 
   const enableWizard = () =>

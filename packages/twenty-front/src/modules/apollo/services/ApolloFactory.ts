@@ -13,6 +13,7 @@ import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { type CurrentWorkspaceMember } from '@/auth/states/currentWorkspaceMemberState';
 import { type CurrentWorkspace } from '@/auth/states/currentWorkspaceState';
 import { getSessionGeneration } from '@/auth/utils/getSessionGeneration';
+import { readWorkspaceBranchSelection } from '@/workspace-branch/utils/workspaceBranchSelection';
 import { logDebug } from '~/utils/logDebug';
 
 import { REST_API_BASE_URL } from '@/apollo/constants/RestApiBaseUrl';
@@ -98,6 +99,9 @@ export class ApolloFactory implements ApolloManager {
 
       const authLink = setContext(async (_, { headers }) => {
         const locale = this.currentWorkspaceMember?.locale ?? i18n.locale;
+        const branchId = readWorkspaceBranchSelection(
+          this.currentWorkspace?.id,
+        );
 
         return {
           sessionGeneration: getSessionGeneration(),
@@ -105,6 +109,9 @@ export class ApolloFactory implements ApolloManager {
             ...headers,
             ...optionHeaders,
             'x-locale': locale,
+            ...(branchId && branchId !== 'all'
+              ? { 'x-workspace-branch-id': branchId }
+              : {}),
             ...(isDefined(this.appVersion) && {
               'X-App-Version': this.appVersion,
             }),

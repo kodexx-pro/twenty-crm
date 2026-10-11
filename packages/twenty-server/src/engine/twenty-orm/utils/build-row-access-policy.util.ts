@@ -12,8 +12,47 @@ import {
 } from 'src/engine/twenty-orm/types/row-access-policy.type';
 import { isObjectOperationPermitted } from 'src/engine/twenty-orm/utils/is-object-operation-permitted.util';
 import { renderRowLevelPermissionFilterToSql } from 'src/engine/twenty-orm/utils/render-row-level-permission-filter-to-sql.util';
+import { escapeIdentifier } from 'src/engine/workspace-manager/workspace-migration/utils/remove-sql-injection.util';
 
-export const buildRowAccessPolicy = ({
+export const buildRowAccessPolicy = (
+  args: RowAccessPolicyContext & RowAccessPolicyTarget,
+): RowAccessPolicy => {
+  const policy = buildOrdinaryRowAccessPolicy(args);
+  const branchAccess = args.subject.resolveWorkspaceBranchAccess?.(
+    args.flatObjectMetadata,
+    args.operationType,
+  );
+  if (
+    !branchAccess ||
+    branchAccess.kind === 'unrestricted' ||
+    policy.kind === 'denied'
+  ) {
+    return policy;
+  }
+  if (branchAccess.branchIds.length === 0) {
+    return { kind: 'denied' };
+  }
+  const parameterName = `branch_${args.tableAlias.replace(/[^a-zA-Z0-9_]/g, '_')}_${args.operationType.replace(/-/g, '_')}`;
+  const branchFieldName = branchAccess.fieldName ?? 'branchId';
+  const expression: RowAccessExpression = {
+    kind: 'branchFilter',
+    branchFieldName,
+    branchIds: branchAccess.branchIds,
+    condition: {
+      sql: `${escapeIdentifier(args.tableAlias)}.${escapeIdentifier(branchFieldName)} = ANY(:${parameterName}::uuid[])`,
+      parameters: { [parameterName]: branchAccess.branchIds },
+    },
+  };
+  return {
+    kind: 'gated',
+    expression:
+      policy.kind === 'open'
+        ? expression
+        : { kind: 'and', operands: [policy.expression, expression] },
+  };
+};
+
+const buildOrdinaryRowAccessPolicy = ({
   subject,
   environment,
   ...target

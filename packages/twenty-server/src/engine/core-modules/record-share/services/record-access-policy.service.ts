@@ -1,6 +1,9 @@
 /* @license Enterprise */
 
 import { Injectable } from '@nestjs/common';
+import { resolveWorkspaceBranchAccess } from 'src/engine/core-modules/workspace-branch/utils/resolve-workspace-branch-access.util';
+import { resolveWorkspaceBranchMemberAccess } from 'src/engine/core-modules/workspace-branch/utils/resolve-workspace-branch-member-access.util';
+import { shouldIsolateWorkspaceObject } from 'src/engine/core-modules/workspace-branch/utils/should-isolate-workspace-object.util';
 
 import { isNonEmptyString } from '@sniptt/guards';
 import groupBy from 'lodash.groupby';
@@ -50,6 +53,16 @@ export class RecordAccessPolicyService {
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly recordShareStorageService: RecordShareStorageService,
   ) {}
+
+  withWorkspaceBranchAccessLock<T>(
+    workspaceId: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    return this.workspaceOrmManager.withWorkspaceBranchAccessLock(
+      workspaceId,
+      operation,
+    );
+  }
 
   // A subject receives the records a query would return it: the event
   // snapshots are run through the same row access policy as its queries.
@@ -117,6 +130,28 @@ export class RecordAccessPolicyService {
 
     return {
       resolveAdmittedRecordIds: async (subject) => {
+        const branchConfiguration =
+          await this.workspaceOrmManager.loadWorkspaceBranchConfiguration(
+            workspaceId,
+          );
+        const branchScopedSubject = {
+          ...subject,
+          resolveWorkspaceBranchAccess: (target: typeof objectMetadata) =>
+            target.nameSingular === 'workspaceMember'
+              ? resolveWorkspaceBranchMemberAccess({
+                  configuration: branchConfiguration,
+                  workspaceId,
+                  principal: subject.workspaceBranchPrincipal,
+                })
+              : shouldIsolateWorkspaceObject(target)
+                ? resolveWorkspaceBranchAccess({
+                    configuration: branchConfiguration,
+                    workspaceId,
+                    principal: subject.workspaceBranchPrincipal,
+                    operation: 'read',
+                  })
+                : { kind: 'unrestricted' as const },
+        };
         const {
           flatObjectMetadataMaps,
           flatFieldMetadataMapsOrm,
@@ -172,7 +207,7 @@ export class RecordAccessPolicyService {
 
         return evaluateRowAccessPolicy({
           policy: buildRowAccessPolicy({
-            subject,
+            subject: branchScopedSubject,
             environment: {
               flatObjectMetadataMaps,
               flatFieldMetadataMaps: flatFieldMetadataMapsOrm,

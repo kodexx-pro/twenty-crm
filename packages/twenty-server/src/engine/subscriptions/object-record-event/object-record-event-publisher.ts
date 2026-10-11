@@ -85,6 +85,15 @@ export class ObjectRecordEventPublisher {
   async publish(
     eventBatch: WorkspaceEventBatch<ObjectRecordEvent>,
   ): Promise<void> {
+    return this.recordAccessPolicyService.withWorkspaceBranchAccessLock(
+      eventBatch.workspaceId,
+      () => this.publishUnderBranchAccessLock(eventBatch),
+    );
+  }
+
+  private async publishUnderBranchAccessLock(
+    eventBatch: WorkspaceEventBatch<ObjectRecordEvent>,
+  ): Promise<void> {
     const workspaceId = eventBatch.workspaceId;
 
     const activeStreamIds =
@@ -501,6 +510,16 @@ export class ObjectRecordEventPublisher {
     flatWorkspaceMemberMaps: FlatWorkspaceMemberMaps;
   }): RowAccessPolicySubject {
     return {
+      workspaceBranchPrincipal: subscriberAuthContext.workspaceMemberId
+        ? {
+            type: 'workspaceMember',
+            id: subscriberAuthContext.workspaceMemberId,
+          }
+        : subscriberAuthContext.apiKeyId
+          ? { type: 'apiKey', id: subscriberAuthContext.apiKeyId }
+          : subscriberAuthContext.applicationId
+            ? { type: 'application', id: subscriberAuthContext.applicationId }
+            : undefined,
       isSystemContext: false,
       objectsPermissions,
       principalIds: [

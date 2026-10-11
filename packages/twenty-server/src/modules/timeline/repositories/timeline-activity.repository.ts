@@ -11,7 +11,7 @@ import { objectRecordDiffMerge } from 'src/engine/core-modules/event-emitter/uti
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { type WorkspaceTransactionScope } from 'src/engine/twenty-orm/types/workspace-transaction-scope.type';
 import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace-repository';
-import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
+import { buildDelegatedBranchSystemAuthContext } from 'src/engine/core-modules/workspace-branch/utils/build-delegated-branch-system-auth-context.util';
 import { type TimelineActivityPayload } from 'src/modules/timeline/types/timeline-activity-payload.type';
 import { type LinkedTimelineActivityHappensAtSyncUpdate } from 'src/modules/timeline/utils/build-linked-timeline-activity-happens-at-sync-updates.util';
 import {
@@ -72,7 +72,7 @@ export class TimelineActivityRepository {
       return;
     }
 
-    const authContext = buildSystemAuthContext(workspaceId);
+    const authContext = buildDelegatedBranchSystemAuthContext(workspaceId);
 
     await this.workspaceOrmManager.executeInWorkspaceContext(async () => {
       for (const update of updates) {
@@ -155,7 +155,7 @@ export class TimelineActivityRepository {
   }: TimelineActivityPayloadWorkspaceIdAndObjectSingularName & {
     shouldFilterMissingTargets: boolean;
   }) {
-    const authContext = buildSystemAuthContext(workspaceId);
+    const authContext = buildDelegatedBranchSystemAuthContext(workspaceId);
 
     await this.workspaceOrmManager.executeInWorkspaceContext(async () => {
       await this.workspaceOrmManager.runInWorkspaceTransaction(

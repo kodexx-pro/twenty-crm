@@ -9,6 +9,7 @@ import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-t
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
+import { FileBranchAccessService } from 'src/engine/core-modules/file/services/file-branch-access.service';
 
 @Injectable()
 export class FileUrlService {
@@ -17,6 +18,7 @@ export class FileUrlService {
   constructor(
     private readonly jwtWrapperService: JwtWrapperService,
     private readonly twentyConfigService: TwentyConfigService,
+    private readonly fileBranchAccessService: FileBranchAccessService,
   ) {}
 
   async signWorkspaceLogoUrl(
@@ -62,7 +64,9 @@ export class FileUrlService {
     workspaceId: string;
     fileFolder: FileFolder;
   }): Promise<string> {
-    const signingCacheKey = `${workspaceId}:${fileFolder}:${fileId}`;
+    const signingScope =
+      await this.fileBranchAccessService.getSigningScope(workspaceId);
+    const signingCacheKey = `${workspaceId}:${fileFolder}:${fileId}:${signingScope.branchRevision ?? ''}:${signingScope.branchPrincipal?.type ?? ''}:${signingScope.branchPrincipal?.id ?? ''}`;
     const inflightSigning = this.inflightFileUrlSignings.get(signingCacheKey);
 
     if (isDefined(inflightSigning)) {
@@ -75,6 +79,7 @@ export class FileUrlService {
           fileId,
           workspaceId,
           fileFolder,
+          signingScope,
         });
       } finally {
         this.inflightFileUrlSignings.delete(signingCacheKey);
@@ -90,16 +95,21 @@ export class FileUrlService {
     fileId,
     workspaceId,
     fileFolder,
+    signingScope,
   }: {
     fileId: string;
     workspaceId: string;
     fileFolder: FileFolder;
+    signingScope: Awaited<
+      ReturnType<FileBranchAccessService['getSigningScope']>
+    >;
   }): Promise<string> {
     const payload: FileTokenJwtPayload = {
       workspaceId,
       fileId,
       sub: workspaceId,
       type: JwtTokenTypeEnum.FILE,
+      ...signingScope,
     };
 
     const token = await this.jwtWrapperService.signAsyncOrThrow(payload, {

@@ -17,6 +17,16 @@ import {
 
 import { DatabaseEventAction } from 'src/engine/api/graphql/graphql-query-runner/enums/database-event-action';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
+import { assertWorkspaceBranchWrite } from 'src/engine/core-modules/workspace-branch/utils/assert-workspace-branch-write.util';
+import { resolveWorkspaceBranchAccess } from 'src/engine/core-modules/workspace-branch/utils/resolve-workspace-branch-access.util';
+import { resolveWorkspaceBranchMemberAccess } from 'src/engine/core-modules/workspace-branch/utils/resolve-workspace-branch-member-access.util';
+import { shouldIsolateWorkspaceObject } from 'src/engine/core-modules/workspace-branch/utils/should-isolate-workspace-object.util';
+import {
+  type WorkspaceBranchAccess,
+  type WorkspaceBranchOperation,
+  type WorkspaceBranchPrincipal,
+} from 'src/engine/core-modules/workspace-branch/types/workspace-branch-access.type';
+import { ForbiddenException } from '@nestjs/common';
 import { isRecordStockTrackedObject } from 'src/engine/core-modules/usage-limit/utils/is-record-stock-tracked-object.util';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import {
@@ -185,9 +195,266 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     sql: string,
     parameters: Record<string, unknown>,
   ): Promise<T[]> {
+    if (this.isWorkspaceBranchIsolationEnabled()) {
+      throw new ForbiddenException(
+        'Raw record queries are unavailable with branch isolation',
+      );
+    }
+    return this.executeBranchCheckedRaw<T>(sql, parameters);
+  }
+
+  private async executeBranchCheckedRaw<T extends Record<string, unknown>>(
+    sql: string,
+    parameters: Record<string, unknown>,
+  ): Promise<T[]> {
     const compiled = compileNamedParameters(sql, parameters);
 
-    return this.options.executor.execute(compiled) as Promise<T[]>;
+    return this.branchCheckedExecutor.execute(compiled) as Promise<T[]>;
+  }
+
+  // Only internal composed SELECTs may use this path; the scoped builder is
+  // embedded verbatim and its security parameters cannot be overridden.
+  async executeScopedRead<T extends Record<string, unknown>>(
+    sql: string,
+    parameters: Record<string, unknown>,
+    source: WorkspaceSelectQueryBuilder,
+  ): Promise<T[]> {
+    if (
+      source.tableShape.objectMetadataId !== this.options.flatObjectMetadata.id
+    )
+      throw new ForbiddenException('Invalid scoped query source');
+    this.onBeforeExecute(source);
+    const scopedSql = source.getQuery();
+    if (!sql.includes(scopedSql))
+      throw new ForbiddenException(
+        'Scoped query must embed its authorized source',
+      );
+    return this.executeBranchCheckedRaw<T>(sql, {
+      ...parameters,
+      ...source.getParameters(),
+    });
+  }
+
+  private get branchCheckedExecutor(): QueryExecutor {
+    return {
+      execute: async (statement) => {
+        const context = this.options.internalContext;
+        const execute = async () => {
+          const current = await context.loadWorkspaceBranchConfiguration?.();
+          const snapshot = context.workspaceBranchConfiguration;
+          if (
+            current &&
+            (current.revision !== snapshot?.revision ||
+              current.enabled !== snapshot?.enabled)
+          ) {
+            throw new ForbiddenException(
+              'Branch permissions changed; retry in a new workspace context',
+            );
+          }
+          return this.options.executor.execute(statement);
+        };
+        return context.withWorkspaceBranchAccessLock
+          ? context.withWorkspaceBranchAccessLock(execute)
+          : execute();
+      },
+    };
+  }
+
+  private isWorkspaceBranchIsolationEnabled(): boolean {
+    return (
+      this.options.internalContext.workspaceBranchConfiguration?.enabled ===
+      true
+    );
+  }
+
+  private resolveBranchAccess(
+    objectMetadata: FlatObjectMetadata,
+    operation: WorkspaceBranchOperation,
+  ): WorkspaceBranchAccess {
+    const configuration =
+      this.options.internalContext.workspaceBranchConfiguration;
+    if (!configuration?.enabled) {
+      return { kind: 'unrestricted' };
+    }
+    const authContext = this.options.authContext;
+    const principal: WorkspaceBranchPrincipal | undefined =
+      authContext.type === 'user'
+        ? { type: 'workspaceMember', id: authContext.workspaceMemberId }
+        : authContext.type === 'apiKey'
+          ? { type: 'apiKey', id: authContext.apiKey.id }
+          : authContext.type === 'application'
+            ? { type: 'application', id: authContext.application.id }
+            : authContext.type === 'system'
+              ? authContext.delegatedBranchPrincipal
+              : undefined;
+    if (
+      objectMetadata.nameSingular === 'workspaceMember' &&
+      operation === 'read'
+    ) {
+      return resolveWorkspaceBranchMemberAccess({
+        configuration,
+        workspaceId: this.options.internalContext.workspaceId,
+        principal,
+        selectedBranchId: authContext.selectedBranchId,
+      });
+    }
+    if (!shouldIsolateWorkspaceObject(objectMetadata))
+      return { kind: 'unrestricted' };
+    if (authContext.type === 'system' && objectMetadata.nameSingular !== 'timelineActivity') {
+      return { kind: 'restricted', branchIds: [] };
+    }
+    const access = resolveWorkspaceBranchAccess({
+      configuration,
+      workspaceId: this.options.internalContext.workspaceId,
+      principal,
+      operation,
+    });
+    if (
+      operation === 'read' &&
+      access.kind === 'restricted' &&
+      authContext.selectedBranchId
+    ) {
+      return {
+        kind: 'restricted',
+        branchIds: access.branchIds.filter(
+          (id) => id === authContext.selectedBranchId,
+        ),
+      };
+    }
+    return access;
+  }
+
+  private async validateWorkspaceBranchWrite(
+    recordAfter: Partial<ObjectRecord>,
+    recordBefore: ObjectRecord | undefined,
+  ): Promise<void> {
+    const operationAccess = this.resolveBranchAccess(
+      this.options.flatObjectMetadata,
+      recordBefore ? 'update' : 'create',
+    );
+    if (operationAccess.kind === 'unrestricted') return;
+    assertWorkspaceBranchWrite({
+      operationAccess,
+      branchIdBefore: recordBefore?.branchId,
+      branchIdAfter: recordAfter.branchId,
+      isCreation: !recordBefore,
+      transferAccess: this.resolveBranchAccess(
+        this.options.flatObjectMetadata,
+        'transfer',
+      ),
+      destinationCreationAccess: this.resolveBranchAccess(
+        this.options.flatObjectMetadata,
+        'create',
+      ),
+    });
+    // A transfer can affect links in both directions. Until all dependent rows can
+    // be moved atomically, ordinary updates must not detach them across branches.
+    if (recordBefore && recordBefore.branchId !== recordAfter.branchId) {
+      throw new ForbiddenException(
+        'Branch transfers require the dedicated atomic transfer operation',
+      );
+    }
+    if (this.options.tableShape.nameSingular === 'timelineActivity') {
+      const parentBranchId = await this.resolveTimelineParentBranch(recordAfter);
+      if (!parentBranchId || parentBranchId !== recordAfter.branchId) throw new ForbiddenException('Timeline activity must belong to its parent branch');
+    }
+    for (const relation of Object.values(
+      this.options.tableShape.relationShapeByFieldName,
+    )) {
+      if (!relation.joinColumnName) continue;
+      const targetId = recordAfter[relation.joinColumnName];
+      if (!isDefined(targetId)) continue;
+      const targetObject = this.options.flatObjectMetadataByObjectMetadataId(
+        relation.targetObjectMetadataId,
+      );
+      if (targetObject.nameSingular === 'workspaceMember') {
+        const configuration =
+          this.options.internalContext.workspaceBranchConfiguration!;
+        if (
+          !configuration.grants.some(
+            (grant) =>
+              grant.principal.type === 'workspaceMember' &&
+              grant.principal.id === targetId &&
+              grant.branchId === recordAfter.branchId &&
+              grant.operations.length > 0,
+          )
+        ) {
+          throw new ForbiddenException(
+            'Responsible employee must have access to the record branch',
+          );
+        }
+        continue;
+      }
+      if (!shouldIsolateWorkspaceObject(targetObject)) continue;
+      const targetShape = this.options.tableShapeByObjectMetadataId(
+        relation.targetObjectMetadataId,
+      );
+      const rows = await this.executeBranchCheckedRaw<{ branchId: string }>(
+        `SELECT ${escapeIdentifier('branchId')} FROM ${escapeIdentifier(targetShape.schemaName)}.${escapeIdentifier(targetShape.tableName)} WHERE ${escapeIdentifier('id')} = :branchTargetId`,
+        { branchTargetId: targetId },
+      );
+      if (rows.length !== 1 || rows[0].branchId !== recordAfter.branchId) {
+        throw new ForbiddenException(
+          'Related records must belong to the same branch',
+        );
+      }
+    }
+  }
+
+  private async inheritWorkspaceBranchFromParent(
+    record: Partial<ObjectRecord>,
+  ): Promise<Partial<ObjectRecord>> {
+    if (
+      !this.isWorkspaceBranchIsolationEnabled() ||
+      !shouldIsolateWorkspaceObject(this.options.flatObjectMetadata) ||
+      isDefined(record.branchId)
+    )
+      return record;
+    if (this.options.tableShape.nameSingular === 'timelineActivity') {
+      const branchId = await this.resolveTimelineParentBranch(record);
+      return branchId ? { ...record, branchId } : record;
+    }
+    let parentBranchId: string | undefined;
+    for (const relation of Object.values(
+      this.options.tableShape.relationShapeByFieldName,
+    )) {
+      if (
+        !relation.joinColumnName ||
+        !isDefined(record[relation.joinColumnName])
+      )
+        continue;
+      const targetObject = this.options.flatObjectMetadataByObjectMetadataId(
+        relation.targetObjectMetadataId,
+      );
+      if (!shouldIsolateWorkspaceObject(targetObject)) continue;
+      const targetShape = this.options.tableShapeByObjectMetadataId(
+        relation.targetObjectMetadataId,
+      );
+      const rows = await this.executeBranchCheckedRaw<{ branchId: string }>(
+        `SELECT ${escapeIdentifier('branchId')} FROM ${escapeIdentifier(targetShape.schemaName)}.${escapeIdentifier(targetShape.tableName)} WHERE ${escapeIdentifier('id')} = :branchParentId`,
+        { branchParentId: record[relation.joinColumnName] },
+      );
+      if (
+        rows.length !== 1 ||
+        !rows[0].branchId ||
+        (parentBranchId && parentBranchId !== rows[0].branchId)
+      )
+        throw new ForbiddenException(
+          'Related records must belong to the same branch',
+        );
+      parentBranchId = rows[0].branchId;
+    }
+    return parentBranchId ? { ...record, branchId: parentBranchId } : record;
+  }
+
+  private async resolveTimelineParentBranch(record: Partial<ObjectRecord>): Promise<string | undefined> {
+    const name = record.objectSingularName;
+    if (!isNonEmptyString(name) || !isNonEmptyString(record.recordId)) return undefined;
+    const objectId = this.options.internalContext.objectIdByNameSingular[name];
+    if (!objectId) return undefined;
+    const target = this.options.tableShapeByObjectMetadataId(objectId);
+    const rows = await this.executeBranchCheckedRaw<{ branchId: string }>(`SELECT ${escapeIdentifier('branchId')} FROM ${escapeIdentifier(target.schemaName)}.${escapeIdentifier(target.tableName)} WHERE ${escapeIdentifier('id')}=:timelineParentId`, { timelineParentId: record.recordId });
+    return rows.length === 1 ? rows[0].branchId : undefined;
   }
 
   createQueryBuilder(alias?: string): WorkspaceSelectQueryBuilder {
@@ -195,7 +462,7 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       alias ?? this.options.tableShape.nameSingular,
       {
         tableShape: this.options.tableShape,
-        executor: this.options.executor,
+        executor: this.branchCheckedExecutor,
         objectRecordsPermissions: this.options.objectRecordsPermissions,
         featureFlagsMap: this.options.internalContext.featureFlagsMap,
         tableShapeByObjectMetadataId: this.options.tableShapeByObjectMetadataId,
@@ -811,7 +1078,7 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     }
 
     const { schemaName, tableName } = this.options.tableShape;
-    const rows = await this.executeRaw<{ id: string }>(
+    const rows = await this.executeBranchCheckedRaw<{ id: string }>(
       `SELECT "id" FROM ${escapeIdentifier(schemaName)}.${escapeIdentifier(
         tableName,
       )} WHERE "id" IN (:...ids)`,
@@ -1056,8 +1323,17 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       recordsToInsert = enriched.entities as Partial<ObjectRecord>[];
     }
 
+    recordsToInsert = await Promise.all(
+      recordsToInsert.map((record) =>
+        this.inheritWorkspaceBranchFromParent(record),
+      ),
+    );
     const { columnNames, rows, parameters, insertedColumns, formattedRecords } =
       this.buildInsertRows(recordsToInsert);
+
+    for (const record of formattedRecords) {
+      await this.validateWorkspaceBranchWrite(record, undefined);
+    }
 
     this.validateWriteIsPermitted({
       operationType: 'insert',
@@ -1088,7 +1364,10 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       onConflictDoNothing,
     });
 
-    const rawRows = await this.executeRaw<ObjectRecord>(sql, parameters);
+    const rawRows = await this.executeBranchCheckedRaw<ObjectRecord>(
+      sql,
+      parameters,
+    );
 
     await validateWrittenRecords?.(rawRows);
 
@@ -1461,7 +1740,7 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
   ): WorkspaceSelectQueryBuilder {
     return new WorkspaceSelectQueryBuilder(alias, {
       tableShape: this.options.tableShape,
-      executor: this.options.executor,
+      executor: this.branchCheckedExecutor,
       objectRecordsPermissions: this.options.objectRecordsPermissions,
       featureFlagsMap: this.options.internalContext.featureFlagsMap,
       tableShapeByObjectMetadataId: this.options.tableShapeByObjectMetadataId,
@@ -1589,7 +1868,10 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     ids: string[];
     operationType: OperationType;
   }): Promise<Set<string>> {
-    if (this.options.shouldBypassPermissionChecks) {
+    if (
+      this.options.shouldBypassPermissionChecks &&
+      !this.isWorkspaceBranchIsolationEnabled()
+    ) {
       return new Set(ids);
     }
 
@@ -1663,6 +1945,7 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     // The before-image only feeds events, scoped-write checks and files field diffs
     const canSkipBeforeImage =
       this.options.shouldBypassPermissionChecks &&
+      !this.isWorkspaceBranchIsolationEnabled() &&
       this.options.shouldSkipEventEmission &&
       !(
         kind === 'update' &&
@@ -1940,6 +2223,12 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       setColumns: Record<string, unknown>;
     }[],
   ): Promise<void> {
+    for (const { rawRecordBefore, setColumns } of updates) {
+      await this.validateWorkspaceBranchWrite(
+        { ...rawRecordBefore, ...setColumns },
+        rawRecordBefore,
+      );
+    }
     if (this.options.shouldBypassPermissionChecks) {
       return;
     }
@@ -2043,7 +2332,7 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
       return [];
     }
 
-    return this.executeRaw<RecordShareGrant>(
+    return this.executeBranchCheckedRaw<RecordShareGrant>(
       `SELECT "recordId", "principalId", "accessLevel" FROM ${this.resolveRowAccessPolicyEnvironment().recordShareTableExpression} WHERE "objectMetadataId" = :objectMetadataId AND "recordId" = ANY(:recordIds) AND "deletedAt" IS NULL`,
       { objectMetadataId, recordIds },
     );
@@ -2140,7 +2429,10 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     queryBuilder: WorkspaceSelectQueryBuilder,
     operationType: OperationType = 'select',
   ): void {
-    if (this.options.shouldBypassPermissionChecks) {
+    if (
+      this.options.shouldBypassPermissionChecks &&
+      !this.isWorkspaceBranchIsolationEnabled()
+    ) {
       return;
     }
 
@@ -2328,7 +2620,10 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     operationType: OperationType;
     tableAlias: string;
   }): boolean | SqlCondition {
-    if (this.options.shouldBypassPermissionChecks) {
+    if (
+      this.options.shouldBypassPermissionChecks &&
+      !this.isWorkspaceBranchIsolationEnabled()
+    ) {
       return true;
     }
 
@@ -2481,7 +2776,20 @@ export class WorkspaceRepository<TEntity extends ObjectLiteral = ObjectRecord> {
     };
 
     return {
-      isSystemContext: this.options.authContext?.type === 'system',
+      isSystemContext:
+        this.options.authContext?.type === 'system' ||
+        this.options.shouldBypassPermissionChecks,
+      resolveWorkspaceBranchAccess: (objectMetadata, operationType) =>
+        this.resolveBranchAccess(
+          objectMetadata,
+          operationType === 'select'
+            ? 'read'
+            : operationType === 'insert'
+              ? 'create'
+              : operationType === 'soft-delete'
+                ? 'delete'
+                : operationType,
+        ),
       objectsPermissions: this.options.objectRecordsPermissions,
       principalIds: resolvePrincipalIdsFromAuthContext(roleMaps),
       canAccessAllRecords: canRolesAccessAllRecords({

@@ -8,6 +8,7 @@ import { FileTokenJwtPayload } from 'src/engine/core-modules/auth/types/file-tok
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
 import { isWorkspaceSuspended } from 'src/engine/core-modules/workspace/utils/is-workspace-suspended.util';
 import { CoreEntityCacheService } from 'src/engine/core-entity-cache/services/core-entity-cache.service';
+import { FileBranchAccessService } from 'src/engine/core-modules/file/services/file-branch-access.service';
 
 export const SUPPORTED_FILE_FOLDERS = [
   FileFolder.CorePicture,
@@ -31,6 +32,7 @@ export class FileByIdGuard implements CanActivate {
   constructor(
     private readonly jwtWrapperService: JwtWrapperService,
     private readonly coreEntityCacheService: CoreEntityCacheService,
+    private readonly fileBranchAccessService: FileBranchAccessService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -69,6 +71,15 @@ export class FileByIdGuard implements CanActivate {
     request.workspaceId = decodedPayload.workspaceId;
 
     if (decodedPayload.fileId !== fileId) {
+      return false;
+    }
+
+    if (
+      !(await this.fileBranchAccessService.canDownload(
+        decodedPayload,
+        fileFolder,
+      ))
+    ) {
       return false;
     }
 

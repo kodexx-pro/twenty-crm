@@ -43,6 +43,9 @@ import { Button } from 'twenty-ui/primitives/input';
 import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 import { computeRecordFormSteps } from '@/object-record/record-form/utils/computeRecordFormSteps';
 import { type RecordFormStep } from '@/object-record/record-form/types/RecordFormSettings';
+import { Select } from '@/ui/input/components/Select';
+import { useWorkspaceBranches } from '@/workspace-branch/hooks/useWorkspaceBranches';
+import { resolveRecordFormBranch } from '@/workspace-branch/utils/resolveRecordFormBranch';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -133,6 +136,19 @@ const SidePanelRecordCreationForm = ({
   });
 
   const { objectMetadataItems } = useObjectMetadataItems();
+  const branchAccess = useWorkspaceBranches();
+  const [chosenBranchId, setChosenBranchId] = useState<string | null>(null);
+  const hasBranchField = objectMetadataItem.fields.some(
+    (field) => field.name === 'branchId' && field.isSystem,
+  );
+  const isBranchScoped = branchAccess.enabled && hasBranchField;
+  const branchId = resolveRecordFormBranch({
+    enabled: isBranchScoped,
+    mode,
+    existingBranchId: initialDraftRecord.branchId,
+    selectedBranchId: chosenBranchId ?? branchAccess.selectedBranchId,
+    branches: branchAccess.branches,
+  });
   const theme = useTheme();
 
   const { settleRecordCreationDraft } = useRecordCreationFormSettle();
@@ -172,6 +188,7 @@ const SidePanelRecordCreationForm = ({
 
   const editableRecordFormFields = recordFormFields.filter(
     ({ fieldMetadataItem }) =>
+      !(fieldMetadataItem.name === 'branchId' && fieldMetadataItem.isSystem) &&
       getFieldPermissions({
         objectPermissions,
         fieldMetadataId: fieldMetadataItem.id,
@@ -286,7 +303,7 @@ const SidePanelRecordCreationForm = ({
   };
 
   const handleCreateClick = async () => {
-    if (isSubmitting) {
+    if (isSubmitting || (isBranchScoped && !branchId)) {
       return;
     }
 
@@ -321,7 +338,7 @@ const SidePanelRecordCreationForm = ({
                       }),
                   ),
                 )
-              : draftRecord,
+              : { ...draftRecord, ...(isBranchScoped ? { branchId } : {}) },
           fieldMetadataItems: objectMetadataItem.fields,
           objectMetadataItems,
           isForUpdate: mode === 'edit',
@@ -382,6 +399,28 @@ const SidePanelRecordCreationForm = ({
         }
       />
       <StyledContent>
+        {isBranchScoped &&
+          (mode === 'edit' ? (
+            <div>
+              {t`Branch`}:{' '}
+              {branchAccess.branches.find((branch) => branch.id === branchId)
+                ?.name ?? t`Unavailable branch`}
+            </div>
+          ) : (
+            <Select
+              dropdownId={`record-form-branch-${requestId}`}
+              label={t`Branch`}
+              description={t`Choose the branch that owns this record.`}
+              fullWidth
+              value={branchId ?? ''}
+              disabled={isSubmitting}
+              emptyOption={{ value: '', label: t`Select a branch` }}
+              options={branchAccess.branches
+                .filter((branch) => branch.operations?.includes('create'))
+                .map((branch) => ({ value: branch.id, label: branch.name }))}
+              onChange={setChosenBranchId}
+            />
+          ))}
         {isWizard && (
           <div role="status" aria-live="polite">
             {t`Step ${currentStepIndex + 1} of ${steps.length}`}
@@ -483,6 +522,7 @@ const SidePanelRecordCreationForm = ({
             size="sm"
             onClick={isLastStep ? handleCreateClick : handleNextClick}
             loading={isSubmitting}
+            disabled={isBranchScoped && !branchId}
             shortcut={['Mod', 'Enter']}
             data-testid="record-creation-form-create-button"
             variant="solid"

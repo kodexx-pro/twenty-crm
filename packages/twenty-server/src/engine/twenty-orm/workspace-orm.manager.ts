@@ -125,7 +125,30 @@ export class WorkspaceOrmManager {
       ? await this.loadLiteWorkspaceContext(resolvedAuthContext)
       : await this.loadWorkspaceContext(resolvedAuthContext);
 
+    context.loadWorkspaceBranchConfiguration = () =>
+      this.workspaceDataSourceService.loadWorkspaceBranchConfiguration(
+        resolvedAuthContext.workspace.id,
+      );
+    context.workspaceBranchConfiguration =
+      await context.loadWorkspaceBranchConfiguration();
+
     return withWorkspaceContext(context, fn);
+  }
+
+  loadWorkspaceBranchConfiguration(workspaceId: string) {
+    return this.workspaceDataSourceService.loadWorkspaceBranchConfiguration(
+      workspaceId,
+    );
+  }
+
+  withWorkspaceBranchAccessLock<T>(
+    workspaceId: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    return this.workspaceDataSourceService.withWorkspaceBranchAccessLock(
+      workspaceId,
+      operation,
+    );
   }
 
   private async loadWorkspaceContext(

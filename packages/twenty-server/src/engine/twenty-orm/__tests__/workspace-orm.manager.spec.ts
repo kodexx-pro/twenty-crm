@@ -14,7 +14,18 @@ describe('workspace context sharing enforcement', () => {
       const module = await Test.createTestingModule({
         providers: [
           WorkspaceOrmManager,
-          { provide: WorkspaceDataSourceService, useValue: {} },
+          {
+            provide: WorkspaceDataSourceService,
+            useValue: {
+              loadWorkspaceBranchConfiguration: jest.fn().mockResolvedValue({
+                workspaceId: 'workspace',
+                enabled: false,
+                revision: 0,
+                branches: [],
+                grants: [],
+              }),
+            },
+          },
           {
             provide: WorkspaceCacheService,
             useValue: {

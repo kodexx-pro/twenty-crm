@@ -532,9 +532,13 @@ export class ProcessNestedRelationsHelper {
       `CROSS JOIN LATERAL (${perParentRecordIdsSql}) AS "lateralRecords"` +
       `) AS "limited_relation_records"`;
 
-    const limitedRecords = await targetObjectRepository.executeRaw<{
+    const limitedRecords = await targetObjectRepository.executeScopedRead<{
       id: string;
-    }>(lateralSql, perParentRecordIdsQueryBuilder.getParameters());
+    }>(
+      lateralSql,
+      perParentRecordIdsQueryBuilder.getParameters(),
+      perParentRecordIdsQueryBuilder,
+    );
 
     return limitedRecords.map((limitedRecord) => limitedRecord.id);
   }

@@ -90,6 +90,7 @@ export class GroupByWithRecordsService {
       flatFieldMetadataMaps,
     });
 
+    queryBuilderWithFiltersAndWithoutGroupBy.applyRowLevelPermissions();
     const { sql, parameters } = this.buildRankedRecordsStatement({
       subQueryBuilder: queryBuilderWithFiltersAndWithoutGroupBy,
       columnsToSelect,
@@ -102,9 +103,9 @@ export class GroupByWithRecordsService {
       offsetForRecords: offsetForRecords ?? 0,
     });
 
-    const recordsResult = await readRepository.executeRaw<
+    const recordsResult = await readRepository.executeScopedRead<
       Record<string, unknown>
-    >(sql, parameters);
+    >(sql, parameters, queryBuilderWithFiltersAndWithoutGroupBy);
 
     const allRecords = recordsResult
       .flatMap((group) => group.records as ObjectRecord[])

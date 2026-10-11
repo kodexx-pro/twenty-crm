@@ -46,6 +46,7 @@ export const compileRowAccessExpression = ({
         expression.kind === 'or' ? 'OR' : 'AND',
       );
     case 'roleFilter':
+    case 'branchFilter':
       return expression.condition;
     case 'recordShared':
       return buildRecordShareCondition({

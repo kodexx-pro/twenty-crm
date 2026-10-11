@@ -1,5 +1,6 @@
 import { type ActingAgent } from 'src/engine/core-modules/auth/types/acting-agent.type';
 import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
+import { type WorkspaceBranchPrincipal } from 'src/engine/core-modules/workspace-branch/types/workspace-branch-access.type';
 
 export type WorkspaceAuthContextType =
   | 'system'
@@ -9,6 +10,7 @@ export type WorkspaceAuthContextType =
   | 'pendingActivationUser';
 
 interface BaseWorkspaceAuthContext {
+  selectedBranchId?: string;
   type: WorkspaceAuthContextType;
   workspace: NonNullable<RawAuthContext['workspace']>;
 }
@@ -37,6 +39,8 @@ export interface ApplicationWorkspaceAuthContext extends BaseWorkspaceAuthContex
 
 export interface SystemWorkspaceAuthContext extends BaseWorkspaceAuthContext {
   type: 'system';
+  // Internal job delegation only. Never populated from request headers or API input.
+  delegatedBranchPrincipal?: WorkspaceBranchPrincipal;
 }
 
 export interface PendingActivationUserWorkspaceAuthContext extends BaseWorkspaceAuthContext {

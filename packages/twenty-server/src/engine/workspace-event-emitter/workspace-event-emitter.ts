@@ -17,6 +17,7 @@ import { type CustomEventName } from 'src/engine/workspace-event-emitter/types/c
 import { CustomWorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/custom-workspace-batch-event.type';
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { computeEventName } from 'src/engine/workspace-event-emitter/utils/compute-event-name';
+import { captureWorkspaceBranchDelegation } from 'src/engine/core-modules/workspace-branch/utils/build-delegated-branch-system-auth-context.util';
 
 type ActionEventMap<T> = {
   [DatabaseEventAction.CREATED]: ObjectRecordCreateEvent<T>;
@@ -59,12 +60,15 @@ export class WorkspaceEventEmitter {
     }
 
     const eventName = computeEventName(objectMetadataNameSingular, action);
+    const delegation = captureWorkspaceBranchDelegation(workspaceId);
 
     const workspaceEventBatch: WorkspaceEventBatch<ActionEventMap<T>[A]> = {
       name: eventName,
       workspaceId,
       objectMetadata,
       events,
+      branchPrincipal: delegation.principal,
+      selectedBranchId: delegation.selectedBranchId,
     };
 
     this.eventEmitter.emit(eventName, workspaceEventBatch);

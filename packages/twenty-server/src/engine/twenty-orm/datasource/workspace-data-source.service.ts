@@ -5,6 +5,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { AsyncLocalStorage } from 'async_hooks';
 
 import { Pool, type PoolConfig, types } from 'pg';
 import { DataSource } from 'typeorm';
@@ -24,6 +25,7 @@ import {
   TwentyOrmExceptionCode,
 } from 'src/engine/twenty-orm/exceptions/twenty-orm.exception';
 import { WorkspaceEventEmitter } from 'src/engine/workspace-event-emitter/workspace-event-emitter';
+import { loadWorkspaceBranchConfiguration } from 'src/engine/core-modules/workspace-branch/utils/load-workspace-branch-configuration.util';
 
 // Workspace DATE fields are date-only: keep Postgres's raw 'YYYY-MM-DD' instead of a JS Date, like the v1 datasource
 const DATE_ONLY_POOL_TYPES: PoolConfig['types'] = {
@@ -35,6 +37,8 @@ const DATE_ONLY_POOL_TYPES: PoolConfig['types'] = {
           format as never,
         )) as typeof types.getTypeParser,
 };
+
+const workspaceBranchLockStorage = new AsyncLocalStorage<string>();
 
 @Injectable()
 export class WorkspaceDataSourceService
@@ -105,10 +109,38 @@ export class WorkspaceDataSourceService
     });
   }
 
+  loadWorkspaceBranchConfiguration(workspaceId: string) {
+    return loadWorkspaceBranchConfiguration(this.coreDataSource, workspaceId);
+  }
+
+  withWorkspaceBranchAccessLock<T>(
+    workspaceId: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    if (workspaceBranchLockStorage.getStore() === workspaceId)
+      return operation();
+    return this.coreDataSource.transaction(async (manager) => {
+      await manager.query(
+        'SELECT pg_advisory_xact_lock_shared(hashtextextended($1, 0))',
+        [`workspace-branch:${workspaceId}`],
+      );
+      return workspaceBranchLockStorage.run(workspaceId, operation);
+    });
+  }
+
   private buildInternalContext(
     workspaceContext: ReturnType<typeof getWorkspaceContext>,
   ): WorkspaceInternalContext {
     return {
+      withWorkspaceBranchAccessLock: (operation) =>
+        this.withWorkspaceBranchAccessLock(
+          workspaceContext.authContext.workspace.id,
+          operation,
+        ),
+      workspaceBranchConfiguration:
+        workspaceContext.workspaceBranchConfiguration,
+      loadWorkspaceBranchConfiguration:
+        workspaceContext.loadWorkspaceBranchConfiguration,
       workspaceId: workspaceContext.authContext.workspace.id,
       flatObjectMetadataMaps: workspaceContext.flatObjectMetadataMaps,
       flatFieldMetadataMaps: workspaceContext.flatFieldMetadataMaps,

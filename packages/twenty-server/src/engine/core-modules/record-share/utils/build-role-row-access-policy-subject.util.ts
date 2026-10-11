@@ -35,6 +35,9 @@ export const buildRoleRowAccessPolicySubject = ({
   const roleIds = isDefined(roleId) ? [roleId] : [];
 
   return {
+    workspaceBranchPrincipal: owningApplicationId
+      ? { type: 'application', id: owningApplicationId }
+      : undefined,
     isSystemContext: false,
     objectsPermissions: isDefined(roleId)
       ? rolesPermissions[roleId]

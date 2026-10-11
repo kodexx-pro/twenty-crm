@@ -1,4 +1,5 @@
 import { type DataSource } from 'typeorm';
+import { type WorkspaceBranchAccessConfiguration } from 'src/engine/core-modules/workspace-branch/types/workspace-branch-access.type';
 import { type FeatureFlagKey } from 'twenty-shared/types';
 
 import { type BillingEntitlements } from 'src/engine/core-modules/billing/types/billing-entitlements.type';
@@ -14,6 +15,11 @@ import { type FlatRowLevelPermissionPredicateMaps } from 'src/engine/metadata-mo
 import { type WorkspaceEventEmitter } from 'src/engine/workspace-event-emitter/workspace-event-emitter';
 
 export interface WorkspaceInternalContext {
+  workspaceBranchConfiguration?: WorkspaceBranchAccessConfiguration;
+  loadWorkspaceBranchConfiguration?: () => Promise<WorkspaceBranchAccessConfiguration>;
+  withWorkspaceBranchAccessLock?: <T>(
+    operation: () => Promise<T>,
+  ) => Promise<T>;
   workspaceId: string;
   flatObjectMetadataMaps: FlatEntityMaps<FlatObjectMetadata>;
   flatFieldMetadataMaps: FlatEntityMaps<OrmFlatFieldMetadata>;

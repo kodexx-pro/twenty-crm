@@ -11,6 +11,10 @@ import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/typ
 import { type OrmFlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/orm-flat-field-metadata.type';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import { type OperationType } from 'src/engine/twenty-orm/repository/permissions.utils';
+import {
+  type WorkspaceBranchAccess,
+  type WorkspaceBranchPrincipal,
+} from 'src/engine/core-modules/workspace-branch/types/workspace-branch-access.type';
 import { type WorkspaceRelationShape } from 'src/engine/twenty-orm/table-shape/types/workspace-table-shape.type';
 
 export type SqlCondition = { sql: string; parameters: ObjectLiteral };
@@ -21,6 +25,12 @@ export type SqlCondition = { sql: string; parameters: ObjectLiteral };
 export type RowAccessExpression =
   | { kind: 'and'; operands: RowAccessExpression[] }
   | { kind: 'or'; operands: RowAccessExpression[] }
+  | {
+      kind: 'branchFilter';
+      branchFieldName: string;
+      branchIds: string[];
+      condition: SqlCondition;
+    }
   | {
       kind: 'roleFilter';
       tableAlias: string;
@@ -74,6 +84,11 @@ export type CompiledRowAccessPolicy =
   | { kind: 'gated'; condition: SqlCondition };
 
 export type RowAccessPolicySubject = {
+  workspaceBranchPrincipal?: WorkspaceBranchPrincipal;
+  resolveWorkspaceBranchAccess?: (
+    objectMetadata: FlatObjectMetadata,
+    operationType: OperationType,
+  ) => WorkspaceBranchAccess;
   isSystemContext: boolean;
   objectsPermissions: ObjectsPermissions | undefined;
   principalIds: string[] | undefined;

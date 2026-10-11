@@ -15,5 +15,6 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
   ],
   providers: [IndexMetadataResolver, IndexMetadataService],
+  exports: [IndexMetadataService],
 })
 export class IndexMetadataModule {}

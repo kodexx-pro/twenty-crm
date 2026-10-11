@@ -1,4 +1,5 @@
 import { FieldMetadataType } from 'twenty-shared/types';
+import { type WorkspaceBranchAccessConfiguration } from 'src/engine/core-modules/workspace-branch/types/workspace-branch-access.type';
 
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { getFlatFieldMetadataMock } from 'src/engine/metadata-modules/flat-field-metadata/__mocks__/get-flat-field-metadata.mock';
@@ -25,6 +26,7 @@ const buildField = (name: string, type: FieldMetadataType) =>
   });
 
 const FIELDS = [
+  buildField('branchId', FieldMetadataType.UUID),
   buildField('id', FieldMetadataType.UUID),
   buildField('state', FieldMetadataType.TEXT),
   buildField('attachments', FieldMetadataType.FILES),
@@ -89,16 +91,24 @@ const ROLE_ID = 'role-id';
 const buildRepository = ({
   shouldBypassPermissionChecks = true,
   shouldSkipEventEmission,
+  workspaceBranchConfiguration,
+  loadWorkspaceBranchConfiguration,
 }: {
   shouldBypassPermissionChecks?: boolean;
   shouldSkipEventEmission: boolean;
+  workspaceBranchConfiguration?: WorkspaceBranchAccessConfiguration;
+  loadWorkspaceBranchConfiguration?: () => Promise<WorkspaceBranchAccessConfiguration>;
 }) => {
   const executedStatements: CompiledStatement[] = [];
 
   const repository = new WorkspaceRepository({
     tableShape,
-    flatObjectMetadata,
+    flatObjectMetadata: workspaceBranchConfiguration
+      ? { ...flatObjectMetadata, isSystem: false }
+      : flatObjectMetadata,
     internalContext: {
+      workspaceBranchConfiguration,
+      loadWorkspaceBranchConfiguration,
       workspaceId: 'workspace-id',
       featureFlagsMap: {},
       flatObjectMetadataMaps,
@@ -137,8 +147,82 @@ const buildRepository = ({
   const getExecutedStatementKinds = () =>
     executedStatements.map((statement) => statement.text.split(' ')[0]);
 
-  return { repository, getExecutedStatementKinds };
+  return { repository, getExecutedStatementKinds, executedStatements };
 };
+
+const branchConfiguration: WorkspaceBranchAccessConfiguration = {
+  workspaceId: 'workspace-id',
+  enabled: true,
+  revision: 1,
+  branches: [
+    {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'A',
+      workspaceId: 'workspace-id',
+      isActive: true,
+    },
+  ],
+  grants: [
+    {
+      principal: { type: 'apiKey', id: API_KEY_ID },
+      branchId: '11111111-1111-4111-8111-111111111111',
+      operations: ['read', 'create', 'update', 'delete', 'restore'],
+    },
+  ],
+};
+
+describe('mandatory workspace branch isolation', () => {
+  it('intersects reads and counts even with permission bypass enabled', async () => {
+    const { repository, executedStatements } = buildRepository({
+      shouldSkipEventEmission: true,
+      workspaceBranchConfiguration: branchConfiguration,
+    });
+    await repository.find();
+    await repository.count();
+    expect(executedStatements).toHaveLength(2);
+    for (const statement of executedStatements) {
+      expect(statement.text).toContain('"branchId" = ANY(');
+      expect(statement.values).toContainEqual([
+        '11111111-1111-4111-8111-111111111111',
+      ]);
+    }
+  });
+  it('rejects unassigned creations before executing SQL despite permission bypass', async () => {
+    const { repository, executedStatements } = buildRepository({
+      shouldSkipEventEmission: true,
+      workspaceBranchConfiguration: branchConfiguration,
+    });
+    await expect(
+      repository.insert({ id: 'record', state: 'NEW' }),
+    ).rejects.toThrow('Branch access denied');
+    expect(executedStatements).toHaveLength(0);
+  });
+  it('denies raw queries that cannot prove their branch predicate', async () => {
+    const { repository, executedStatements } = buildRepository({
+      shouldSkipEventEmission: true,
+      workspaceBranchConfiguration: branchConfiguration,
+    });
+    await expect(
+      repository.executeRaw('SELECT * FROM delivery', {}),
+    ).rejects.toThrow('Raw record queries are unavailable');
+    expect(executedStatements).toHaveLength(0);
+  });
+  it('rejects stale background job grants before returning data', async () => {
+    const { repository, executedStatements } = buildRepository({
+      shouldSkipEventEmission: true,
+      workspaceBranchConfiguration: branchConfiguration,
+      loadWorkspaceBranchConfiguration: async () => ({
+        ...branchConfiguration,
+        revision: 2,
+        grants: [],
+      }),
+    });
+    await expect(repository.find()).rejects.toThrow(
+      'Branch permissions changed',
+    );
+    expect(executedStatements).toHaveLength(0);
+  });
+});
 
 describe('WorkspaceRepository mutations', () => {
   describe('on a repository that bypasses permission checks and skips events', () => {

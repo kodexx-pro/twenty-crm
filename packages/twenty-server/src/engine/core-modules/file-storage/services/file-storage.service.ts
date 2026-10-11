@@ -33,6 +33,7 @@ import { validateStoragePathIsWithinWorkspaceOrThrow } from 'src/engine/core-mod
 import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { FILE_CONTENT_SNIFF_BYTE_COUNT } from 'src/engine/core-modules/file/file-upload/constants/file-content-sniff.constant';
 import { FileSettings } from 'src/engine/core-modules/file/types/file-settings.type';
+import { FileBranchAccessService } from 'src/engine/core-modules/file/services/file-branch-access.service';
 import { FILE_STATUS } from 'src/engine/core-modules/file/types/file-status.type';
 import { extractFileInfoOrThrow } from 'src/engine/core-modules/file/utils/extract-file-info-or-throw.utils';
 import { removeFileFolderFromFileEntityPath } from 'src/engine/core-modules/file/utils/remove-file-folder-from-file-entity-path.utils';
@@ -60,6 +61,7 @@ export class FileStorageService {
     private readonly fileRepository: WorkspaceScopedRepository<FileEntity>,
     private readonly workspaceCacheService: WorkspaceCacheService,
     private readonly usageLimitStockService: UsageLimitStockService,
+    private readonly fileBranchAccessService: FileBranchAccessService,
   ) {}
 
   async releaseStorageStock({
@@ -440,6 +442,11 @@ export class FileStorageService {
     settings: FileSettings;
     queryRunner?: QueryRunner;
   }): Promise<FileEntity> {
+    const scopedSettings = await this.fileBranchAccessService.getUploadSettings(
+      workspaceId,
+      fileFolder,
+      settings,
+    );
     const driver = this.fileStorageDriverFactory.getCurrentDriver();
 
     const resolvedApplicationId =
@@ -479,6 +486,14 @@ export class FileStorageService {
       applicationId: resolvedApplicationId,
     });
 
+    if (existingFile) {
+      await this.fileBranchAccessService.assertOverwrite(
+        workspaceId,
+        existingFile,
+        scopedSettings.branchId,
+      );
+    }
+
     const delta = buildStockDelta({ existingFile, size });
 
     await this.assertStorageStockAvailable({
@@ -501,7 +516,7 @@ export class FileStorageService {
         id: existingFile?.id ?? fileId,
         mimeType,
         size,
-        settings,
+        settings: scopedSettings,
       },
       ['path', 'workspaceId', 'applicationId'],
     );
@@ -533,6 +548,11 @@ export class FileStorageService {
     mimeType: string;
     settings: FileSettings;
   }): Promise<FileEntity> {
+    const scopedSettings = await this.fileBranchAccessService.getUploadSettings(
+      workspaceId,
+      fileFolder,
+      settings,
+    );
     const resolvedApplicationId =
       applicationId ??
       (await this.resolveApplicationIdOrThrow({
@@ -554,6 +574,14 @@ export class FileStorageService {
       applicationId: resolvedApplicationId,
     });
 
+    if (existingFile) {
+      await this.fileBranchAccessService.assertOverwrite(
+        workspaceId,
+        existingFile,
+        scopedSettings.branchId,
+      );
+    }
+
     const delta = buildStockDelta({ existingFile, size });
 
     await this.assertStorageStockAvailable({
@@ -570,7 +598,7 @@ export class FileStorageService {
         id: existingFile?.id ?? fileId,
         mimeType,
         size,
-        settings,
+        settings: scopedSettings,
         status: FILE_STATUS.PENDING,
       },
       ['path', 'workspaceId', 'applicationId'],
@@ -600,6 +628,11 @@ export class FileStorageService {
     size: number;
     mimeType: string;
   }): Promise<UpdateResult> {
+    await this.fileBranchAccessService.assertFileOperation(
+      workspaceId,
+      fileId,
+      'create',
+    );
     const updateResult = await this.fileRepository.update(
       workspaceId,
       { id: fileId },
@@ -628,6 +661,7 @@ export class FileStorageService {
     const driver = this.fileStorageDriverFactory.getCurrentDriver();
     const { onStorageFilePath } =
       this.validateAndBuildFileStoragePathOrThrow(params);
+    await this.fileBranchAccessService.assertStreamUpload(params);
 
     return driver.writeFileStream({
       filePath: onStorageFilePath,
@@ -844,6 +878,11 @@ export class FileStorageService {
     workspaceId: string;
     fileFolder: FileFolder;
   }): Promise<void> {
+    await this.fileBranchAccessService.assertFileOperation(
+      workspaceId,
+      fileId,
+      'delete',
+    );
     const file = await this.fileRepository.findOneOrFail(workspaceId, {
       where: {
         id: fileId,
@@ -895,6 +934,37 @@ export class FileStorageService {
     mimeType: string;
     settings: FileSettings | null;
   }): Promise<FileEntity> {
+    const scopedSettings = await this.fileBranchAccessService.getUploadSettings(
+      to.workspaceId,
+      to.fileFolder,
+      settings ?? { isTemporaryFile: false, toDelete: false },
+    );
+    const sourceApplicationId = await this.resolveApplicationIdOrThrow(from);
+    const { filePath: sourceFilePath } =
+      this.validateAndBuildFileStoragePathOrThrow(from);
+    const sourceFile = await this.findFileByPath({
+      fileRepository: this.fileRepository,
+      workspaceId: from.workspaceId,
+      filePath: sourceFilePath,
+      applicationId: sourceApplicationId,
+    });
+
+    if (sourceFile) {
+      await this.fileBranchAccessService.assertFileOperation(
+        from.workspaceId,
+        sourceFile.id,
+        'read',
+      );
+    } else {
+      // A legacy blob without a durable owning record cannot be copied into an
+      // isolated workspace merely because its storage path is known.
+      await this.fileBranchAccessService.assertFileOperation(
+        from.workspaceId,
+        fileId,
+        'read',
+      );
+    }
+
     const { filePath } = this.validateAndBuildFileStoragePathOrThrow(to);
     const delta = { [UsageUnit.BYTE]: size, [UsageUnit.FILE]: 1 };
 
@@ -913,7 +983,7 @@ export class FileStorageService {
       mimeType,
       size,
       status: FILE_STATUS.UPLOADED,
-      settings,
+      settings: scopedSettings,
     });
 
     await this.applyStorageStockDelta({

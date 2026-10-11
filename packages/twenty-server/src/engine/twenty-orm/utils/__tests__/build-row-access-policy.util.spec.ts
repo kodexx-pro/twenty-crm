@@ -116,6 +116,50 @@ const gatedSql = (
 };
 
 describe('buildRowAccessPolicy', () => {
+  it('intersects branch scope after named record sharing grants', () => {
+    const policy = buildRowAccessPolicy({
+      subject: {
+        ...readEverything,
+        resolveWorkspaceBranchAccess: () => ({
+          kind: 'restricted',
+          branchIds: ['branch-a'],
+        }),
+      },
+      environment: sharingEnvironment,
+      flatObjectMetadata: person,
+      tableAlias: 'person',
+      operationType: 'select',
+      depth: 0,
+    });
+    expect(policy.kind).toBe('gated');
+    if (policy.kind === 'gated') {
+      expect(policy.expression.kind).toBe('and');
+      if (policy.expression.kind === 'and')
+        expect(policy.expression.operands.at(-1)).toMatchObject({
+          kind: 'branchFilter',
+          branchIds: ['branch-a'],
+        });
+    }
+  });
+  it('never converts trusted system role bypass into a branch grant', () => {
+    expect(
+      buildRowAccessPolicy({
+        subject: {
+          ...readEverything,
+          isSystemContext: true,
+          resolveWorkspaceBranchAccess: () => ({
+            kind: 'restricted',
+            branchIds: [],
+          }),
+        },
+        environment,
+        flatObjectMetadata: person,
+        tableAlias: 'person',
+        operationType: 'update',
+        depth: 0,
+      }),
+    ).toEqual({ kind: 'denied' });
+  });
   beforeEach(() => {
     (resolveInheritedReadabilityParents as jest.Mock).mockReturnValue([
       {

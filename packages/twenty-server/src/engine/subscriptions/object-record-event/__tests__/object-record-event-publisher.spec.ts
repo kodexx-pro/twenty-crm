@@ -114,6 +114,8 @@ describe('ObjectRecordEventPublisher', () => {
   const roleId = 'test-role-id';
 
   let mockWorkspaceOrmManager: {
+    withWorkspaceBranchAccessLock: jest.Mock;
+    loadWorkspaceBranchConfiguration: jest.Mock;
     executeInWorkspaceContext: jest.Mock;
     getRepository: jest.Mock;
   };
@@ -302,6 +304,16 @@ describe('ObjectRecordEventPublisher', () => {
     };
 
     mockWorkspaceOrmManager = {
+      withWorkspaceBranchAccessLock: jest
+        .fn()
+        .mockImplementation((_workspaceId, operation) => operation()),
+      loadWorkspaceBranchConfiguration: jest.fn().mockResolvedValue({
+        workspaceId,
+        enabled: false,
+        revision: 0,
+        branches: [],
+        grants: [],
+      }),
       executeInWorkspaceContext: jest.fn(),
       getRepository: jest.fn(),
     };
@@ -419,6 +431,57 @@ describe('ObjectRecordEventPublisher', () => {
         publishCall.payload.objectRecordEventsWithQueryIds[0].queryIds,
       ).toContain('query-1');
     });
+
+    it.each([
+      ['branch-a', true],
+      ['branch-b', false],
+      [null, false],
+    ])(
+      'limits live event snapshots to current branch grants (%s)',
+      async (branchId, shouldPublish) => {
+        mockWorkspaceOrmManager.loadWorkspaceBranchConfiguration.mockResolvedValue(
+          {
+            workspaceId,
+            enabled: true,
+            revision: 1,
+            branches: [
+              { id: 'branch-a', name: 'A', workspaceId, isActive: true },
+              { id: 'branch-b', name: 'B', workspaceId, isActive: true },
+            ],
+            grants: [
+              {
+                principal: {
+                  type: 'workspaceMember',
+                  id: 'test-workspace-member-id',
+                },
+                branchId: 'branch-a',
+                operations: ['read'],
+              },
+            ],
+          },
+        );
+        await service.publish({
+          name: 'company.created',
+          workspaceId,
+          objectMetadata: { ...companyObjectMetadata, isSystem: false },
+          events: [
+            createMockEvent({
+              properties: {
+                after: { id: 'record-1', name: 'Test Company', branchId },
+              },
+            }),
+          ],
+        } as WorkspaceEventBatch<never>);
+        if (shouldPublish)
+          expect(
+            mockSubscriptionService.publishToEventStream,
+          ).toHaveBeenCalled();
+        else
+          expect(
+            mockSubscriptionService.publishToEventStream,
+          ).not.toHaveBeenCalled();
+      },
+    );
 
     it('should not publish events when object-level read permission is denied', async () => {
       const permissionsWithoutRead: ObjectsPermissionsByRoleId = {

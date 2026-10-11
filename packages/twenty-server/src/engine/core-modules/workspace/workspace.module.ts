@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
 import { KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
+import { WorkspaceBranchModule } from 'src/engine/core-modules/workspace-branch/workspace-branch.module';
 import { RecordFormSettingsResolver } from 'src/engine/core-modules/workspace/record-form-settings.resolver';
 import { RecordFormSettingsService } from 'src/engine/core-modules/workspace/services/record-form-settings.service';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
@@ -45,6 +46,7 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
 
 @Module({
   imports: [
+    WorkspaceBranchModule,
     TypeORMModule,
     TypeOrmModule.forFeature([
       KeyValuePairEntity,

@@ -1,0 +1,53 @@
+name: Fork branch isolation
+
+on:
+  push:
+    branches: [feat/branch-isolation]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: branch-isolation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    if: github.repository == 'kodexx-pro/twenty-crm'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      BRANCH_ISOLATION_TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/branch_isolation_test
+      NODE_OPTIONS: --max-old-space-size=6144
+      NX_DAEMON: 'false'
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: branch_isolation_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d branch_isolation_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: ./.github/actions/yarn-install
+      - name: Build shared types
+        run: yarn nx build twenty-shared
+      - name: Branch authorization and PostgreSQL integration
+        working-directory: packages/twenty-server
+        run: >-
+          node ../../node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand
+          src/engine/core-modules/workspace-branch
+          src/engine/core-modules/file/services/__tests__/file-branch-access.service.spec.ts
+          src/engine/twenty-orm/utils/__tests__/build-row-access-policy.util.spec.ts
+          src/engine/twenty-orm/repository/__tests__/workspace-repository.spec.ts
+          src/engine/twenty-orm/repository/__tests__/workspace-branch-postgres.integration.spec.ts
+          src/engine/twenty-orm/__tests__/workspace-orm.manager.spec.ts
+          src/engine/subscriptions/object-record-event/__tests__/object-record-event-publisher.spec.ts
+      - name: Server types
+        working-directory: packages/twenty-server
+        run: node ../../node_modules/typescript/bin/tsc --noEmit --pretty false

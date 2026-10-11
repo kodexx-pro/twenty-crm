@@ -3,6 +3,7 @@ import { useNavigationMenuItemsByFolder } from '@/navigation-menu-item/display/f
 import { MainNavigationDrawerScrollableItems } from '@/navigation/components/MainNavigationDrawerScrollableItems';
 import { currentNavigationMenuItemFolderIdState } from '@/navigation-menu-item/common/states/currentNavigationMenuItemFolderIdState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { WorkspaceBranchSelector } from '@/workspace-branch/components/WorkspaceBranchSelector';
 
 export const MainNavigationDrawerNavigationContent = () => {
   const currentNavigationMenuItemFolderId = useAtomStateValue(
@@ -16,6 +17,7 @@ export const MainNavigationDrawerNavigationContent = () => {
 
   return (
     <>
+      <WorkspaceBranchSelector />
       {openedNavigationMenuItemFolder ? (
         <NavigationMenuItemFolderContentDispatcherEffect
           folderName={openedNavigationMenuItemFolder.folderName}

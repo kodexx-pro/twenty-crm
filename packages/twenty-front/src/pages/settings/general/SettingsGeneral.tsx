@@ -12,6 +12,7 @@ import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFla
 import { SettingsSecuritySettings } from '@/settings/security/components/SettingsSecuritySettings';
 import { NameField } from '@/settings/workspace/components/NameField';
 import { WorkspaceLogoUploader } from '@/settings/workspace/components/WorkspaceLogoUploader';
+import { SettingsWorkspaceBranches } from '@/workspace-branch/components/SettingsWorkspaceBranches';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Section } from 'twenty-ui/components/layout';
 import { IconHistory, IconKey, IconSettings2 } from 'twenty-ui/icon';
@@ -80,6 +81,7 @@ export const SettingsGeneral = () => {
             <SettingsWorkspaceDomainCard />
           </Section.Root>
         )}
+        <SettingsWorkspaceBranches />
         <Section.Root>
           <DeleteWorkspace />
         </Section.Root>
