@@ -8,4 +8,5 @@ export type WorkspaceEventBatch<WorkspaceEvent> = {
   events: WorkspaceEvent[];
   branchPrincipal?: WorkspaceBranchPrincipal;
   selectedBranchId?: string;
+  branchApplicationId?: string;
 };

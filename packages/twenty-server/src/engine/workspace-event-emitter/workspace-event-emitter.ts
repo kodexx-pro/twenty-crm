@@ -69,6 +69,7 @@ export class WorkspaceEventEmitter {
       events,
       branchPrincipal: delegation.principal,
       selectedBranchId: delegation.selectedBranchId,
+      branchApplicationId: delegation.applicationId,
     };
 
     this.eventEmitter.emit(eventName, workspaceEventBatch);

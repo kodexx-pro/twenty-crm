@@ -521,23 +521,12 @@ export class ProcessNestedRelationsHelper {
 
     perParentRecordIdsQueryBuilder.applyRowLevelPermissions();
 
-    const perParentRecordIdsSql = `${perParentRecordIdsQueryBuilder.getQuery()} LIMIT ${Number(perParentLimit)}`;
-
-    const parentValues = sanitizedIds.map((id) => `('${id}'::uuid)`).join(', ');
-
-    const lateralSql =
-      `SELECT "limited_relation_records"."id" AS "id" FROM (` +
-      `SELECT "lateralRecords"."id" AS "id" ` +
-      `FROM (VALUES ${parentValues}) AS "lateralParents"("parentId") ` +
-      `CROSS JOIN LATERAL (${perParentRecordIdsSql}) AS "lateralRecords"` +
-      `) AS "limited_relation_records"`;
-
-    const limitedRecords = await targetObjectRepository.executeScopedRead<{
-      id: string;
-    }>(
-      lateralSql,
-      perParentRecordIdsQueryBuilder.getParameters(),
-      perParentRecordIdsQueryBuilder,
+    const limitedRecords = await targetObjectRepository.executeLateralRecordIds(
+      {
+        source: perParentRecordIdsQueryBuilder,
+        parentIds: sanitizedIds,
+        limit: perParentLimit,
+      },
     );
 
     return limitedRecords.map((limitedRecord) => limitedRecord.id);

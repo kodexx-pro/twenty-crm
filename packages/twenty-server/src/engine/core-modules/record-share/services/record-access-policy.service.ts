@@ -136,21 +136,37 @@ export class RecordAccessPolicyService {
           );
         const branchScopedSubject = {
           ...subject,
-          resolveWorkspaceBranchAccess: (target: typeof objectMetadata) =>
-            target.nameSingular === 'workspaceMember'
-              ? resolveWorkspaceBranchMemberAccess({
-                  configuration: branchConfiguration,
-                  workspaceId,
-                  principal: subject.workspaceBranchPrincipal,
-                })
-              : shouldIsolateWorkspaceObject(target)
-                ? resolveWorkspaceBranchAccess({
+          resolveWorkspaceBranchAccess: (target: typeof objectMetadata) => {
+            const access =
+              target.nameSingular === 'workspaceMember'
+                ? resolveWorkspaceBranchMemberAccess({
                     configuration: branchConfiguration,
                     workspaceId,
                     principal: subject.workspaceBranchPrincipal,
-                    operation: 'read',
+                    selectedBranchId: subject.selectedBranchId,
                   })
-                : { kind: 'unrestricted' as const },
+                : shouldIsolateWorkspaceObject(target)
+                  ? resolveWorkspaceBranchAccess({
+                      configuration: branchConfiguration,
+                      workspaceId,
+                      principal: subject.workspaceBranchPrincipal,
+                      operation: 'read',
+                    })
+                  : { kind: 'unrestricted' as const };
+            if (
+              target.nameSingular !== 'workspaceMember' &&
+              access.kind === 'restricted' &&
+              subject.selectedBranchId
+            ) {
+              return {
+                kind: 'restricted' as const,
+                branchIds: access.branchIds.filter(
+                  (id) => id === subject.selectedBranchId,
+                ),
+              };
+            }
+            return access;
+          },
         };
         const {
           flatObjectMetadataMaps,

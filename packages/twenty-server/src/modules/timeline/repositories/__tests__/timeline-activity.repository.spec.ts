@@ -47,12 +47,12 @@ describe('TimelineActivityRepository', () => {
         async (
           callback: (transactionScope: {
             getRepository: () => typeof workspaceRepository;
-            executeRawQuery: () => Promise<never[]>;
+            acquireAdvisoryLocks: () => Promise<void>;
           }) => Promise<void>,
         ) =>
           callback({
             getRepository: () => workspaceRepository,
-            executeRawQuery: jest.fn().mockResolvedValue([]),
+            acquireAdvisoryLocks: jest.fn().mockResolvedValue(undefined),
           }),
       ),
     } as unknown as WorkspaceOrmManager;
@@ -89,7 +89,7 @@ describe('TimelineActivityRepository', () => {
   });
 
   it('locks merge identities in a stable order before reading recent rows', async () => {
-    const executeRawQuery = jest.fn().mockResolvedValue([]);
+    const acquireAdvisoryLocks = jest.fn().mockResolvedValue(undefined);
     const workspaceRepository = {
       find: jest.fn().mockResolvedValue([]),
       update: jest.fn().mockResolvedValue(undefined),
@@ -103,12 +103,12 @@ describe('TimelineActivityRepository', () => {
         async (
           callback: (transactionScope: {
             getRepository: () => typeof workspaceRepository;
-            executeRawQuery: typeof executeRawQuery;
+            acquireAdvisoryLocks: typeof acquireAdvisoryLocks;
           }) => Promise<void>,
         ) =>
           callback({
             getRepository: () => workspaceRepository,
-            executeRawQuery,
+            acquireAdvisoryLocks,
           }),
       ),
     } as unknown as WorkspaceOrmManager;
@@ -137,33 +137,27 @@ describe('TimelineActivityRepository', () => {
       ],
     });
 
-    const lockStatement = `SELECT pg_advisory_xact_lock(hashtextextended("lockName", 0))
-   FROM unnest($1::text[]) WITH ORDINALITY AS "locks"("lockName", "ordinality")
-   ORDER BY "ordinality"`;
-
-    expect(executeRawQuery).toHaveBeenCalledTimes(1);
-    expect(executeRawQuery).toHaveBeenCalledWith(lockStatement, [
-      [
-        JSON.stringify([
-          'timeline-activity-merge',
-          WORKSPACE_ID,
-          'person',
-          'record-a',
-          WORKSPACE_MEMBER_ID,
-          TIMELINE_ACTIVITY_TYPE_ID,
-        ]),
-        JSON.stringify([
-          'timeline-activity-merge',
-          WORKSPACE_ID,
-          'person',
-          'record-z',
-          WORKSPACE_MEMBER_ID,
-          TIMELINE_ACTIVITY_TYPE_ID,
-        ]),
-      ],
+    expect(acquireAdvisoryLocks).toHaveBeenCalledTimes(1);
+    expect(acquireAdvisoryLocks).toHaveBeenCalledWith([
+      JSON.stringify([
+        'timeline-activity-merge',
+        WORKSPACE_ID,
+        'person',
+        'record-a',
+        WORKSPACE_MEMBER_ID,
+        TIMELINE_ACTIVITY_TYPE_ID,
+      ]),
+      JSON.stringify([
+        'timeline-activity-merge',
+        WORKSPACE_ID,
+        'person',
+        'record-z',
+        WORKSPACE_MEMBER_ID,
+        TIMELINE_ACTIVITY_TYPE_ID,
+      ]),
     ]);
     expect(
       workspaceRepository.find.mock.invocationCallOrder[0],
-    ).toBeGreaterThan(executeRawQuery.mock.invocationCallOrder[0]);
+    ).toBeGreaterThan(acquireAdvisoryLocks.mock.invocationCallOrder[0]);
   });
 });

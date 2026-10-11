@@ -84,6 +84,7 @@ export type CompiledRowAccessPolicy =
   | { kind: 'gated'; condition: SqlCondition };
 
 export type RowAccessPolicySubject = {
+  selectedBranchId?: string;
   workspaceBranchPrincipal?: WorkspaceBranchPrincipal;
   resolveWorkspaceBranchAccess?: (
     objectMetadata: FlatObjectMetadata,

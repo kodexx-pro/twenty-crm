@@ -46,6 +46,9 @@ import { type RecordFormStep } from '@/object-record/record-form/types/RecordFor
 import { Select } from '@/ui/input/components/Select';
 import { useWorkspaceBranches } from '@/workspace-branch/hooks/useWorkspaceBranches';
 import { resolveRecordFormBranch } from '@/workspace-branch/utils/resolveRecordFormBranch';
+import { RecordFormBranchContext } from '@/workspace-branch/contexts/RecordFormBranchContext';
+import { getFieldMetadataItemGqlFieldName } from '@/object-metadata/utils/getFieldMetadataItemGqlFieldName';
+import { FieldMetadataType } from '~/generated-metadata/graphql';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -398,74 +401,105 @@ const SidePanelRecordCreationForm = ({
           />
         }
       />
-      <StyledContent>
-        {isBranchScoped &&
-          (mode === 'edit' ? (
-            <div>
-              {t`Branch`}:{' '}
-              {branchAccess.branches.find((branch) => branch.id === branchId)
-                ?.name ?? t`Unavailable branch`}
+      <RecordFormBranchContext.Provider
+        key={isBranchScoped ? (branchId ?? 'unassigned') : 'unrestricted'}
+        value={{ enabled: isBranchScoped, branchId }}
+      >
+        <StyledContent>
+          {isBranchScoped &&
+            (mode === 'edit' ? (
+              <div>
+                {t`Branch`}:{' '}
+                {branchAccess.branches.find((branch) => branch.id === branchId)
+                  ?.name ?? t`Unavailable branch`}
+              </div>
+            ) : (
+              <Select
+                dropdownId={`record-form-branch-${requestId}`}
+                label={t`Branch`}
+                description={t`Choose the branch that owns this record.`}
+                fullWidth
+                value={branchId ?? ''}
+                disabled={isSubmitting}
+                emptyOption={{ value: '', label: t`Select a branch` }}
+                options={branchAccess.branches
+                  .filter((branch) => branch.operations?.includes('create'))
+                  .map((branch) => ({ value: branch.id, label: branch.name }))}
+                onChange={(value) => {
+                  if (value === branchId) return;
+                  const relationFields = objectMetadataItem.fields.filter(
+                    (field) =>
+                      [
+                        FieldMetadataType.RELATION,
+                        FieldMetadataType.MORPH_RELATION,
+                        FieldMetadataType.FILES,
+                      ].includes(field.type),
+                  );
+                  const keysToClear = new Set(
+                    relationFields.flatMap((field) =>
+                      [
+                        getFieldMetadataItemGqlFieldName(field),
+                        field.settings?.joinColumnName,
+                      ].filter(isDefined),
+                    ),
+                  );
+                  setRecordCreationFormDraft((previous) =>
+                    Object.fromEntries(
+                      Object.entries(previous ?? initialDraftRecord).filter(
+                        ([key]) => !keysToClear.has(key),
+                      ),
+                    ),
+                  );
+                  setChosenBranchId(value);
+                }}
+              />
+            ))}
+          {isWizard && (
+            <div role="status" aria-live="polite">
+              {t`Step ${currentStepIndex + 1} of ${steps.length}`}
+              {currentStep.title ? `: ${currentStep.title}` : ''}
             </div>
-          ) : (
-            <Select
-              dropdownId={`record-form-branch-${requestId}`}
-              label={t`Branch`}
-              description={t`Choose the branch that owns this record.`}
-              fullWidth
-              value={branchId ?? ''}
-              disabled={isSubmitting}
-              emptyOption={{ value: '', label: t`Select a branch` }}
-              options={branchAccess.branches
-                .filter((branch) => branch.operations?.includes('create'))
-                .map((branch) => ({ value: branch.id, label: branch.name }))}
-              onChange={setChosenBranchId}
-            />
-          ))}
-        {isWizard && (
-          <div role="status" aria-live="polite">
-            {t`Step ${currentStepIndex + 1} of ${steps.length}`}
-            {currentStep.title ? `: ${currentStep.title}` : ''}
-          </div>
-        )}
-        <RecordFormFieldInputs
-          objectMetadataItem={objectMetadataItem}
-          fieldMetadataItems={renderedVisibleFieldMetadataItems}
-          draftRecord={draftRecord}
-          onFieldValueChange={handleFieldValueChange}
-          onFieldValueClear={handleFieldValueClear}
-        />
-        {hiddenFieldsCount > 0 && (
-          <StyledHiddenFieldsToggle>
-            <LightButton
-              startIcon={
-                recordCreationFormAreHiddenFieldsShown ? (
-                  <IconChevronUp />
-                ) : (
-                  <IconChevronDown />
-                )
-              }
-              onClick={() =>
-                setRecordCreationFormAreHiddenFieldsShown(
-                  !recordCreationFormAreHiddenFieldsShown,
-                )
-              }
-            >
-              {recordCreationFormAreHiddenFieldsShown
-                ? t`Collapse hidden fields`
-                : t`Show hidden fields (${hiddenFieldsCount})`}
-            </LightButton>
-          </StyledHiddenFieldsToggle>
-        )}
-        {recordCreationFormAreHiddenFieldsShown && hiddenFieldsCount > 0 && (
+          )}
           <RecordFormFieldInputs
             objectMetadataItem={objectMetadataItem}
-            fieldMetadataItems={renderedHiddenFieldMetadataItems}
+            fieldMetadataItems={renderedVisibleFieldMetadataItems}
             draftRecord={draftRecord}
             onFieldValueChange={handleFieldValueChange}
             onFieldValueClear={handleFieldValueClear}
           />
-        )}
-      </StyledContent>
+          {hiddenFieldsCount > 0 && (
+            <StyledHiddenFieldsToggle>
+              <LightButton
+                startIcon={
+                  recordCreationFormAreHiddenFieldsShown ? (
+                    <IconChevronUp />
+                  ) : (
+                    <IconChevronDown />
+                  )
+                }
+                onClick={() =>
+                  setRecordCreationFormAreHiddenFieldsShown(
+                    !recordCreationFormAreHiddenFieldsShown,
+                  )
+                }
+              >
+                {recordCreationFormAreHiddenFieldsShown
+                  ? t`Collapse hidden fields`
+                  : t`Show hidden fields (${hiddenFieldsCount})`}
+              </LightButton>
+            </StyledHiddenFieldsToggle>
+          )}
+          {recordCreationFormAreHiddenFieldsShown && hiddenFieldsCount > 0 && (
+            <RecordFormFieldInputs
+              objectMetadataItem={objectMetadataItem}
+              fieldMetadataItems={renderedHiddenFieldMetadataItems}
+              draftRecord={draftRecord}
+              onFieldValueChange={handleFieldValueChange}
+              onFieldValueClear={handleFieldValueClear}
+            />
+          )}
+        </StyledContent>
+      </RecordFormBranchContext.Provider>
       {validationRuleViolations.length > 0 && (
         <StyledValidationRuleErrors>
           {validationRuleViolations.map((violation) => (

@@ -1,4 +1,6 @@
-import { Logger } from '@nestjs/common';
+import { shouldIsolateWorkspaceObject } from 'src/engine/core-modules/workspace-branch/utils/should-isolate-workspace-object.util';
+import { normalizeWorkspaceBranchRolePermissionConfig } from 'src/engine/twenty-orm/utils/normalize-workspace-branch-role-permission-config.util';
+import { ForbiddenException, Logger } from '@nestjs/common';
 
 import { type Pool } from 'pg';
 import { isDefined } from 'twenty-shared/utils';
@@ -102,28 +104,72 @@ export class WorkspaceDataSource {
         },
       },
     };
-    const result = await this.runInClientTransaction((executor) =>
-      work({
-        workspaceId: this.internalContext.workspaceId,
-        getRepository: <T extends ObjectLiteral = ObjectRecord>(
-          nameSingular: string,
-          rolePermissionConfig?: RolePermissionConfig,
-          repositoryOptions?: { shouldSkipEventEmission?: boolean },
-        ) =>
-          this.buildRepository<T>({
-            nameSingular,
-            rolePermissionConfig,
-            executor,
-            isTransactional: true,
-            shouldSkipEventEmission:
-              repositoryOptions?.shouldSkipEventEmission ?? false,
-            internalContext: transactionalInternalContext,
-          }),
-        executeRawQuery: (sql, parameters = []) =>
-          executor.execute({ text: sql, values: parameters }),
-        afterCommit,
-      }),
-    );
+    const runTransaction = async () => {
+      const current =
+        await this.internalContext.loadWorkspaceBranchConfiguration?.();
+      const snapshot = this.internalContext.workspaceBranchConfiguration;
+      if (
+        current &&
+        (current.revision !== snapshot?.revision ||
+          current.enabled !== snapshot?.enabled)
+      )
+        throw new ForbiddenException(
+          'Branch permissions changed; retry in a new workspace context',
+        );
+      return this.runInClientTransaction((executor) =>
+        work({
+          acquireAdvisoryLocks: async (lockNames) => {
+            if (lockNames.length > 10000)
+              throw new ForbiddenException('Too many transaction locks');
+            for (const name of lockNames) {
+              let parts: unknown;
+              try {
+                parts = JSON.parse(name);
+              } catch {
+                throw new ForbiddenException('Invalid transaction lock');
+              }
+              if (
+                !Array.isArray(parts) ||
+                parts.length !== 6 ||
+                parts[0] !== 'timeline-activity-merge' ||
+                parts[1] !== this.internalContext.workspaceId
+              )
+                throw new ForbiddenException('Invalid transaction lock');
+            }
+            await executor.execute({
+              text: 'SELECT pg_advisory_xact_lock(hashtextextended("lockName", 0)) FROM unnest($1::text[]) WITH ORDINALITY AS "locks"("lockName", "ordinality") ORDER BY "ordinality"',
+              values: [[...new Set(lockNames)].sort()],
+            });
+          },
+          workspaceId: this.internalContext.workspaceId,
+          getRepository: <T extends ObjectLiteral = ObjectRecord>(
+            nameSingular: string,
+            rolePermissionConfig?: RolePermissionConfig,
+            repositoryOptions?: { shouldSkipEventEmission?: boolean },
+          ) =>
+            this.buildRepository<T>({
+              nameSingular,
+              rolePermissionConfig,
+              executor,
+              isTransactional: true,
+              shouldSkipEventEmission:
+                repositoryOptions?.shouldSkipEventEmission ?? false,
+              internalContext: transactionalInternalContext,
+            }),
+          executeRawQuery: (sql, parameters = []) => {
+            if (this.internalContext.workspaceBranchConfiguration?.enabled)
+              throw new ForbiddenException(
+                'Raw transaction queries are unavailable with branch isolation',
+              );
+            return executor.execute({ text: sql, values: parameters });
+          },
+          afterCommit,
+        }),
+      );
+    };
+    const result = this.internalContext.withWorkspaceBranchAccessLock
+      ? await this.internalContext.withWorkspaceBranchAccessLock(runTransaction)
+      : await runTransaction();
 
     for (const callback of afterCommitCallbacks) {
       try {
@@ -205,7 +251,13 @@ export class WorkspaceDataSource {
 
     const { objectRecordsPermissions, shouldBypassPermissionChecks } =
       resolveObjectRecordsPermissions({
-        rolePermissionConfig,
+        rolePermissionConfig: shouldIsolateWorkspaceObject(flatObjectMetadata)
+          ? normalizeWorkspaceBranchRolePermissionConfig({
+              authContext: this.authContext,
+              internalContext,
+              rolePermissionConfig,
+            })
+          : rolePermissionConfig,
         objectPermissionsByRoleId: this.objectPermissionsByRoleId,
       });
 

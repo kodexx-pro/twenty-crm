@@ -4,6 +4,8 @@ import { FileFolder } from 'twenty-shared/types';
 
 import { type FileTokenJwtPayload } from 'src/engine/core-modules/auth/types/file-token-jwt-payload.type';
 import { FileBranchAccessService } from 'src/engine/core-modules/file/services/file-branch-access.service';
+import { type FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
+import { type WorkspaceBranchPrincipalAuthService } from 'src/engine/core-modules/workspace-branch/workspace-branch-principal-auth.service';
 import { loadWorkspaceBranchConfiguration } from 'src/engine/core-modules/workspace-branch/utils/load-workspace-branch-configuration.util';
 
 jest.mock(
@@ -35,7 +37,11 @@ describe('FileBranchAccessService', () => {
     getRepository: () => ({ findOne }),
     query,
   } as unknown as DataSource;
-  const service = new FileBranchAccessService(dataSource);
+  const hydrate = jest.fn();
+  const principalAuthService = {
+    hydrate,
+  } as unknown as WorkspaceBranchPrincipalAuthService;
+  const service = new FileBranchAccessService(dataSource, principalAuthService);
   const token = {
     workspaceId,
     fileId,
@@ -50,6 +56,7 @@ describe('FileBranchAccessService', () => {
       settings: { branchId, isTemporaryFile: false },
     });
     query.mockResolvedValue([{ branchId }]);
+    hydrate.mockResolvedValue({ type: 'user' });
   });
 
   it('preserves downloads when isolation is disabled', async () => {
@@ -118,19 +125,53 @@ describe('FileBranchAccessService', () => {
   });
 
   it('forbids overwriting a foreign file or moving ownership through upload', async () => {
-    const scope = jest.spyOn(service, 'getSigningScope').mockResolvedValue({ branchRevision: 3, branchPrincipal: { type: 'workspaceMember', id: memberId } });
-    jest.mocked(loadWorkspaceBranchConfiguration).mockResolvedValue({ ...policy, grants: [{ ...policy.grants[0], operations: ['update'] }] });
-    const file = { id: fileId, path: `${FileFolder.FilesField}/file`, settings: { branchId, isTemporaryFile: false, toDelete: false } } as never;
+    const scope = jest
+      .spyOn(service, 'getSigningScope')
+      .mockResolvedValue({
+        branchRevision: 3,
+        branchPrincipal: { type: 'workspaceMember', id: memberId },
+        branchApplicationId: undefined,
+      });
+    jest
+      .mocked(loadWorkspaceBranchConfiguration)
+      .mockResolvedValue({
+        ...policy,
+        grants: [{ ...policy.grants[0], operations: ['update'] }],
+      });
+    const file = {
+      id: fileId,
+      path: `${FileFolder.FilesField}/file`,
+      settings: { branchId, isTemporaryFile: false, toDelete: false },
+    } as FileEntity;
     findOne.mockResolvedValue(file);
 
-    await expect(service.assertOverwrite(workspaceId, file, memberId)).rejects.toThrow('cannot be transferred');
+    await expect(
+      service.assertOverwrite(workspaceId, file, memberId),
+    ).rejects.toThrow('cannot be transferred');
     findOne.mockResolvedValue({ ...file, settings: { branchId: memberId } });
-    await expect(service.assertOverwrite(workspaceId, file, branchId)).rejects.toThrow('access denied');
+    await expect(
+      service.assertOverwrite(workspaceId, file, branchId),
+    ).rejects.toThrow('access denied');
     scope.mockRestore();
   });
 
   it('rejects an unbound stream upload in an isolated workspace', async () => {
     findOne.mockResolvedValue(null);
-    await expect(service.assertStreamUpload({ workspaceId, fileFolder: FileFolder.FilesField, resourcePath: 'file', applicationUniversalIdentifier: memberId })).rejects.toThrow('Unbound file upload');
+    await expect(
+      service.assertStreamUpload({
+        workspaceId,
+        fileFolder: FileFolder.FilesField,
+        resourcePath: 'file',
+        applicationUniversalIdentifier: memberId,
+      }),
+    ).rejects.toThrow('Unbound file upload');
+  });
+
+  it('rejects a removed principal even when branch grants and revision are unchanged', async () => {
+    hydrate.mockRejectedValueOnce(
+      new ForbiddenException('Workspace member is no longer authorized'),
+    );
+    expect(await service.canDownload(token, FileFolder.FilesField)).toBe(false);
+    expect(query).not.toHaveBeenCalled();
   });
 });

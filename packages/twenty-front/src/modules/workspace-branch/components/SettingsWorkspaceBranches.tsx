@@ -136,6 +136,7 @@ const WorkspaceBranchesEditor = ({
         {t`Isolate records by branch`}
       </label>
       <div>{t`Keep this disabled to use the current shared workspace. Activation requires every existing record to be classified and validated by the server.`}</div>
+      <div>{t`Clientes e contatos também ficam isolados. Rotinas automáticas sem filial e responsável autorizados ficam bloqueadas.`}</div>
       {draft.branches.map((branch, index) => (
         <StyledRow key={branch.id}>
           <SettingsTextInput
@@ -303,17 +304,29 @@ const WorkspaceBranchesEditor = ({
           })
         }
       >{t`Add employee permission`}</Button>
-      <Section.Header title={t`Object structure`} description={t`Prepare protected branch fields and indexes for new objects without assigning records or disabling isolation.`} />
-      <Button size="sm" disabled={loading} loading={preparing} onClick={async () => {
-        setError(null);
-        try {
-          const result = await prepare({ variables: {} });
-          if (result.error) throw result.error;
-          if (result.data) setPrepared(result.data.prepareWorkspaceBranches);
-        } catch (prepareError) {
-          setError(prepareError instanceof Error ? prepareError.message : t`Unable to prepare object structure.`);
-        }
-      }}>{t`Prepare object structure`}</Button>
+      <Section.Header
+        title={t`Object structure`}
+        description={t`Prepare protected branch fields and indexes for new objects without assigning records or disabling isolation.`}
+      />
+      <Button
+        size="sm"
+        disabled={loading}
+        loading={preparing}
+        onClick={async () => {
+          setError(null);
+          try {
+            const result = await prepare({ variables: {} });
+            if (result.error) throw result.error;
+            if (result.data) setPrepared(result.data.prepareWorkspaceBranches);
+          } catch (prepareError) {
+            setError(
+              prepareError instanceof Error
+                ? prepareError.message
+                : t`Unable to prepare object structure.`,
+            );
+          }
+        }}
+      >{t`Prepare object structure`}</Button>
       {!access.enabled && (
         <StyledStack>
           <Section.Header
@@ -369,7 +382,9 @@ const WorkspaceBranchesEditor = ({
           >{t`Prepare existing records`}</Button>
         </StyledStack>
       )}
-      {prepared && <div role="status">{t`${prepared.objectsPrepared} objects prepared; ${prepared.recordsAssigned} records assigned.`}</div>}
+      {prepared && (
+        <div role="status">{t`${prepared.objectsPrepared} objects prepared; ${prepared.recordsAssigned} records assigned.`}</div>
+      )}
       {error && <div role="alert">{error}</div>}
       {saved && <div role="status">{t`Branch settings saved.`}</div>}
       <Button

@@ -99,9 +99,10 @@ export class ApolloFactory implements ApolloManager {
 
       const authLink = setContext(async (_, { headers }) => {
         const locale = this.currentWorkspaceMember?.locale ?? i18n.locale;
-        const branchId = readWorkspaceBranchSelection(
-          this.currentWorkspace?.id,
-        );
+        const branchId =
+          typeof headers?.['x-workspace-branch-id'] === 'string'
+            ? headers['x-workspace-branch-id']
+            : readWorkspaceBranchSelection(this.currentWorkspace?.id);
 
         return {
           sessionGeneration: getSessionGeneration(),

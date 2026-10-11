@@ -1,5 +1,7 @@
-import { UseFilters, UseGuards, UsePipes } from '@nestjs/common';
-import { Args, Mutation, Subscription } from '@nestjs/graphql';
+import { BadRequestException, UseFilters, UseGuards, UsePipes } from '@nestjs/common';
+import { Args, Context, Mutation, Subscription } from '@nestjs/graphql';
+import { type Request } from 'express';
+import { isUUID } from 'class-validator';
 
 import { mapAsyncIterator } from '@graphql-tools/utils';
 
@@ -97,7 +99,10 @@ export class EventStreamResolver {
     @AuthApiKey() apiKey: ApiKeyEntity | undefined,
     @AuthApplication({ allowUndefined: true })
     application: FlatApplication | undefined,
+    @Context('req') request?: Request,
   ) {
+    const selectedBranchId = request?.headers['x-workspace-branch-id'];
+    if (isDefined(selectedBranchId) && (typeof selectedBranchId !== 'string' || !isUUID(selectedBranchId))) throw new BadRequestException('Invalid branch selection');
     const eventStreamChannelId = eventStreamIdToChannelId(eventStreamId);
 
     const existingStreamData = await this.eventStreamService.getStreamData(
@@ -137,6 +142,7 @@ export class EventStreamResolver {
         workspaceMemberId,
         apiKeyId: apiKey?.id,
         applicationId: application?.id,
+        selectedBranchId: typeof selectedBranchId === 'string' ? selectedBranchId : undefined,
       },
     });
 

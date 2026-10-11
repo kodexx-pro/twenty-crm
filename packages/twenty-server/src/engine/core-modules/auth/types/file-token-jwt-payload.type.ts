@@ -8,4 +8,5 @@ export type FileTokenJwtPayload = CommonPropertiesJwtPayload & {
   fileId: string;
   branchRevision?: number;
   branchPrincipal?: WorkspaceBranchPrincipal;
+  branchApplicationId?: string;
 };

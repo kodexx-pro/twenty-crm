@@ -23,3 +23,12 @@ export const writeWorkspaceBranchSelection = (
     );
   }
 };
+
+export const getWorkspaceBranchSelectionHeaders = (
+  workspaceId?: string,
+): Record<string, string> => {
+  const branchId = readWorkspaceBranchSelection(workspaceId);
+  return branchId && branchId !== 'all'
+    ? { 'x-workspace-branch-id': branchId }
+    : {};
+};

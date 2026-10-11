@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client/react';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import { RecordFormBranchContext } from '@/workspace-branch/contexts/RecordFormBranchContext';
 
 import { useApolloCoreClient } from '@/object-metadata/hooks/useApolloCoreClient';
 import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
@@ -36,6 +37,7 @@ export const useFindOneRecord = <T extends ObjectRecord = ObjectRecord>({
     });
 
   const apolloCoreClient = useApolloCoreClient();
+  const recordFormBranch = useContext(RecordFormBranchContext);
 
   const computedRecordGqlFields = recordGqlFields ?? depthOneRecordGqlFields;
 
@@ -55,9 +57,15 @@ export const useFindOneRecord = <T extends ObjectRecord = ObjectRecord>({
       !isDefined(objectMetadataItem) ||
       !objectRecordId ||
       skip ||
-      !hasReadPermission,
+      !hasReadPermission ||
+      (recordFormBranch.enabled && !recordFormBranch.branchId),
     variables: { objectRecordId },
     client: apolloCoreClient,
+    fetchPolicy: recordFormBranch.enabled ? 'no-cache' : undefined,
+    context:
+      recordFormBranch.enabled && recordFormBranch.branchId
+        ? { headers: { 'x-workspace-branch-id': recordFormBranch.branchId } }
+        : undefined,
   });
 
   // TODO: Remove connection from record

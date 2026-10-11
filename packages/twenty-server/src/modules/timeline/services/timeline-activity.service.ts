@@ -10,7 +10,7 @@ import { type DatabaseEventAction } from 'src/engine/api/graphql/graphql-query-r
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { type OrmFlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/orm-flat-field-metadata.type';
 import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
-import { buildDelegatedBranchSystemAuthContext } from 'src/engine/core-modules/workspace-branch/utils/build-delegated-branch-system-auth-context.util';
+import { workspaceBranchAuditProofStorage } from 'src/engine/core-modules/workspace-branch/storage/workspace-branch-audit-proof.storage';
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { parseEventNameOrThrow } from 'src/engine/workspace-event-emitter/utils/parse-event-name';
 import { TimelineActivityRepository } from 'src/modules/timeline/repositories/timeline-activity.repository';
@@ -169,7 +169,7 @@ export class TimelineActivityService {
             }),
           ),
         ]);
-      }, buildDelegatedBranchSystemAuthContext(workspaceId))
+      }, workspaceBranchAuditProofStorage.getStore()?.authContext)
     ).flat();
 
     if (action === 'updated') {

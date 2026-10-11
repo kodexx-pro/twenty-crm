@@ -510,6 +510,7 @@ export class ObjectRecordEventPublisher {
     flatWorkspaceMemberMaps: FlatWorkspaceMemberMaps;
   }): RowAccessPolicySubject {
     return {
+      selectedBranchId: subscriberAuthContext.selectedBranchId,
       workspaceBranchPrincipal: subscriberAuthContext.workspaceMemberId
         ? {
             type: 'workspaceMember',

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { isUUID } from 'class-validator';
 import { FieldMetadataType, IndexType } from 'twenty-shared/types';
@@ -91,7 +95,9 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
       throw new BadRequestException('Add a branch before enabling isolation');
     for (const object of objects) {
       const field = fields.find(
-        (candidate) => candidate.objectMetadataId === object.id && candidate.name === 'branchId',
+        (candidate) =>
+          candidate.objectMetadataId === object.id &&
+          candidate.name === 'branchId',
       );
       if (
         object.isRemote ||
@@ -115,7 +121,12 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
           `Assign all records in ${object.labelPlural} to a branch before enabling isolation`,
         );
     }
-    await this.validateRelationships(workspaceId, objects, fields, configuration);
+    await this.validateRelationships(
+      workspaceId,
+      objects,
+      fields,
+      configuration,
+    );
     const invalidFiles: { count: string }[] = await this.dataSource.query(
       `SELECT COUNT(*)::text AS count FROM ${schema}."attachment" a
        CROSS JOIN LATERAL jsonb_array_elements(COALESCE(a."file", '[]'::jsonb)) attached
@@ -124,7 +135,9 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
       [workspaceId],
     );
     if (Number(invalidFiles[0]?.count ?? 0) > 0) {
-      throw new BadRequestException('Prepare attachment file ownership before enabling branch isolation');
+      throw new BadRequestException(
+        'Prepare attachment file ownership before enabling branch isolation',
+      );
     }
   }
 
@@ -135,17 +148,48 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
     configuration: WorkspaceBranchAccessConfiguration,
   ) {
     const schema = quoteIdentifier(getWorkspaceSchemaName(workspaceId));
-    const allObjects = await this.dataSource.getRepository(ObjectMetadataEntity).find({ where: { workspaceId } });
-    const employeeGrants = configuration.grants.filter((grant) => grant.principal.type === 'workspaceMember' && grant.operations.includes('read')).map((grant) => ({ branchId: grant.branchId, memberId: grant.principal.id }));
+    const allObjects = await this.dataSource
+      .getRepository(ObjectMetadataEntity)
+      .find({ where: { workspaceId } });
+    const employeeGrants = configuration.grants
+      .filter(
+        (grant) =>
+          grant.principal.type === 'workspaceMember' &&
+          grant.operations.includes('read'),
+      )
+      .map((grant) => ({
+        branchId: grant.branchId,
+        memberId: grant.principal.id,
+      }));
     for (const field of fields) {
-      if (field.type !== FieldMetadataType.RELATION && field.type !== FieldMetadataType.MORPH_RELATION) continue;
-      const settings = field.settings as { relationType?: string; joinColumnName?: string } | null;
+      if (
+        field.type !== FieldMetadataType.RELATION &&
+        field.type !== FieldMetadataType.MORPH_RELATION
+      )
+        continue;
+      const settings = field.settings as {
+        relationType?: string;
+        joinColumnName?: string;
+      } | null;
       if (settings?.relationType === RelationType.ONE_TO_MANY) continue;
-      const source = objects.find((object) => object.id === field.objectMetadataId);
+      const source = objects.find(
+        (object) => object.id === field.objectMetadataId,
+      );
       if (!source) continue;
-      const target = allObjects.find((object) => object.id === field.relationTargetObjectMetadataId);
-      if (settings?.relationType !== RelationType.MANY_TO_ONE || !settings.joinColumnName || !target || target.isRemote || (target.nameSingular !== 'workspaceMember' && !shouldIsolateWorkspaceObject(target))) {
-        throw new BadRequestException(`Unsupported branch relationship ${source.labelPlural}.${field.label}`);
+      const target = allObjects.find(
+        (object) => object.id === field.relationTargetObjectMetadataId,
+      );
+      if (
+        settings?.relationType !== RelationType.MANY_TO_ONE ||
+        !settings.joinColumnName ||
+        !target ||
+        target.isRemote ||
+        (target.nameSingular !== 'workspaceMember' &&
+          !shouldIsolateWorkspaceObject(target))
+      ) {
+        throw new BadRequestException(
+          `Unsupported branch relationship ${source.labelPlural}.${field.label}`,
+        );
       }
       const sourceTable = `${schema}.${quoteIdentifier(source.nameSingular)}`;
       const targetTable = `${schema}.${quoteIdentifier(target.nameSingular)}`;
@@ -158,29 +202,45 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
         `SELECT COUNT(*)::text AS count FROM ${sourceTable} source
          LEFT JOIN ${targetTable} target ON target.id = source.${joinColumn}
          WHERE source.${joinColumn} IS NOT NULL AND (target.id IS NULL OR ${target.nameSingular === 'workspaceMember' ? employeeCondition : 'target."branchId" IS DISTINCT FROM source."branchId"'})`,
-        target.nameSingular === 'workspaceMember' ? [JSON.stringify(employeeGrants)] : [],
+        target.nameSingular === 'workspaceMember'
+          ? [JSON.stringify(employeeGrants)]
+          : [],
       );
       if (Number(invalid[0]?.count ?? 0) > 0) {
-        throw new BadRequestException(`Resolve cross-branch or unauthorized relationships in ${source.labelPlural}.${field.label} before enabling isolation`);
+        throw new BadRequestException(
+          `Resolve cross-branch or unauthorized relationships in ${source.labelPlural}.${field.label} before enabling isolation`,
+        );
       }
     }
   }
 
   async prepare(workspaceId: string, branchId?: string) {
-    if (!isUUID(workspaceId)) throw new BadRequestException('Invalid workspace');
+    if (!isUUID(workspaceId))
+      throw new BadRequestException('Invalid workspace');
     const runner = this.dataSource.createQueryRunner();
     const lockKey = `workspace-branch-prepare:${workspaceId}`;
     let locked = false;
-    await runner.connect();
     try {
+      await runner.connect();
       // Metadata migrations use separate connections. A distinct session lock
       // serializes preparation without conflicting with the configuration lock.
-      await runner.query('SELECT pg_advisory_lock(hashtextextended($1, 0))', [lockKey]);
-      locked = true;
+      const locks: { locked: boolean }[] = await runner.query(
+        'SELECT pg_try_advisory_lock(hashtextextended($1, 0)) AS locked',
+        [lockKey],
+      );
+      locked = locks[0]?.locked === true;
+      if (!locked)
+        throw new ConflictException(
+          'Branch preparation is already running. Try again after it completes.',
+        );
       return await this.prepareUnlocked(workspaceId, branchId);
     } finally {
       try {
-        if (locked) await runner.query('SELECT pg_advisory_unlock(hashtextextended($1, 0))', [lockKey]);
+        if (locked)
+          await runner.query(
+            'SELECT pg_advisory_unlock(hashtextextended($1, 0))',
+            [lockKey],
+          );
       } finally {
         await runner.release();
       }
@@ -197,7 +257,12 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
       .getRepository(FieldMetadataEntity)
       .find({ where: { workspaceId, name: 'branchId' } });
     for (const field of existingFields) {
-      if (field.type !== FieldMetadataType.UUID || !field.isSystem || !field.isActive || field.isUIEditable)
+      if (
+        field.type !== FieldMetadataType.UUID ||
+        !field.isSystem ||
+        !field.isActive ||
+        field.isUIEditable
+      )
         throw new BadRequestException(
           'An existing branchId field conflicts with protected branch ownership',
         );
@@ -224,22 +289,47 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
       })),
     });
 
-    const preparedFields = await this.dataSource.getRepository(FieldMetadataEntity).find({ where: { workspaceId, name: 'branchId' } });
-    const indexes = await this.dataSource.getRepository(IndexMetadataEntity).find({ where: { workspaceId }, relations: ['indexFieldMetadatas'] });
+    const preparedFields = await this.dataSource
+      .getRepository(FieldMetadataEntity)
+      .find({ where: { workspaceId, name: 'branchId' } });
+    const indexes = await this.dataSource
+      .getRepository(IndexMetadataEntity)
+      .find({ where: { workspaceId }, relations: ['indexFieldMetadatas'] });
     for (const object of objects) {
-      const field = preparedFields.find((candidate) => candidate.objectMetadataId === object.id);
-      if (!field) throw new BadRequestException('Protected branch metadata was not created');
-      const indexed = indexes.some((index) => index.objectMetadataId === object.id && index.indexType === IndexType.BTREE && index.indexFieldMetadatas.some((indexField) => indexField.fieldMetadataId === field.id && indexField.order === 0));
+      const field = preparedFields.find(
+        (candidate) => candidate.objectMetadataId === object.id,
+      );
+      if (!field)
+        throw new BadRequestException(
+          'Protected branch metadata was not created',
+        );
+      const indexed = indexes.some(
+        (index) =>
+          index.objectMetadataId === object.id &&
+          index.indexType === IndexType.BTREE &&
+          index.indexFieldMetadatas.some(
+            (indexField) =>
+              indexField.fieldMetadataId === field.id && indexField.order === 0,
+          ),
+      );
       if (!indexed) {
-        await this.indexMetadataService.createOne({ workspaceId, createIndexInput: { objectMetadataId: object.id, fields: [{ fieldMetadataId: field.id }], indexType: IndexType.BTREE } });
+        await this.indexMetadataService.createOne({
+          workspaceId,
+          createIndexInput: {
+            objectMetadataId: object.id,
+            fields: [{ fieldMetadataId: field.id }],
+            indexType: IndexType.BTREE,
+          },
+        });
       }
     }
 
     const recordsAssigned = await this.dataSource.transaction(
       async (manager) => {
-        await manager.query('SELECT pg_advisory_xact_lock(hashtextextended($1, 0))', [
-          `workspace-branch:${workspaceId}`,
-        ]);
+        await manager.query(
+          'SELECT pg_advisory_xact_lock(hashtextextended($1, 0))',
+          [`workspace-branch:${workspaceId}`],
+        );
         const entry = await manager.getRepository(KeyValuePairEntity).findOne({
           where: {
             workspaceId,
@@ -273,24 +363,24 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
             `LOCK TABLE ${tables.join(', ')} IN SHARE ROW EXCLUSIVE MODE`,
           );
         let assigned = 0;
-      for (const table of tables) {
+        for (const table of tables) {
           const rows: { count: string }[] = await manager.query(
             `WITH assigned AS (UPDATE ${table} SET "branchId" = $1 WHERE "branchId" IS NULL RETURNING id) SELECT COUNT(*)::text AS count FROM assigned`,
             [branchId],
           );
-        assigned += Number(rows[0]?.count ?? 0);
-      }
-      await manager.query(
-        `WITH ownership AS (
+          assigned += Number(rows[0]?.count ?? 0);
+        }
+        await manager.query(
+          `WITH ownership AS (
           SELECT attached->>'fileId' AS id, MIN(a."branchId"::text) AS "branchId"
           FROM ${schema}."attachment" a
           CROSS JOIN LATERAL jsonb_array_elements(COALESCE(a."file", '[]'::jsonb)) attached
           GROUP BY attached->>'fileId' HAVING COUNT(DISTINCT a."branchId") = 1
         ) UPDATE core."file" f SET settings = COALESCE(f.settings, '{}'::jsonb) || jsonb_build_object('branchId', ownership."branchId")
         FROM ownership WHERE f.id::text = ownership.id AND f."workspaceId" = $1 AND f.settings->>'branchId' IS NULL`,
-        [workspaceId],
-      );
-      return assigned;
+          [workspaceId],
+        );
+        return assigned;
       },
     );
     return { objectsPrepared: missing.length, recordsAssigned };

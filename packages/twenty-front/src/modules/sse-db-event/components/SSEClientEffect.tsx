@@ -15,6 +15,8 @@ import { isDefined } from 'twenty-shared/utils';
 import { useDebouncedCallback } from 'use-debounce';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import { useStore } from 'jotai';
+import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
+import { getWorkspaceBranchSelectionHeaders } from '@/workspace-branch/utils/workspaceBranchSelection';
 
 export const SSEClientEffect = () => {
   const store = useStore();
@@ -58,6 +60,10 @@ export const SSEClientEffect = () => {
       const newSseClient = createClient({
         url: `${REACT_APP_SERVER_BASE_URL}/metadata`,
         credentials: 'include',
+        headers: () =>
+          getWorkspaceBranchSelectionHeaders(
+            store.get(currentWorkspaceState.atom)?.id,
+          ),
         on: {
           connected: handleSSEClientConnected,
         },

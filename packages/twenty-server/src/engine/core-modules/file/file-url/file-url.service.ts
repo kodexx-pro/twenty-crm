@@ -66,7 +66,7 @@ export class FileUrlService {
   }): Promise<string> {
     const signingScope =
       await this.fileBranchAccessService.getSigningScope(workspaceId);
-    const signingCacheKey = `${workspaceId}:${fileFolder}:${fileId}:${signingScope.branchRevision ?? ''}:${signingScope.branchPrincipal?.type ?? ''}:${signingScope.branchPrincipal?.id ?? ''}`;
+    const signingCacheKey = `${workspaceId}:${fileFolder}:${fileId}:${signingScope.branchRevision ?? ''}:${signingScope.branchPrincipal?.type ?? ''}:${signingScope.branchPrincipal?.id ?? ''}:${signingScope.branchApplicationId ?? ''}`;
     const inflightSigning = this.inflightFileUrlSignings.get(signingCacheKey);
 
     if (isDefined(inflightSigning)) {

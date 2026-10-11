@@ -16,7 +16,7 @@ jobs:
   verify:
     if: github.repository == 'kodexx-pro/twenty-crm'
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     env:
       BRANCH_ISOLATION_TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/branch_isolation_test
       NODE_OPTIONS: --max-old-space-size=6144
@@ -44,10 +44,24 @@ jobs:
           src/engine/core-modules/workspace-branch
           src/engine/core-modules/file/services/__tests__/file-branch-access.service.spec.ts
           src/engine/twenty-orm/utils/__tests__/build-row-access-policy.util.spec.ts
+          src/engine/twenty-orm/utils/__tests__/workspace-branch-audit-access.util.spec.ts
+          src/engine/twenty-orm/datasource/__tests__/workspace-branch-transaction.spec.ts
+          src/engine/twenty-orm/datasource/__tests__/workspace-branch-role-permissions.spec.ts
           src/engine/twenty-orm/repository/__tests__/workspace-repository.spec.ts
           src/engine/twenty-orm/repository/__tests__/workspace-branch-postgres.integration.spec.ts
           src/engine/twenty-orm/__tests__/workspace-orm.manager.spec.ts
           src/engine/subscriptions/object-record-event/__tests__/object-record-event-publisher.spec.ts
+          src/modules/timeline/jobs/__tests__/upsert-timeline-activity-from-internal-event.job.spec.ts
+          src/modules/timeline/repositories/__tests__/timeline-activity.repository.spec.ts
       - name: Server types
         working-directory: packages/twenty-server
         run: node ../../node_modules/typescript/bin/tsc --noEmit --pretty false
+      - name: Build interface dependencies
+        run: yarn nx build twenty-ui
+      - name: Branch settings and form behavior
+        working-directory: packages/twenty-front
+        run: >-
+          node ../../node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand
+          src/modules/workspace-branch
+          src/modules/side-panel/pages/record-creation-form/components/__tests__/SidePanelRecordCreationFormPage.test.tsx
+          src/modules/record-export/utils/__tests__/createRecordExportConnection.test.ts

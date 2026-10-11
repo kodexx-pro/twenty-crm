@@ -3,10 +3,14 @@ import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/wo
 import { type WorkspaceBranchPrincipal } from 'src/engine/core-modules/workspace-branch/types/workspace-branch-access.type';
 import { getWorkspaceContext } from 'src/engine/twenty-orm/storage/orm-workspace-context.storage';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
+import { workspaceBranchAuditProofStorage } from 'src/engine/core-modules/workspace-branch/storage/workspace-branch-audit-proof.storage';
 
-export const captureWorkspaceBranchDelegation = (workspaceId: string): {
+export const captureWorkspaceBranchDelegation = (
+  workspaceId: string,
+): {
   principal?: WorkspaceBranchPrincipal;
   selectedBranchId?: string;
+  applicationId?: string;
 } => {
   let context: WorkspaceAuthContext | undefined;
 
@@ -31,14 +35,27 @@ export const captureWorkspaceBranchDelegation = (workspaceId: string): {
             ? context.delegatedBranchPrincipal
             : undefined;
 
-  return { principal, selectedBranchId: context.selectedBranchId };
+  return {
+    principal,
+    selectedBranchId: context.selectedBranchId,
+    ...(context.type === 'user' && context.application
+      ? { applicationId: context.application.id }
+      : {}),
+  };
 };
 
 export const buildDelegatedBranchSystemAuthContext = (
   workspaceId: string,
   delegation = captureWorkspaceBranchDelegation(workspaceId),
-) => ({
-  ...buildSystemAuthContext(workspaceId),
-  delegatedBranchPrincipal: delegation.principal,
-  selectedBranchId: delegation.selectedBranchId,
-});
+) => {
+  const audit = workspaceBranchAuditProofStorage.getStore();
+
+  return {
+    ...buildSystemAuthContext(workspaceId),
+    delegatedBranchPrincipal: delegation.principal,
+    selectedBranchId: delegation.selectedBranchId,
+    ...(audit?.workspaceId === workspaceId
+      ? { workspaceBranchAuditProofs: audit.proofs }
+      : {}),
+  };
+};

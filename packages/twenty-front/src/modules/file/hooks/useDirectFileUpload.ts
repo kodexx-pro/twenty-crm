@@ -1,6 +1,8 @@
 import { putFileToUploadTarget } from '@/file/utils/putFileToUploadTarget';
+import { RecordFormBranchContext } from '@/workspace-branch/contexts/RecordFormBranchContext';
 import { useApolloClient, useMutation } from '@apollo/client/react';
 import { t } from '@lingui/core/macro';
+import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import {
   CompleteFileUploadDocument,
@@ -16,6 +18,7 @@ type DirectFileUploadOptions = {
 };
 
 export const useDirectFileUpload = () => {
+  const formBranch = useContext(RecordFormBranchContext);
   const apolloClient = useApolloClient();
   const [createFileUpload] = useMutation(CreateFileUploadDocument, {
     client: apolloClient,
@@ -28,7 +31,16 @@ export const useDirectFileUpload = () => {
     file: File,
     { fileFolder, fieldMetadataId, signal }: DirectFileUploadOptions,
   ): Promise<{ fileId: string }> => {
+    if (formBranch.enabled && !formBranch.branchId) {
+      throw new Error(t`Select a branch before uploading a file`);
+    }
+
     const createResult = await createFileUpload({
+      context: {
+        headers: formBranch.enabled
+          ? { 'x-workspace-branch-id': formBranch.branchId }
+          : {},
+      },
       variables: {
         filename: file.name,
         size: file.size,
@@ -56,7 +68,12 @@ export const useDirectFileUpload = () => {
 
     const completeResult = await completeFileUpload({
       variables: { fileId },
-      context: { fetchOptions: { signal: options.signal } },
+      context: {
+        fetchOptions: { signal: options.signal },
+        headers: formBranch.enabled
+          ? { 'x-workspace-branch-id': formBranch.branchId }
+          : {},
+      },
     });
 
     const uploadedFile = completeResult?.data?.completeFileUpload;

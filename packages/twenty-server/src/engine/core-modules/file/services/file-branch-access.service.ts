@@ -12,11 +12,13 @@ import { FileEntity } from 'src/engine/core-modules/file/entities/file.entity';
 import { type FileSettings } from 'src/engine/core-modules/file/types/file-settings.type';
 import { ApplicationEntity } from 'src/engine/core-modules/application/application.entity';
 import { captureWorkspaceBranchDelegation } from 'src/engine/core-modules/workspace-branch/utils/build-delegated-branch-system-auth-context.util';
+import { WorkspaceBranchPrincipalAuthService } from 'src/engine/core-modules/workspace-branch/workspace-branch-principal-auth.service';
 
 @Injectable()
 export class FileBranchAccessService {
   constructor(
     @InjectDataSource() private readonly coreDataSource: DataSource,
+    private readonly principalAuthService: WorkspaceBranchPrincipalAuthService,
   ) {}
 
   async getUploadSettings(
@@ -72,13 +74,17 @@ export class FileBranchAccessService {
       this.coreDataSource,
       workspaceId,
     );
-    const principal = captureWorkspaceBranchDelegation(workspaceId).principal;
+    const delegation = captureWorkspaceBranchDelegation(workspaceId);
+    const principal = delegation.principal;
 
     return {
       branchRevision: configuration.enabled
         ? configuration.revision
         : undefined,
       branchPrincipal: configuration.enabled ? principal : undefined,
+      branchApplicationId: configuration.enabled
+        ? delegation.applicationId
+        : undefined,
     };
   }
 
@@ -169,15 +175,13 @@ export class FileBranchAccessService {
         },
       });
     const file = application
-      ? await this.coreDataSource
-          .getRepository(FileEntity)
-          .findOne({
-            where: {
-              workspaceId: params.workspaceId,
-              applicationId: application.id,
-              path: `${params.fileFolder}/${params.resourcePath}`,
-            },
-          })
+      ? await this.coreDataSource.getRepository(FileEntity).findOne({
+          where: {
+            workspaceId: params.workspaceId,
+            applicationId: application.id,
+            path: `${params.fileFolder}/${params.resourcePath}`,
+          },
+        })
       : null;
 
     if (!file) {
@@ -217,6 +221,20 @@ export class FileBranchAccessService {
       principal,
       operation: 'read',
     });
+
+    try {
+      await this.principalAuthService.hydrate({
+        workspaceId: payload.workspaceId,
+        principal,
+        applicationId: payload.branchApplicationId,
+      });
+    } catch (error) {
+      if (error instanceof ForbiddenException) {
+        return false;
+      }
+
+      throw error;
+    }
 
     if (access.kind !== 'restricted' || access.branchIds.length === 0) {
       return false;

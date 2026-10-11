@@ -152,7 +152,12 @@ describeWithPostgres('workspace branch enforcement against PostgreSQL', () => {
         roleIdsWithAllRecordsAccess: [],
         flatRowLevelPermissionPredicateMaps: emptyMaps,
         flatRowLevelPermissionPredicateGroupMaps: emptyMaps,
-        coreDataSource: {},
+        coreDataSource: {
+          getRepository: () => ({
+            find: jest.fn().mockResolvedValue([]),
+            update: jest.fn().mockResolvedValue({}),
+          }),
+        },
         eventEmitterService: { emitDatabaseBatchEvent: jest.fn() },
         recordStock: {
           assertRecordStockAvailable: jest.fn(),
@@ -218,6 +223,47 @@ describeWithPostgres('workspace branch enforcement against PostgreSQL', () => {
     expect(grouped).toEqual([{ branch: branchA, total: '1' }]);
   });
 
+  it('executes fixed ranked group records without returning another branch', async () => {
+    const source = repository
+      .createQueryBuilder('company')
+      .select('"company"."id"', 'record_id')
+      .addSelect('"company"."branchId"', 'group_branch')
+      .addSelect(
+        'ROW_NUMBER() OVER (PARTITION BY "company"."branchId" ORDER BY "company"."id")',
+        'record_row_number',
+      );
+    const result = await repository.executeRankedRecords({
+      source,
+      groupAliases: ['group_branch'],
+      columnAliases: { id: 'record_id' },
+      offset: 0,
+      limit: 10,
+    });
+    expect(result).toEqual([
+      {
+        group_branch: branchA,
+        records: [{ id: recordA, group_branch: branchA }],
+      },
+    ]);
+  });
+
+  it('executes fixed per-parent lateral reads without returning another branch', async () => {
+    await pool.query(`UPDATE "${schemaName}"."company" SET "parentId"=$1`, [
+      recordA,
+    ]);
+    const source = repository
+      .createQueryBuilder('company')
+      .select('"company"."id"', 'id')
+      .where('"company"."parentId" = "lateralParents"."parentId"');
+    expect(
+      await repository.executeLateralRecordIds({
+        source,
+        parentIds: [recordA],
+        limit: 10,
+      }),
+    ).toEqual([{ id: recordA }]);
+  });
+
   it('does not update or delete another branch by guessed record id', async () => {
     await repository.update({ id: recordB }, { name: 'Forbidden' });
     await repository.delete({ id: recordB });
@@ -271,5 +317,33 @@ describeWithPostgres('workspace branch enforcement against PostgreSQL', () => {
       [recordB],
     );
     expect(rows.rows).toEqual([{ deleted: true }]);
+  });
+
+  it('preserves permitted create, update, soft-delete and restore operations', async () => {
+    const createdId = randomUUID();
+    await repository.insert({
+      id: createdId,
+      name: 'Created in only permitted branch',
+    });
+    const created = await repository.findOne({ where: { id: createdId } });
+    expect(created?.branchId).toBe(branchA);
+    await repository.update({ id: recordA }, { name: 'Updated A' });
+    expect((await repository.findOne({ where: { id: recordA } }))?.name).toBe(
+      'Updated A',
+    );
+    await repository.softDelete({ id: recordA });
+    expect(await repository.findOne({ where: { id: recordA } })).toBeNull();
+    await repository.restore({ id: recordA });
+    expect((await repository.findOne({ where: { id: recordA } }))?.name).toBe(
+      'Updated A',
+    );
+    expect(
+      (
+        await pool.query(
+          `SELECT name FROM "${schemaName}"."company" WHERE id=$1`,
+          [recordB],
+        )
+      ).rows,
+    ).toEqual([{ name: 'B' }]);
   });
 });

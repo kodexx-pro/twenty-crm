@@ -516,6 +516,72 @@ describe('ObjectRecordEventPublisher', () => {
       ).not.toHaveBeenCalled();
     });
 
+    it.each([
+      ['branch-a', false],
+      [undefined, true],
+    ])(
+      'intersects live events with selected scope even when both branches are granted (%s)',
+      async (selectedBranchId, shouldPublish) => {
+        mockWorkspaceOrmManager.loadWorkspaceBranchConfiguration.mockResolvedValue(
+          {
+            workspaceId,
+            enabled: true,
+            revision: 1,
+            branches: [
+              { id: 'branch-a', name: 'A', workspaceId, isActive: true },
+              { id: 'branch-b', name: 'B', workspaceId, isActive: true },
+            ],
+            grants: ['branch-a', 'branch-b'].map((branchId) => ({
+              principal: {
+                type: 'workspaceMember',
+                id: 'test-workspace-member-id',
+              },
+              branchId,
+              operations: ['read'],
+            })),
+          },
+        );
+        mockEventStreamService.getStreamsData.mockResolvedValue(
+          new Map([
+            [
+              streamChannelId,
+              {
+                ...mockStreamData,
+                authContext: {
+                  ...mockStreamData.authContext,
+                  selectedBranchId,
+                },
+              },
+            ],
+          ]),
+        );
+        await service.publish({
+          name: 'company.created',
+          workspaceId,
+          objectMetadata: { ...companyObjectMetadata, isSystem: false },
+          events: [
+            createMockEvent({
+              properties: {
+                after: {
+                  id: 'record-1',
+                  name: 'Branch B',
+                  branchId: 'branch-b',
+                },
+              },
+            }),
+          ],
+        } as WorkspaceEventBatch<never>);
+        if (shouldPublish)
+          expect(
+            mockSubscriptionService.publishToEventStream,
+          ).toHaveBeenCalled();
+        else
+          expect(
+            mockSubscriptionService.publishToEventStream,
+          ).not.toHaveBeenCalled();
+      },
+    );
+
     it('publishes events of a record named for a subscriber whose role cannot read the object', async () => {
       mockWorkspaceCacheService.getOrRecompute.mockImplementation(
         createCacheMock({

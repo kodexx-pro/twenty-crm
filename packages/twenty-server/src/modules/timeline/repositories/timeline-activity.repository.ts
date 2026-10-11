@@ -12,6 +12,7 @@ import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager
 import { type WorkspaceTransactionScope } from 'src/engine/twenty-orm/types/workspace-transaction-scope.type';
 import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace-repository';
 import { buildDelegatedBranchSystemAuthContext } from 'src/engine/core-modules/workspace-branch/utils/build-delegated-branch-system-auth-context.util';
+import { workspaceBranchAuditProofStorage } from 'src/engine/core-modules/workspace-branch/storage/workspace-branch-audit-proof.storage';
 import { type TimelineActivityPayload } from 'src/modules/timeline/types/timeline-activity-payload.type';
 import { type LinkedTimelineActivityHappensAtSyncUpdate } from 'src/modules/timeline/utils/build-linked-timeline-activity-happens-at-sync-updates.util';
 import {
@@ -28,10 +29,6 @@ type TimelineActivityPayloadWorkspaceIdAndObjectSingularName = {
   workspaceId: string;
   objectSingularName: string;
 };
-
-const ACQUIRE_TIMELINE_ACTIVITY_MERGE_LOCK = `SELECT pg_advisory_xact_lock(hashtextextended("lockName", 0))
-   FROM unnest($1::text[]) WITH ORDINALITY AS "locks"("lockName", "ordinality")
-   ORDER BY "ordinality"`;
 
 const isForeignKeyViolation = (error: unknown): boolean =>
   (error as Error & { cause?: { code?: unknown } }).cause?.code ===
@@ -89,17 +86,19 @@ export class TimelineActivityRepository {
     timelineActivityTypeIds,
     linkedRecordIds,
   }: LinkedTimelineActivityHappensAtSyncUpdate) {
-    const sourceRepository =
-      this.workspaceOrmManager.getRepository<ObjectLiteral>(
-        sourceObjectNameSingular,
-        { shouldBypassPermissionChecks: true },
-      );
-
     // Queue retries can replay an older event, so read the value from the source row rather than the event snapshot
-    const sourceRecords = await sourceRepository.find({
-      select: ['id', happensAtFieldName],
-      where: { id: In(linkedRecordIds) },
-    });
+    const sourceRecords =
+      await this.workspaceOrmManager.executeInWorkspaceContext(async () => {
+        const sourceRepository =
+          this.workspaceOrmManager.getRepositoryWithContextPermissions<ObjectLiteral>(
+            sourceObjectNameSingular,
+          );
+
+        return sourceRepository.find({
+          select: ['id', happensAtFieldName],
+          where: { id: In(linkedRecordIds) },
+        });
+      }, workspaceBranchAuditProofStorage.getStore()?.authContext);
 
     const happensAtByLinkedRecordId = new Map<string, Date>();
 
@@ -293,16 +292,20 @@ export class TimelineActivityRepository {
       return payloads;
     }
 
-    const targetRepository = transactionScope.getRepository<ObjectLiteral>(
-      objectSingularName,
-      { shouldBypassPermissionChecks: true },
-    );
+    const existingRecords =
+      await this.workspaceOrmManager.executeInWorkspaceContext(async () => {
+        const targetRepository =
+          this.workspaceOrmManager.getRepositoryWithContextPermissions<ObjectLiteral>(
+            objectSingularName,
+            transactionScope,
+          );
 
-    const existingRecords = await targetRepository.find({
-      select: ['id'],
-      where: { id: In(payloads.map((payload) => payload.recordId)) },
-      withDeleted: true,
-    });
+        return targetRepository.find({
+          select: ['id'],
+          where: { id: In(payloads.map((payload) => payload.recordId)) },
+          withDeleted: true,
+        });
+      }, workspaceBranchAuditProofStorage.getStore()?.authContext);
 
     const existingRecordIds = new Set(
       existingRecords.map((record) => record.id),
@@ -339,10 +342,7 @@ export class TimelineActivityRepository {
       ),
     ].sort();
 
-    await transactionScope.executeRawQuery(
-      ACQUIRE_TIMELINE_ACTIVITY_MERGE_LOCK,
-      [lockNames],
-    );
+    await transactionScope.acquireAdvisoryLocks(lockNames);
   }
 
   private async findRecentTimelineActivities({

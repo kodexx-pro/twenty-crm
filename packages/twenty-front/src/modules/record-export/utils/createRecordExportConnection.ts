@@ -2,6 +2,9 @@ import { t } from '@lingui/core/macro';
 import { print } from 'graphql';
 import { createClient } from 'graphql-sse';
 import { isDefined } from 'twenty-shared/utils';
+import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
+import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
+import { getWorkspaceBranchSelectionHeaders } from '@/workspace-branch/utils/workspaceBranchSelection';
 import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import {
   ExportRecordsDocument,
@@ -25,6 +28,10 @@ export const createRecordExportConnection = () => {
     const client = createClient({
       url: `${serverBaseUrl}/metadata`,
       credentials: 'include',
+      headers: () =>
+        getWorkspaceBranchSelectionHeaders(
+          jotaiStore.get(currentWorkspaceState.atom)?.id,
+        ),
       retryAttempts: 0,
     });
 

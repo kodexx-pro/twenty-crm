@@ -24,7 +24,6 @@ import {
   SUB_QUERY_ALIAS,
 } from 'src/engine/api/graphql/graphql-query-runner/group-by/services/group-by-with-records.constants';
 import { buildGroupByRecordConditions } from 'src/engine/api/graphql/graphql-query-runner/group-by/utils/build-group-by-record-conditions.util';
-import { buildRecordJsonObjectSql } from 'src/engine/api/graphql/graphql-query-runner/group-by/utils/build-record-json-object-sql.util';
 import { getGroupLimit } from 'src/engine/api/graphql/graphql-query-runner/group-by/utils/get-group-limit.util';
 import { buildColumnResultAlias } from 'src/engine/twenty-orm/sql/utils/build-column-result-alias.util';
 import { buildColumnsToSelect } from 'src/engine/api/graphql/graphql-query-runner/utils/build-columns-to-select';
@@ -91,7 +90,7 @@ export class GroupByWithRecordsService {
     });
 
     queryBuilderWithFiltersAndWithoutGroupBy.applyRowLevelPermissions();
-    const { sql, parameters } = this.buildRankedRecordsStatement({
+    const rankedPage = this.buildRankedRecordsStatement({
       subQueryBuilder: queryBuilderWithFiltersAndWithoutGroupBy,
       columnsToSelect,
       groupsResult,
@@ -103,9 +102,9 @@ export class GroupByWithRecordsService {
       offsetForRecords: offsetForRecords ?? 0,
     });
 
-    const recordsResult = await readRepository.executeScopedRead<
+    const recordsResult = await readRepository.executeRankedRecords<
       Record<string, unknown>
-    >(sql, parameters, queryBuilderWithFiltersAndWithoutGroupBy);
+    >({ ...rankedPage, source: queryBuilderWithFiltersAndWithoutGroupBy });
 
     const allRecords = recordsResult
       .flatMap((group) => group.records as ObjectRecord[])
@@ -170,7 +169,12 @@ export class GroupByWithRecordsService {
     flatObjectMetadataMaps: FlatEntityMaps<FlatObjectMetadata>;
     flatFieldMetadataMaps: FlatEntityMaps<OrmFlatFieldMetadata>;
     offsetForRecords: number;
-  }): { sql: string; parameters: Record<string, unknown> } {
+  }): {
+    groupAliases: string[];
+    columnAliases: Record<string, string>;
+    offset: number;
+    limit: number;
+  } {
     const objectAlias = getObjectAlias(flatObjectMetadata);
 
     subQueryBuilder.select([]);
@@ -218,28 +222,12 @@ export class GroupByWithRecordsService {
 
     subQueryBuilder.applyRowLevelPermissions();
 
-    const groupByAliases = groupByDefinitions
-      .map((groupByDefinition) => `"${groupByDefinition.alias}"`)
-      .join(', ');
-
-    const pageStart = offsetForRecords;
-    const pageEnd = offsetForRecords + RECORDS_PER_GROUP_LIMIT;
-
-    const recordJsonObjectSql = buildRecordJsonObjectSql({
-      subQueryAliasByColumnName,
-      groupByDefinitions,
-    });
-
-    const pageFilter = `record_row_number > ${pageStart} AND record_row_number <= ${pageEnd}`;
-
-    const sql =
-      `SELECT ${groupByAliases}, ` +
-      `JSONB_AGG(${recordJsonObjectSql} ORDER BY record_row_number) ` +
-      `FILTER (WHERE ${pageFilter}) AS "records" ` +
-      `FROM (${subQueryBuilder.getQuery()}) AS "ranked_records" ` +
-      `GROUP BY ${groupByAliases}`;
-
-    return { sql, parameters: subQueryBuilder.getParameters() };
+    return {
+      groupAliases: groupByDefinitions.map((definition) => definition.alias),
+      columnAliases: subQueryAliasByColumnName,
+      offset: offsetForRecords,
+      limit: RECORDS_PER_GROUP_LIMIT,
+    };
   }
 
   private buildRowNumberExpression({
