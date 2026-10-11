@@ -7,7 +7,7 @@ import { type WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/typ
 export const buildWorkspaceBranchAuditProofs = (
   batch: WorkspaceEventBatch<ObjectRecordBaseEvent>,
 ): WorkspaceBranchAuditProof[] => {
-  const action = batch.name.split('.').at(-1);
+  const action = batch.name.substring(batch.name.lastIndexOf('.') + 1);
 
   return batch.events.flatMap((event) => {
     const snapshot =

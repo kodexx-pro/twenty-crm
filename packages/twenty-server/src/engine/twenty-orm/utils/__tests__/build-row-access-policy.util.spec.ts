@@ -135,7 +135,9 @@ describe('buildRowAccessPolicy', () => {
     if (policy.kind === 'gated') {
       expect(policy.expression.kind).toBe('and');
       if (policy.expression.kind === 'and')
-        expect(policy.expression.operands.at(-1)).toMatchObject({
+        expect(
+          policy.expression.operands[policy.expression.operands.length - 1],
+        ).toMatchObject({
           kind: 'branchFilter',
           branchIds: ['branch-a'],
         });

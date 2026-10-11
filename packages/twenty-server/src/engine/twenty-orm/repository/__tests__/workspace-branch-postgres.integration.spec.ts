@@ -1,7 +1,8 @@
 import { randomUUID } from 'crypto';
 import { Pool } from 'pg';
 import { RelationType } from 'src/engine/metadata-modules/field-metadata/interfaces/relation-type.interface';
-import { FieldMetadataType } from 'twenty-shared/types';
+import { FieldMetadataType, type ObjectRecord } from 'twenty-shared/types';
+import { type CompiledStatement } from 'src/engine/twenty-orm/sql/utils/compile-named-parameters.util';
 
 import { getFlatFieldMetadataMock } from 'src/engine/metadata-modules/flat-field-metadata/__mocks__/get-flat-field-metadata.mock';
 import { getFlatObjectMetadataMock } from 'src/engine/metadata-modules/flat-object-metadata/__mocks__/get-flat-object-metadata.mock';
@@ -117,7 +118,7 @@ describeWithPostgres('workspace branch enforcement against PostgreSQL', () => {
       universalIdentifierById: {},
       universalIdentifiersByApplicationId: {},
     };
-    repository = new WorkspaceRepository({
+    repository = new WorkspaceRepository<ObjectRecord>({
       tableShape,
       flatObjectMetadata: object,
       authContext: {
@@ -175,14 +176,16 @@ describeWithPostgres('workspace branch enforcement against PostgreSQL', () => {
         },
       },
       executor: {
-        execute: async (statement) =>
+        execute: async (statement: CompiledStatement) =>
           (await pool.query(statement.text, statement.values)).rows,
       },
       shouldBypassPermissionChecks: true,
       shouldSkipEventEmission: true,
       tableShapeByObjectMetadataId: () => tableShape,
       flatObjectMetadataByObjectMetadataId: () => object,
-    } as unknown as ConstructorParameters<typeof WorkspaceRepository>[0]);
+    } as unknown as ConstructorParameters<
+      typeof WorkspaceRepository<ObjectRecord>
+    >[0]);
   }, 30000);
 
   beforeEach(async () => {
