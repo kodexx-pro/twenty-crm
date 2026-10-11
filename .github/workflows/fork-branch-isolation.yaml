@@ -55,6 +55,11 @@ jobs:
           src/modules/timeline/repositories/__tests__/timeline-activity.repository.spec.ts
       - name: Server types
         run: yarn nx typecheck twenty-server --parallel=1
+      - name: Email template compatibility
+        working-directory: packages/twenty-server
+        run: >-
+          node ../../node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand
+          src/engine/core-modules/email/__tests__/email-templates-rendering.spec.ts
       - name: Build interface dependencies
         run: yarn nx build twenty-ui
       - name: Branch settings and form behavior

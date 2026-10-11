@@ -65,6 +65,7 @@ const TEMPLATES = [
       daysSinceInactive: 30,
       userName: 'Tim',
       workspaceDisplayName: 'Acme Inc',
+      serverUrl: 'https://crm.example.com',
       locale: 'en',
     }),
     expectedContent: 'Acme Inc',
