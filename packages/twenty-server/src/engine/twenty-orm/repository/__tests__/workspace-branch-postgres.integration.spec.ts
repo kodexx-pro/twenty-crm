@@ -24,6 +24,7 @@ describeWithPostgres('workspace branch enforcement against PostgreSQL', () => {
   let repository: WorkspaceRepository;
 
   beforeAll(async () => {
+    jest.useRealTimers();
     if (
       !databaseUrl ||
       new URL(databaseUrl).pathname !== '/branch_isolation_test'
