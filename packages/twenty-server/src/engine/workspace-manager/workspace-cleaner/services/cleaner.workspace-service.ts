@@ -208,6 +208,7 @@ export class CleanerWorkspaceService {
       userName: `${workspaceMember.name.firstName} ${workspaceMember.name.lastName}`,
       workspaceDisplayName,
       locale: workspaceMember.locale,
+      serverUrl: this.twentyConfigService.get('SERVER_URL'),
     };
     const emailTemplate = CleanSuspendedWorkspaceEmail(emailData);
     const html = await renderEmail(emailTemplate, { pretty: true });

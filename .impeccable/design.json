@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T00:00:00Z",
+  "title": "Design System: Kodexx One",
+  "extensions": {
+    "colorMeta": {
+      "primary-light": { "role": "primary", "canonical": "oklch(0.8348 0.1302 160.9080)" },
+      "primary-dark": { "role": "primary", "canonical": "oklch(0.4365 0.1044 156.7556)" }
+    },
+    "typographyMeta": { "body": { "displayName": "Outfit", "purpose": "Locally hosted CRM interface font" } }
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default and accent solid actions share scheme-specific foreground/background tokens.",
+      "html": "<button class=\"primary\">Continue</button>",
+      "css": ".primary { background: oklch(0.8348 0.1302 160.9080); color: oklch(0.2626 0.0147 166.4589); font: 500 13px Outfit, sans-serif; border-radius: 8px; padding: 8px 12px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A familiar CRM with Kodexx One identity",
+    "overview": "Preserve operational layouts and behavior. Apply the supplied palette and locally hosted Outfit through shared tokens.",
+    "dos": ["Respect workspace custom logos", "Check both color schemes"],
+    "donts": ["Rename API machine identifiers", "Remove license attribution", "Fetch branding from Twenty servers"]
+  }
+}

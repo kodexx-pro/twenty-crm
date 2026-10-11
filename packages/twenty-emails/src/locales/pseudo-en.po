@@ -75,7 +75,7 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
-msgid "Connect to Twenty"
+msgid "Connect to Kodexx One"
 msgstr ""
 
 #. js-lingui-explicit-id
@@ -139,7 +139,7 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
-msgid "If Twenty is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
+msgid "If Kodexx One is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
 msgstr ""
 
 #. js-lingui-explicit-id
@@ -164,7 +164,7 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/clean-suspended-workspace.email.tsx
-msgid "If you'd ever like to give Twenty another try, you can start a fresh workspace in minutes — we'd love to have you back."
+msgid "If you'd ever like to give Kodexx One another try, you can start a fresh workspace in minutes — we'd love to have you back."
 msgstr ""
 
 #. js-lingui-explicit-id
@@ -184,7 +184,7 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/send-invite-link.email.tsx
-msgid "Join your team on Twenty"
+msgid "Join your team on Kodexx One"
 msgstr ""
 
 #. js-lingui-explicit-id
@@ -220,7 +220,7 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Read Twenty's user guide"
+msgid "Read Kodexx One's user guide"
 msgstr ""
 
 #. js-lingui-explicit-id
@@ -321,17 +321,17 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's developer documentation"
+msgid "Visit Kodexx One's developer documentation"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's GitHub repository"
+msgid "Visit Kodexx One's GitHub repository"
 msgstr ""
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's website"
+msgid "Visit Kodexx One's website"
 msgstr ""
 
 #. js-lingui-explicit-id
@@ -346,7 +346,7 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/components/WhatIsTwenty.tsx
-msgid "What is Twenty?"
+msgid "What is Kodexx One?"
 msgstr ""
 
 #. js-lingui-explicit-id

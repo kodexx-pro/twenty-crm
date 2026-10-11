@@ -2028,38 +2028,38 @@ msgstr "Lägg till teammedlemmar"
 
 #. js-lingui-id: FKGcEL
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server as a remote context server in Zed."
-msgstr "Lägg till Twenty MCP-servern som en fjärrkontextserver i Zed."
+msgid "Add the Kodexx One MCP server as a remote context server in Zed."
+msgstr "Lägg till Kodexx One MCP-servern som en fjärrkontextserver i Zed."
 
 #. js-lingui-id: iA2nHX
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Augment Code settings."
-msgstr "Lägg till Twenty MCP-servern från inställningarna för Augment Code."
+msgid "Add the Kodexx One MCP server from Augment Code settings."
+msgstr "Lägg till Kodexx One MCP-servern från inställningarna för Augment Code."
 
 #. js-lingui-id: l+NzAk
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Raycast's MCP commands or settings."
-msgstr "Lägg till Twenty MCP-servern från Raycasts MCP-kommandon eller -inställningar."
+msgid "Add the Kodexx One MCP server from Raycast's MCP commands or settings."
+msgstr "Lägg till Kodexx One MCP-servern från Raycasts MCP-kommandon eller -inställningar."
 
 #. js-lingui-id: j6G/yI
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server in Gemini CLI settings."
-msgstr "Lägg till Twenty MCP-servern i inställningarna för Gemini CLI."
+msgid "Add the Kodexx One MCP server in Gemini CLI settings."
+msgstr "Lägg till Kodexx One MCP-servern i inställningarna för Gemini CLI."
 
 #. js-lingui-id: /OyhlM
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server to your LibreChat configuration file."
-msgstr "Lägg till Twenty MCP-servern i din LibreChat-konfigurationsfil."
+msgid "Add the Kodexx One MCP server to your LibreChat configuration file."
+msgstr "Lägg till Kodexx One MCP-servern i din LibreChat-konfigurationsfil."
 
 #. js-lingui-id: K0DXoj
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty remote server with LM Studio's install link."
-msgstr "Lägg till Twenty-fjärrservern med LM Studios installationslänk."
+msgid "Add the Kodexx One remote server with LM Studio's install link."
+msgstr "Lägg till Kodexx One-fjärrservern med LM Studios installationslänk."
 
 #. js-lingui-id: BTFMKE
 #: src/pages/settings/communications/SettingsWorkspaceCommunicationGroupChannelDetail.tsx
-msgid "Add these records at your DNS provider. Twenty checks them automatically."
-msgstr "Lägg till dessa poster hos din DNS-leverantör. Twenty kontrollerar dem automatiskt."
+msgid "Add these records at your DNS provider. Kodexx One checks them automatically."
+msgstr "Lägg till dessa poster hos din DNS-leverantör. Kodexx One kontrollerar dem automatiskt."
 
 #. js-lingui-id: 5+ttxv
 #: src/modules/settings/accounts/components/SettingsAccountsBlocklistInput.tsx
@@ -2078,8 +2078,8 @@ msgstr "Lägg till ämne"
 
 #. js-lingui-id: 4D/zWv
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add Twenty as a Streamable HTTP extension in Goose."
-msgstr "Lägg till Twenty som ett Streamable HTTP-tillägg i Goose."
+msgid "Add Kodexx One as a Streamable HTTP extension in Goose."
+msgstr "Lägg till Kodexx One som ett Streamable HTTP-tillägg i Goose."
 
 #. js-lingui-id: XnwceV
 #: src/pages/settings/applications/components/SettingsApplicationRegistrationRedirectURIsInput.tsx
@@ -3848,8 +3848,8 @@ msgstr "Installera automatiskt den här appen på varje ny arbetsyta som skapas"
 
 #. js-lingui-id: MHsVk5
 #: src/pages/settings/ai/components/SettingsAiModelTiersPreview.tsx
-msgid "Automatically selected by Twenty for this mode."
-msgstr "Väljs automatiskt av Twenty för detta läge."
+msgid "Automatically selected by Kodexx One for this mode."
+msgstr "Väljs automatiskt av Kodexx One för detta läge."
 
 #. js-lingui-id: XFGV21
 #: src/pages/settings/applications/tabs/SettingsApplicationAutoUpdateSection.tsx
@@ -4064,8 +4064,8 @@ msgstr "Faktureringsperiod"
 
 #. js-lingui-id: xF/NXI
 #: src/modules/settings/billing/hooks/useBillingPortalSession.ts
-msgid "Billing portal session error. Please retry or contact Twenty team"
-msgstr "Fel i sessionen för faktureringsportalen. Försök igen eller kontakta Twenty-teamet"
+msgid "Billing portal session error. Please retry or contact Kodexx One team"
+msgstr "Fel i sessionen för faktureringsportalen. Försök igen eller kontakta Kodexx One-teamet"
 
 #. js-lingui-id: H++SIW
 #: src/modules/settings/billing/hooks/useBillingSubscriptionChangeWording.ts
@@ -4280,8 +4280,8 @@ msgstr "av {author}"
 
 #. js-lingui-id: 8Pfllj
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
-msgid "By using Twenty, you agree to the"
-msgstr "Genom att använda Twenty godkänner du"
+msgid "By using Kodexx One, you agree to the"
+msgstr "Genom att använda Kodexx One godkänner du"
 
 #. js-lingui-id: Yx41df
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
@@ -4899,8 +4899,8 @@ msgstr "Kontrolleras endast när posten som denna regel tillhör sparas. Rediger
 #. js-lingui-id: SxwQE8
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
-msgid "Checkout session error. Please retry or contact Twenty team"
-msgstr "Fel under betalningssession. Försök igen eller kontakta Twenty-teamet"
+msgid "Checkout session error. Please retry or contact Kodexx One team"
+msgstr "Fel under betalningssession. Försök igen eller kontakta Kodexx One-teamet"
 
 #. js-lingui-id: SviKkE
 #: src/modules/localization/hooks/useLocaleOptions.ts
@@ -5721,13 +5721,13 @@ msgstr "Konfigurera den fjärranslutna servern i Amazon Q Developers MCP-instäl
 
 #. js-lingui-id: g1/8jH
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cascade."
-msgstr "Konfigurera Twenty MCP-servern manuellt i Cascade."
+msgid "Configure the Kodexx One MCP server manually in Cascade."
+msgstr "Konfigurera Kodexx One MCP-servern manuellt i Cascade."
 
 #. js-lingui-id: XiyvRh
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cline."
-msgstr "Konfigurera Twenty MCP-servern manuellt i Cline."
+msgid "Configure the Kodexx One MCP server manually in Cline."
+msgstr "Konfigurera Kodexx One MCP-servern manuellt i Cline."
 
 #. js-lingui-id: qA9AGQ
 #: src/modules/settings/domains/components/SettingsDomainRecords.tsx
@@ -6477,8 +6477,8 @@ msgstr "Räkna efter"
 
 #. js-lingui-id: EEqRLn
 #: src/modules/settings/workspace/components/ClickTrackingSwitch.tsx
-msgid "Count clicks by routing campaign links through Twenty before the original page."
-msgstr "Räkna klick genom att dirigera kampanjlänkar via Twenty före den ursprungliga sidan."
+msgid "Count clicks by routing campaign links through Kodexx One before the original page."
+msgstr "Räkna klick genom att dirigera kampanjlänkar via Kodexx One före den ursprungliga sidan."
 
 #. js-lingui-id: vQJINq
 #: src/modules/object-record/record-board/record-board-column/utils/getAggregateOperationLabel.ts
@@ -9784,8 +9784,8 @@ msgstr "Fel vid avbrytning av planbyte."
 
 #. js-lingui-id: QmR+2U
 #: src/modules/settings/billing/hooks/useEndSubscriptionTrialPeriod.ts
-msgid "Error while ending trial period. Please contact Twenty team."
-msgstr "Fel vid avslutning av provperioden. Vänligen kontakta Twenty-teamet."
+msgid "Error while ending trial period. Please contact Kodexx One team."
+msgstr "Fel vid avslutning av provperioden. Vänligen kontakta Kodexx One-teamet."
 
 #. js-lingui-id: 5g78zo
 #: src/pages/settings/members/SettingsWorkspaceMember.tsx
@@ -12015,8 +12015,8 @@ msgstr "Hög"
 
 #. js-lingui-id: 1ETc0T
 #: src/pages/settings/community/SettingsCommunity.tsx
-msgid "Hire a partner to help you implement and customize Twenty."
-msgstr "Anlita en partner som hjälper dig att implementera och anpassa Twenty."
+msgid "Hire a partner to help you implement and customize Kodexx One."
+msgstr "Anlita en partner som hjälper dig att implementera och anpassa Kodexx One."
 
 #. js-lingui-id: i0qMbr
 #: src/modules/navigation/hooks/useMobileNavigationBarItems.ts
@@ -14910,8 +14910,8 @@ msgstr "Modellinformation"
 
 #. js-lingui-id: iaurWj
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Model used when you chat with Twenty"
-msgstr "Modell som används när du chattar med Twenty"
+msgid "Model used when you chat with Kodexx One"
+msgstr "Modell som används när du chattar med Kodexx One"
 
 #. js-lingui-id: //nm2/
 #: src/pages/settings/admin-panel/SettingsAdminAiProviderDetail.tsx
@@ -17037,8 +17037,8 @@ msgstr "En per körning"
 
 #. js-lingui-id: 1WZTTl
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
-msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Twenty on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
-msgstr "Ett abonnemang ger en Organization-nyckel som driver en produktionsinstans och en möjlig staging- eller testinstans. Om du vill köra en staging- eller testmiljö installerar du Twenty på en andra server, aktiverar den med samma Organization-nyckel och registrerar sedan den servern som en utvecklingsinstans. Utvecklingsinstanser låser upp premiumfunktioner utan extra fakturering och räknas inte mot dina produktionsplatser."
+msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Kodexx One on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
+msgstr "Ett abonnemang ger en Organization-nyckel som driver en produktionsinstans och en möjlig staging- eller testinstans. Om du vill köra en staging- eller testmiljö installerar du Kodexx One på en andra server, aktiverar den med samma Organization-nyckel och registrerar sedan den servern som en utvecklingsinstans. Utvecklingsinstanser låser upp premiumfunktioner utan extra fakturering och räknas inte mot dina produktionsplatser."
 
 #. js-lingui-id: JEtonz
 #: src/modules/settings/event-logs/components/SettingsLogs.tsx
@@ -17187,8 +17187,8 @@ msgstr "Öppna chattar i"
 
 #. js-lingui-id: n0vVgf
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Claude with the Twenty connector name and MCP URL prefilled."
-msgstr "Öppna Claude med Twenty-anslutningsnamn och MCP-URL förifyllda."
+msgid "Open Claude with the Kodexx One connector name and MCP URL prefilled."
+msgstr "Öppna Claude med Kodexx One-anslutningsnamn och MCP-URL förifyllda."
 
 #. js-lingui-id: uIKeEf
 #: src/modules/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepAiAgentConversationButton.tsx
@@ -17197,8 +17197,8 @@ msgstr "Öppna konversationen"
 
 #. js-lingui-id: +n2jpB
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Cursor's MCP installer with the Twenty remote server config."
-msgstr "Öppna Cursors MCP-installationsprogram med Twenty:s fjärrserverkonfiguration."
+msgid "Open Cursor's MCP installer with the Kodexx One remote server config."
+msgstr "Öppna Cursors MCP-installationsprogram med Kodexx One:s fjärrserverkonfiguration."
 
 #. js-lingui-id: pZZH4Q
 #: src/modules/auth/sign-in-up/components/EmailVerificationSent.tsx
@@ -17273,8 +17273,8 @@ msgstr "Öppna poster på en dedikerad sida"
 
 #. js-lingui-id: q170S2
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Replit with the Twenty remote server config."
-msgstr "Öppna Replit med Twenty:s fjärrserverkonfiguration."
+msgid "Open Replit with the Kodexx One remote server config."
+msgstr "Öppna Replit med Kodexx One:s fjärrserverkonfiguration."
 
 #. js-lingui-id: Yp+Hi/
 #: src/modules/settings/applications/components/SettingsApplicationActionButton.tsx
@@ -17288,8 +17288,8 @@ msgstr "Öppna sidopanelen"
 
 #. js-lingui-id: sBd/cl
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Twenty's official ChatGPT integration for your workspace."
-msgstr "Öppna Twenty:s officiella ChatGPT-integration för din arbetsyta."
+msgid "Open Kodexx One's official ChatGPT integration for your workspace."
+msgstr "Öppna Kodexx One:s officiella ChatGPT-integration för din arbetsyta."
 
 #. js-lingui-id: tirDue
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -17689,8 +17689,8 @@ msgstr "Sidnamn"
 
 #. js-lingui-id: NRvxzv
 #: src/pages/not-found/NotFound.tsx
-msgid "Page Not Found | Twenty"
-msgstr "Sidan kunde inte hittas | Twenty"
+msgid "Page Not Found | Kodexx One"
+msgstr "Sidan kunde inte hittas | Kodexx One"
 
 #. js-lingui-id: oIhFvf
 #: src/modules/side-panel/pages/email-block-settings/components/EmailBlockInsertList.tsx
@@ -23090,11 +23090,11 @@ msgstr "AWS-regionen för Bedrock"
 #. js-lingui-id: HP7per
 #: src/modules/applications/utils/getStandardApplicationDescription.ts
 msgid ""
-"The base data model every Twenty workspace runs on.\n"
+"The base data model every Kodexx One workspace runs on.\n"
 "\n"
 "#### What \"foundation\" means\n"
 "\n"
-"Every Twenty workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
+"Every Kodexx One workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
 "\n"
 "#### Included objects\n"
 "- **People & Companies**: contact and account records\n"
@@ -23102,11 +23102,11 @@ msgid ""
 "- **Notes & Tasks**: activity and follow-ups\n"
 "- **Workflows & Dashboards**: automation and reporting\n"
 "\n"
-"Remove this app and the rest of Twenty has nothing to hang off.\n"
+"Remove this app and the rest of Kodexx One has nothing to hang off.\n"
 "\n"
 "#### Build your own app\n"
 "\n"
-"Extend Twenty with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
+"Extend Kodexx One with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -23121,11 +23121,11 @@ msgid ""
 "\n"
 "See the [Getting Started guide](https://twenty.com/developers/extend/apps/getting-started) for the full walkthrough, and [Building Apps](https://twenty.com/developers/extend/apps/building) for the `defineApplication` / `defineEntity` APIs."
 msgstr ""
-"Den grundläggande datamodell som varje Twenty-arbetsyta bygger på.\n"
+"Den grundläggande datamodell som varje Kodexx One-arbetsyta bygger på.\n"
 "\n"
 "#### Vad \"grund\" betyder\n"
 "\n"
-"Varje Twenty-arbetsyta börjar med den här uppsättningen objekt. De definierar formen på ditt CRM, inklusive relationer, aktivitet och rapportering. Allt annat, inklusive appar från marknadsplatsen, AI-agenter och anpassade objekt, kopplas in i dem.\n"
+"Varje Kodexx One-arbetsyta börjar med den här uppsättningen objekt. De definierar formen på ditt CRM, inklusive relationer, aktivitet och rapportering. Allt annat, inklusive appar från marknadsplatsen, AI-agenter och anpassade objekt, kopplas in i dem.\n"
 "\n"
 "#### Ingående objekt\n"
 "- **Personer och företag**: kontakt- och kontoposter\n"
@@ -23133,11 +23133,11 @@ msgstr ""
 "- **Anteckningar och uppgifter**: aktivitet och uppföljningar\n"
 "- **Arbetsflöden och instrumentpaneler**: automatisering och rapportering\n"
 "\n"
-"Tar du bort den här appen har resten av Twenty inget att bygga på.\n"
+"Tar du bort den här appen har resten av Kodexx One inget att bygga på.\n"
 "\n"
 "#### Bygg din egen app\n"
 "\n"
-"Utöka Twenty med egna objekt, fält, logikfunktioner eller AI-förmågor. Skapa en ny appstomme med ett enda kommando:\n"
+"Utöka Kodexx One med egna objekt, fält, logikfunktioner eller AI-förmågor. Skapa en ny appstomme med ett enda kommando:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -24534,23 +24534,23 @@ msgstr "Turkos"
 
 #. js-lingui-id: 8pmRvi
 #: src/pages/onboarding/SyncEmails.tsx
-msgid "Twenty adds the people you email and meet, and keeps them up to date without manual data entry."
-msgstr "Twenty lägger till personerna du skickar e-post till och träffar, och håller dem uppdaterade utan manuell datainmatning."
+msgid "Kodexx One adds the people you email and meet, and keeps them up to date without manual data entry."
+msgstr "Kodexx One lägger till personerna du skickar e-post till och träffar, och håller dem uppdaterade utan manuell datainmatning."
 
 #. js-lingui-id: JnaRPe
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/components/ColumnGrid.tsx
-msgid "Twenty fields"
-msgstr "Twenty-fält"
+msgid "Kodexx One fields"
+msgstr "Kodexx One-fält"
 
 #. js-lingui-id: pNo8xt
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Twenty fills each level with the best model that meets your requirements"
-msgstr "Twenty fyller varje nivå med den bästa modellen som uppfyller dina krav"
+msgid "Kodexx One fills each level with the best model that meets your requirements"
+msgstr "Kodexx One fyller varje nivå med den bästa modellen som uppfyller dina krav"
 
 #. js-lingui-id: qUadjH
 #: src/modules/onboarding/components/OnboardingInviteTeamSkipDialog.tsx
-msgid "Twenty works better with your team"
-msgstr "Twenty fungerar bättre med ditt team"
+msgid "Kodexx One works better with your team"
+msgstr "Kodexx One fungerar bättre med ditt team"
 
 #. js-lingui-id: YIjS4q
 #: src/modules/ai/components/SettingsAgentModelCapabilities.tsx
@@ -26436,8 +26436,8 @@ msgstr ""
 
 #. js-lingui-id: nTuObL
 #: src/pages/auth/SignInUp.tsx
-msgid "Welcome to Twenty"
-msgstr "Välkommen till Twenty"
+msgid "Welcome to Kodexx One"
+msgstr "Välkommen till Kodexx One"
 
 #. js-lingui-id: t8ZvkC
 #: src/modules/onboarding/constants/WelcomeTitleMessage.ts

@@ -112,6 +112,9 @@ export const themeCssVariables = {
   lastLayerZIndex: 'var(--t-last-layer-z-index)',
   buttons: {
     secondaryTextColor: 'var(--t-buttons-secondary-text-color)',
+    primaryBackground: 'var(--t-buttons-primary-background)',
+    primaryHover: 'var(--t-buttons-primary-hover)',
+    primaryTextColor: 'var(--t-buttons-primary-text-color)',
   },
   accent: {
     primary: 'var(--t-accent-primary)',

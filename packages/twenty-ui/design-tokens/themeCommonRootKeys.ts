@@ -11,5 +11,4 @@ export const THEME_COMMON_ROOT_KEYS: readonly string[] = [
   'sidePanelWidth',
   'clickableElementBackgroundTransition',
   'lastLayerZIndex',
-  'buttons',
 ];

@@ -71,11 +71,11 @@
     }
   }
   &[data-variant='solid'] {
-    --tw-button-background: var(--t-background-primary-inverted);
+    --tw-button-background: var(--t-buttons-primary-background);
     --tw-button-border: var(--t-background-transparent-strong);
-    --tw-button-color: var(--t-font-color-inverted);
-    --tw-button-hover: var(--t-background-primary-inverted-hover);
-    --tw-button-active: var(--t-background-primary-inverted-hover);
+    --tw-button-color: var(--t-buttons-primary-text-color);
+    --tw-button-hover: var(--t-buttons-primary-hover);
+    --tw-button-active: var(--t-buttons-primary-hover);
   }
   &[data-variant='ghost'] {
     --tw-button-background: transparent;
@@ -113,11 +113,11 @@
 
 $colors: (
   'accent': (
-    base: var(--t-color-blue),
-    text: var(--t-color-blue),
+    base: var(--t-accent-accent11),
+    text: var(--t-accent-accent11),
     border: var(--t-accent-primary),
-    hover: var(--t-color-blue10),
-    active: var(--t-color-blue12),
+    hover: var(--t-accent-accent10),
+    active: var(--t-accent-accent12),
     soft: var(--t-accent-tertiary),
     soft-hover: var(--t-accent-secondary),
   ),
@@ -163,6 +163,13 @@ $colors: (
       --tw-button-hover: #{map.get($tokens, soft-hover)};
     }
   }
+}
+
+.button[data-color='accent'][data-variant='solid'] {
+  --tw-button-background: var(--t-buttons-primary-background);
+  --tw-button-color: var(--t-buttons-primary-text-color);
+  --tw-button-hover: var(--t-buttons-primary-hover);
+  --tw-button-active: var(--t-buttons-primary-hover);
 }
 
 .button[data-variant='link'] {

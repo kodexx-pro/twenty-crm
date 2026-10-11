@@ -1,17 +1,19 @@
-import { Img } from 'react-email';
+import { Text } from 'react-email';
 
-const logoStyle = {
-  marginBottom: '40px',
-};
-
-export const Logo = () => {
-  return (
-    <Img
-      src="https://app.twenty.com/images/icons/windows11/Square150x150Logo.scale-100.png"
-      alt="Twenty logo"
-      width="40"
-      height="40"
-      style={logoStyle}
-    />
-  );
-};
+export const Logo = () => (
+  <Text
+    style={{
+      color: '#123c2a',
+      backgroundColor: '#3ecf8e',
+      borderRadius: '8px',
+      width: '48px',
+      lineHeight: '48px',
+      textAlign: 'center',
+      fontSize: '22px',
+      fontWeight: 700,
+      marginBottom: '40px',
+    }}
+  >
+    K1
+  </Text>
+);

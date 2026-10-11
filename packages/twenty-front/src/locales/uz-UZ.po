@@ -2028,38 +2028,38 @@ msgstr "Jamoa a’zolarini qo‘shish"
 
 #. js-lingui-id: FKGcEL
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server as a remote context server in Zed."
-msgstr "Twenty MCP serverini Zed ichida masofaviy kontekst serveri sifatida qo‘shing."
+msgid "Add the Kodexx One MCP server as a remote context server in Zed."
+msgstr "Kodexx One MCP serverini Zed ichida masofaviy kontekst serveri sifatida qo‘shing."
 
 #. js-lingui-id: iA2nHX
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Augment Code settings."
-msgstr "Twenty MCP serverini Augment Code sozlamalaridan qo‘shing."
+msgid "Add the Kodexx One MCP server from Augment Code settings."
+msgstr "Kodexx One MCP serverini Augment Code sozlamalaridan qo‘shing."
 
 #. js-lingui-id: l+NzAk
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Raycast's MCP commands or settings."
-msgstr "Twenty MCP serverini Raycastning MCP buyruqlari yoki sozlamalaridan qo‘shing."
+msgid "Add the Kodexx One MCP server from Raycast's MCP commands or settings."
+msgstr "Kodexx One MCP serverini Raycastning MCP buyruqlari yoki sozlamalaridan qo‘shing."
 
 #. js-lingui-id: j6G/yI
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server in Gemini CLI settings."
-msgstr "Twenty MCP serverini Gemini CLI sozlamalarida qo‘shing."
+msgid "Add the Kodexx One MCP server in Gemini CLI settings."
+msgstr "Kodexx One MCP serverini Gemini CLI sozlamalarida qo‘shing."
 
 #. js-lingui-id: /OyhlM
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server to your LibreChat configuration file."
-msgstr "Twenty MCP serverini LibreChat konfiguratsiya faylingizga qo‘shing."
+msgid "Add the Kodexx One MCP server to your LibreChat configuration file."
+msgstr "Kodexx One MCP serverini LibreChat konfiguratsiya faylingizga qo‘shing."
 
 #. js-lingui-id: K0DXoj
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty remote server with LM Studio's install link."
-msgstr "Twenty masofaviy serverini LM Studioning o‘rnatish havolasi bilan qo‘shing."
+msgid "Add the Kodexx One remote server with LM Studio's install link."
+msgstr "Kodexx One masofaviy serverini LM Studioning o‘rnatish havolasi bilan qo‘shing."
 
 #. js-lingui-id: BTFMKE
 #: src/pages/settings/communications/SettingsWorkspaceCommunicationGroupChannelDetail.tsx
-msgid "Add these records at your DNS provider. Twenty checks them automatically."
-msgstr "Ushbu yozuvlarni DNS provayderingizga qo‘shing. Twenty ularni avtomatik tekshiradi."
+msgid "Add these records at your DNS provider. Kodexx One checks them automatically."
+msgstr "Ushbu yozuvlarni DNS provayderingizga qo‘shing. Kodexx One ularni avtomatik tekshiradi."
 
 #. js-lingui-id: 5+ttxv
 #: src/modules/settings/accounts/components/SettingsAccountsBlocklistInput.tsx
@@ -2078,8 +2078,8 @@ msgstr "Mavzu qo‘shish"
 
 #. js-lingui-id: 4D/zWv
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add Twenty as a Streamable HTTP extension in Goose."
-msgstr "Twenty ni Goose ichida Streamable HTTP kengaytmasi sifatida qo‘shing."
+msgid "Add Kodexx One as a Streamable HTTP extension in Goose."
+msgstr "Kodexx One ni Goose ichida Streamable HTTP kengaytmasi sifatida qo‘shing."
 
 #. js-lingui-id: XnwceV
 #: src/pages/settings/applications/components/SettingsApplicationRegistrationRedirectURIsInput.tsx
@@ -3848,8 +3848,8 @@ msgstr "Har bir yangi yaratilgan ish maydoniga ushbu ilovani avtomatik o‘rnati
 
 #. js-lingui-id: MHsVk5
 #: src/pages/settings/ai/components/SettingsAiModelTiersPreview.tsx
-msgid "Automatically selected by Twenty for this mode."
-msgstr "Ushbu rejim uchun Twenty tomonidan avtomatik tanlanadi."
+msgid "Automatically selected by Kodexx One for this mode."
+msgstr "Ushbu rejim uchun Kodexx One tomonidan avtomatik tanlanadi."
 
 #. js-lingui-id: XFGV21
 #: src/pages/settings/applications/tabs/SettingsApplicationAutoUpdateSection.tsx
@@ -4064,8 +4064,8 @@ msgstr "Hisob-kitob davri"
 
 #. js-lingui-id: xF/NXI
 #: src/modules/settings/billing/hooks/useBillingPortalSession.ts
-msgid "Billing portal session error. Please retry or contact Twenty team"
-msgstr "Hisob-kitob portali seansi xatosi. Iltimos, qayta urinib ko‘ring yoki Twenty jamoasiga murojaat qiling"
+msgid "Billing portal session error. Please retry or contact Kodexx One team"
+msgstr "Hisob-kitob portali seansi xatosi. Iltimos, qayta urinib ko‘ring yoki Kodexx One jamoasiga murojaat qiling"
 
 #. js-lingui-id: H++SIW
 #: src/modules/settings/billing/hooks/useBillingSubscriptionChangeWording.ts
@@ -4280,8 +4280,8 @@ msgstr "muallif: {author}"
 
 #. js-lingui-id: 8Pfllj
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
-msgid "By using Twenty, you agree to the"
-msgstr "Twentyʼdan foydalanish orqali siz"
+msgid "By using Kodexx One, you agree to the"
+msgstr "Kodexx Oneʼdan foydalanish orqali siz"
 
 #. js-lingui-id: Yx41df
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
@@ -4899,8 +4899,8 @@ msgstr "Faqat ushbu qoida tegishli bo‘lgan yozuv saqlanganda tekshiriladi. Bog
 #. js-lingui-id: SxwQE8
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
-msgid "Checkout session error. Please retry or contact Twenty team"
-msgstr "To‘lov seansi xatosi. Iltimos, qayta urinib ko‘ring yoki Twenty jamoasiga murojaat qiling"
+msgid "Checkout session error. Please retry or contact Kodexx One team"
+msgstr "To‘lov seansi xatosi. Iltimos, qayta urinib ko‘ring yoki Kodexx One jamoasiga murojaat qiling"
 
 #. js-lingui-id: SviKkE
 #: src/modules/localization/hooks/useLocaleOptions.ts
@@ -5721,13 +5721,13 @@ msgstr "Uzoqdagi serverni Amazon Q Developer MCP sozlamalarida moslang."
 
 #. js-lingui-id: g1/8jH
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cascade."
-msgstr "Twenty MCP serverini Cascade’da qo‘lda moslang."
+msgid "Configure the Kodexx One MCP server manually in Cascade."
+msgstr "Kodexx One MCP serverini Cascade’da qo‘lda moslang."
 
 #. js-lingui-id: XiyvRh
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cline."
-msgstr "Twenty MCP serverini Cline’da qo‘lda moslang."
+msgid "Configure the Kodexx One MCP server manually in Cline."
+msgstr "Kodexx One MCP serverini Cline’da qo‘lda moslang."
 
 #. js-lingui-id: qA9AGQ
 #: src/modules/settings/domains/components/SettingsDomainRecords.tsx
@@ -6477,8 +6477,8 @@ msgstr "Sanash usuli"
 
 #. js-lingui-id: EEqRLn
 #: src/modules/settings/workspace/components/ClickTrackingSwitch.tsx
-msgid "Count clicks by routing campaign links through Twenty before the original page."
-msgstr "Asl sahifadan oldin kampaniya havolalarini Twenty orqali yo‘naltirib, bosishlarni hisoblang."
+msgid "Count clicks by routing campaign links through Kodexx One before the original page."
+msgstr "Asl sahifadan oldin kampaniya havolalarini Kodexx One orqali yo‘naltirib, bosishlarni hisoblang."
 
 #. js-lingui-id: vQJINq
 #: src/modules/object-record/record-board/record-board-column/utils/getAggregateOperationLabel.ts
@@ -9784,8 +9784,8 @@ msgstr "Tarifni o‘zgartirishni bekor qilishda xatolik yuz berdi."
 
 #. js-lingui-id: QmR+2U
 #: src/modules/settings/billing/hooks/useEndSubscriptionTrialPeriod.ts
-msgid "Error while ending trial period. Please contact Twenty team."
-msgstr "Sinov davrini yakunlashda xatolik yuz berdi. Iltimos, Twenty jamoasiga murojaat qiling."
+msgid "Error while ending trial period. Please contact Kodexx One team."
+msgstr "Sinov davrini yakunlashda xatolik yuz berdi. Iltimos, Kodexx One jamoasiga murojaat qiling."
 
 #. js-lingui-id: 5g78zo
 #: src/pages/settings/members/SettingsWorkspaceMember.tsx
@@ -12015,8 +12015,8 @@ msgstr "Yuqori"
 
 #. js-lingui-id: 1ETc0T
 #: src/pages/settings/community/SettingsCommunity.tsx
-msgid "Hire a partner to help you implement and customize Twenty."
-msgstr "Twenty ni joriy qilish va moslashtirishda yordam berishi uchun hamkor yollang."
+msgid "Hire a partner to help you implement and customize Kodexx One."
+msgstr "Kodexx One ni joriy qilish va moslashtirishda yordam berishi uchun hamkor yollang."
 
 #. js-lingui-id: i0qMbr
 #: src/modules/navigation/hooks/useMobileNavigationBarItems.ts
@@ -14910,8 +14910,8 @@ msgstr "Model ma'lumotlari"
 
 #. js-lingui-id: iaurWj
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Model used when you chat with Twenty"
-msgstr "Twenty bilan chat qilganingizda foydalaniladigan model"
+msgid "Model used when you chat with Kodexx One"
+msgstr "Kodexx One bilan chat qilganingizda foydalaniladigan model"
 
 #. js-lingui-id: //nm2/
 #: src/pages/settings/admin-panel/SettingsAdminAiProviderDetail.tsx
@@ -17035,8 +17035,8 @@ msgstr "Har bir ishga tushirish uchun bittadan"
 
 #. js-lingui-id: 1WZTTl
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
-msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Twenty on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
-msgstr "Bitta obuna bitta ishlab chiqarish instansiyasini va bitta ehtimoliy steyjing yoki test instansiyasini ishga tushiradigan bitta Tashkilot kalitini taqdim etadi. Steyjing yoki test muhitini ishga tushirish uchun Twenty’ni ikkinchi serverga o‘rnating, uni shu Tashkilot kaliti bilan faollashtiring, so‘ng bu serverni ishlab chiqish instansiyasi sifatida ro‘yxatdan o‘tkazing. Ishlab chiqish instansiyalari qo‘shimcha to‘lovlarsiz premium funksiyalarni ochadi va ishlab chiqarish o‘rinlaringiz soniga kiritilmaydi."
+msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Kodexx One on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
+msgstr "Bitta obuna bitta ishlab chiqarish instansiyasini va bitta ehtimoliy steyjing yoki test instansiyasini ishga tushiradigan bitta Tashkilot kalitini taqdim etadi. Steyjing yoki test muhitini ishga tushirish uchun Kodexx One’ni ikkinchi serverga o‘rnating, uni shu Tashkilot kaliti bilan faollashtiring, so‘ng bu serverni ishlab chiqish instansiyasi sifatida ro‘yxatdan o‘tkazing. Ishlab chiqish instansiyalari qo‘shimcha to‘lovlarsiz premium funksiyalarni ochadi va ishlab chiqarish o‘rinlaringiz soniga kiritilmaydi."
 
 #. js-lingui-id: JEtonz
 #: src/modules/settings/event-logs/components/SettingsLogs.tsx
@@ -17185,8 +17185,8 @@ msgstr "Chatlarni quyidagida ochish"
 
 #. js-lingui-id: n0vVgf
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Claude with the Twenty connector name and MCP URL prefilled."
-msgstr "Claude ni Twenty konnektori nomi va oldindan to‘ldirilgan MCP URL bilan oching."
+msgid "Open Claude with the Kodexx One connector name and MCP URL prefilled."
+msgstr "Claude ni Kodexx One konnektori nomi va oldindan to‘ldirilgan MCP URL bilan oching."
 
 #. js-lingui-id: uIKeEf
 #: src/modules/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepAiAgentConversationButton.tsx
@@ -17195,8 +17195,8 @@ msgstr "Suhbatni ochish"
 
 #. js-lingui-id: +n2jpB
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Cursor's MCP installer with the Twenty remote server config."
-msgstr "Cursor ning MCP o‘rnatish dasturini Twenty masofaviy server konfiguratsiyasi bilan oching."
+msgid "Open Cursor's MCP installer with the Kodexx One remote server config."
+msgstr "Cursor ning MCP o‘rnatish dasturini Kodexx One masofaviy server konfiguratsiyasi bilan oching."
 
 #. js-lingui-id: pZZH4Q
 #: src/modules/auth/sign-in-up/components/EmailVerificationSent.tsx
@@ -17271,8 +17271,8 @@ msgstr "Yozuvlarni alohida sahifada oching"
 
 #. js-lingui-id: q170S2
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Replit with the Twenty remote server config."
-msgstr "Replit ni Twenty masofaviy server konfiguratsiyasi bilan oching."
+msgid "Open Replit with the Kodexx One remote server config."
+msgstr "Replit ni Kodexx One masofaviy server konfiguratsiyasi bilan oching."
 
 #. js-lingui-id: Yp+Hi/
 #: src/modules/settings/applications/components/SettingsApplicationActionButton.tsx
@@ -17286,8 +17286,8 @@ msgstr "Yon panelni ochish"
 
 #. js-lingui-id: sBd/cl
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Twenty's official ChatGPT integration for your workspace."
-msgstr "Ish maydoningiz uchun Twenty ning rasmiy ChatGPT integratsiyasini oching."
+msgid "Open Kodexx One's official ChatGPT integration for your workspace."
+msgstr "Ish maydoningiz uchun Kodexx One ning rasmiy ChatGPT integratsiyasini oching."
 
 #. js-lingui-id: tirDue
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -17687,8 +17687,8 @@ msgstr "Sahifa nomi"
 
 #. js-lingui-id: NRvxzv
 #: src/pages/not-found/NotFound.tsx
-msgid "Page Not Found | Twenty"
-msgstr "Sahifa topilmadi | Twenty"
+msgid "Page Not Found | Kodexx One"
+msgstr "Sahifa topilmadi | Kodexx One"
 
 #. js-lingui-id: oIhFvf
 #: src/modules/side-panel/pages/email-block-settings/components/EmailBlockInsertList.tsx
@@ -23084,11 +23084,11 @@ msgstr "Bedrock uchun AWS regioni"
 #. js-lingui-id: HP7per
 #: src/modules/applications/utils/getStandardApplicationDescription.ts
 msgid ""
-"The base data model every Twenty workspace runs on.\n"
+"The base data model every Kodexx One workspace runs on.\n"
 "\n"
 "#### What \"foundation\" means\n"
 "\n"
-"Every Twenty workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
+"Every Kodexx One workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
 "\n"
 "#### Included objects\n"
 "- **People & Companies**: contact and account records\n"
@@ -23096,11 +23096,11 @@ msgid ""
 "- **Notes & Tasks**: activity and follow-ups\n"
 "- **Workflows & Dashboards**: automation and reporting\n"
 "\n"
-"Remove this app and the rest of Twenty has nothing to hang off.\n"
+"Remove this app and the rest of Kodexx One has nothing to hang off.\n"
 "\n"
 "#### Build your own app\n"
 "\n"
-"Extend Twenty with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
+"Extend Kodexx One with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -23115,11 +23115,11 @@ msgid ""
 "\n"
 "See the [Getting Started guide](https://twenty.com/developers/extend/apps/getting-started) for the full walkthrough, and [Building Apps](https://twenty.com/developers/extend/apps/building) for the `defineApplication` / `defineEntity` APIs."
 msgstr ""
-"Har bir Twenty ish maydoni ishlaydigan asosiy ma’lumotlar modeli.\n"
+"Har bir Kodexx One ish maydoni ishlaydigan asosiy ma’lumotlar modeli.\n"
 "\n"
 "#### \"Poydevor\" nimani anglatadi\n"
 "\n"
-"Har bir Twenty ish maydoni obyektlarning ushbu to‘plami bilan boshlanadi. Ular sizning CRM tuzilishingizni, shu jumladan munosabatlar, faollik va hisobotlarni belgilaydi. Qolgan hamma narsa, jumladan bozor ilovalari, AI agentlari va maxsus obyektlar ularga ulanadi.\n"
+"Har bir Kodexx One ish maydoni obyektlarning ushbu to‘plami bilan boshlanadi. Ular sizning CRM tuzilishingizni, shu jumladan munosabatlar, faollik va hisobotlarni belgilaydi. Qolgan hamma narsa, jumladan bozor ilovalari, AI agentlari va maxsus obyektlar ularga ulanadi.\n"
 "\n"
 "#### Kiritilgan obyektlar\n"
 "- **People & Companies**: kontakt va hisob yozuvlari\n"
@@ -23127,11 +23127,11 @@ msgstr ""
 "- **Notes & Tasks**: faollik va kuzatuv vazifalari\n"
 "- **Workflows & Dashboards**: avtomatlashtirish va hisobotlar\n"
 "\n"
-"Ushbu ilovani olib tashlasangiz, Twenty ning qolgan qismi tayanadigan asosdan mahrum bo‘ladi.\n"
+"Ushbu ilovani olib tashlasangiz, Kodexx One ning qolgan qismi tayanadigan asosdan mahrum bo‘ladi.\n"
 "\n"
 "#### O‘zingizning ilovangizni yarating\n"
 "\n"
-"Twenty’ni o‘z obyektlaringiz, maydonlaringiz, mantiq funksiyalaringiz yoki AI ko‘nikmalaringiz bilan kengaytiring. Yangi ilovani bitta buyruq bilan shablon asosida yarating:\n"
+"Kodexx One’ni o‘z obyektlaringiz, maydonlaringiz, mantiq funksiyalaringiz yoki AI ko‘nikmalaringiz bilan kengaytiring. Yangi ilovani bitta buyruq bilan shablon asosida yarating:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -24526,23 +24526,23 @@ msgstr "Firuzarang"
 
 #. js-lingui-id: 8pmRvi
 #: src/pages/onboarding/SyncEmails.tsx
-msgid "Twenty adds the people you email and meet, and keeps them up to date without manual data entry."
-msgstr "Twenty siz yozishadigan va uchrashadigan odamlarni qo‘shadi hamda qo‘lda ma’lumot kiritmasdan ularni yangilab turadi."
+msgid "Kodexx One adds the people you email and meet, and keeps them up to date without manual data entry."
+msgstr "Kodexx One siz yozishadigan va uchrashadigan odamlarni qo‘shadi hamda qo‘lda ma’lumot kiritmasdan ularni yangilab turadi."
 
 #. js-lingui-id: JnaRPe
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/components/ColumnGrid.tsx
-msgid "Twenty fields"
-msgstr "Twenty maydonlari"
+msgid "Kodexx One fields"
+msgstr "Kodexx One maydonlari"
 
 #. js-lingui-id: pNo8xt
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Twenty fills each level with the best model that meets your requirements"
-msgstr "Twenty har bir darajani talablaringizga javob beradigan eng yaxshi model bilan to‘ldiradi"
+msgid "Kodexx One fills each level with the best model that meets your requirements"
+msgstr "Kodexx One har bir darajani talablaringizga javob beradigan eng yaxshi model bilan to‘ldiradi"
 
 #. js-lingui-id: qUadjH
 #: src/modules/onboarding/components/OnboardingInviteTeamSkipDialog.tsx
-msgid "Twenty works better with your team"
-msgstr "Twenty jamoangiz bilan yaxshiroq ishlaydi"
+msgid "Kodexx One works better with your team"
+msgstr "Kodexx One jamoangiz bilan yaxshiroq ishlaydi"
 
 #. js-lingui-id: YIjS4q
 #: src/modules/ai/components/SettingsAgentModelCapabilities.tsx
@@ -26428,8 +26428,8 @@ msgstr "haftalar"
 
 #. js-lingui-id: nTuObL
 #: src/pages/auth/SignInUp.tsx
-msgid "Welcome to Twenty"
-msgstr "Twenty ga xush kelibsiz"
+msgid "Welcome to Kodexx One"
+msgstr "Kodexx One ga xush kelibsiz"
 
 #. js-lingui-id: t8ZvkC
 #: src/modules/onboarding/constants/WelcomeTitleMessage.ts

@@ -2028,38 +2028,38 @@ msgstr "Csapattagok hozzáadása"
 
 #. js-lingui-id: FKGcEL
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server as a remote context server in Zed."
-msgstr "Adja hozzá a Twenty MCP szervert távoli kontextus szerverként a Zedben."
+msgid "Add the Kodexx One MCP server as a remote context server in Zed."
+msgstr "Adja hozzá a Kodexx One MCP szervert távoli kontextus szerverként a Zedben."
 
 #. js-lingui-id: iA2nHX
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Augment Code settings."
-msgstr "Adja hozzá a Twenty MCP szervert az Augment Code beállításaiban."
+msgid "Add the Kodexx One MCP server from Augment Code settings."
+msgstr "Adja hozzá a Kodexx One MCP szervert az Augment Code beállításaiban."
 
 #. js-lingui-id: l+NzAk
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Raycast's MCP commands or settings."
-msgstr "Adja hozzá a Twenty MCP szervert a Raycast MCP parancsaiból vagy beállításaiból."
+msgid "Add the Kodexx One MCP server from Raycast's MCP commands or settings."
+msgstr "Adja hozzá a Kodexx One MCP szervert a Raycast MCP parancsaiból vagy beállításaiból."
 
 #. js-lingui-id: j6G/yI
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server in Gemini CLI settings."
-msgstr "Adja hozzá a Twenty MCP szervert a Gemini CLI beállításaiban."
+msgid "Add the Kodexx One MCP server in Gemini CLI settings."
+msgstr "Adja hozzá a Kodexx One MCP szervert a Gemini CLI beállításaiban."
 
 #. js-lingui-id: /OyhlM
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server to your LibreChat configuration file."
-msgstr "Adja hozzá a Twenty MCP szervert a LibreChat konfigurációs fájljához."
+msgid "Add the Kodexx One MCP server to your LibreChat configuration file."
+msgstr "Adja hozzá a Kodexx One MCP szervert a LibreChat konfigurációs fájljához."
 
 #. js-lingui-id: K0DXoj
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty remote server with LM Studio's install link."
-msgstr "Adja hozzá a Twenty távoli szervert az LM Studio telepítési hivatkozásával."
+msgid "Add the Kodexx One remote server with LM Studio's install link."
+msgstr "Adja hozzá a Kodexx One távoli szervert az LM Studio telepítési hivatkozásával."
 
 #. js-lingui-id: BTFMKE
 #: src/pages/settings/communications/SettingsWorkspaceCommunicationGroupChannelDetail.tsx
-msgid "Add these records at your DNS provider. Twenty checks them automatically."
-msgstr "Adja hozzá ezeket a rekordokat a DNS-szolgáltatójánál. A Twenty automatikusan ellenőrzi őket."
+msgid "Add these records at your DNS provider. Kodexx One checks them automatically."
+msgstr "Adja hozzá ezeket a rekordokat a DNS-szolgáltatójánál. A Kodexx One automatikusan ellenőrzi őket."
 
 #. js-lingui-id: 5+ttxv
 #: src/modules/settings/accounts/components/SettingsAccountsBlocklistInput.tsx
@@ -2078,8 +2078,8 @@ msgstr "Téma hozzáadása"
 
 #. js-lingui-id: 4D/zWv
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add Twenty as a Streamable HTTP extension in Goose."
-msgstr "Adja hozzá a Twenty-t Streamable HTTP-bővítményként a Goose-ban."
+msgid "Add Kodexx One as a Streamable HTTP extension in Goose."
+msgstr "Adja hozzá a Kodexx One-t Streamable HTTP-bővítményként a Goose-ban."
 
 #. js-lingui-id: XnwceV
 #: src/pages/settings/applications/components/SettingsApplicationRegistrationRedirectURIsInput.tsx
@@ -3848,8 +3848,8 @@ msgstr "Az alkalmazás automatikus telepítése minden újonnan létrehozott mun
 
 #. js-lingui-id: MHsVk5
 #: src/pages/settings/ai/components/SettingsAiModelTiersPreview.tsx
-msgid "Automatically selected by Twenty for this mode."
-msgstr "A Twenty automatikusan kiválasztja ehhez a módhoz."
+msgid "Automatically selected by Kodexx One for this mode."
+msgstr "A Kodexx One automatikusan kiválasztja ehhez a módhoz."
 
 #. js-lingui-id: XFGV21
 #: src/pages/settings/applications/tabs/SettingsApplicationAutoUpdateSection.tsx
@@ -4064,8 +4064,8 @@ msgstr "Számlázási időszak"
 
 #. js-lingui-id: xF/NXI
 #: src/modules/settings/billing/hooks/useBillingPortalSession.ts
-msgid "Billing portal session error. Please retry or contact Twenty team"
-msgstr "Számlázási portál munkamenet hiba. Kérem, próbálja újra, vagy vegye fel a kapcsolatot a Twenty csapatával"
+msgid "Billing portal session error. Please retry or contact Kodexx One team"
+msgstr "Számlázási portál munkamenet hiba. Kérem, próbálja újra, vagy vegye fel a kapcsolatot a Kodexx One csapatával"
 
 #. js-lingui-id: H++SIW
 #: src/modules/settings/billing/hooks/useBillingSubscriptionChangeWording.ts
@@ -4280,8 +4280,8 @@ msgstr "készítette: {author}"
 
 #. js-lingui-id: 8Pfllj
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
-msgid "By using Twenty, you agree to the"
-msgstr "A Twenty használatával elfogadja a"
+msgid "By using Kodexx One, you agree to the"
+msgstr "A Kodexx One használatával elfogadja a"
 
 #. js-lingui-id: Yx41df
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
@@ -4899,8 +4899,8 @@ msgstr "Csak akkor ellenőrzi, amikor a szabályhoz tartozó rekord mentésre ke
 #. js-lingui-id: SxwQE8
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
-msgid "Checkout session error. Please retry or contact Twenty team"
-msgstr "Fizetési munkamenet hiba. Kérem, próbálja újra, vagy vegye fel a kapcsolatot a Twenty csapatával"
+msgid "Checkout session error. Please retry or contact Kodexx One team"
+msgstr "Fizetési munkamenet hiba. Kérem, próbálja újra, vagy vegye fel a kapcsolatot a Kodexx One csapatával"
 
 #. js-lingui-id: SviKkE
 #: src/modules/localization/hooks/useLocaleOptions.ts
@@ -5721,13 +5721,13 @@ msgstr "A távoli szerver konfigurálása az Amazon Q Developer MCP beállítás
 
 #. js-lingui-id: g1/8jH
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cascade."
-msgstr "A Twenty MCP szerver kézi konfigurálása a Cascade-ben."
+msgid "Configure the Kodexx One MCP server manually in Cascade."
+msgstr "A Kodexx One MCP szerver kézi konfigurálása a Cascade-ben."
 
 #. js-lingui-id: XiyvRh
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cline."
-msgstr "A Twenty MCP szerver kézi konfigurálása a Cline-ban."
+msgid "Configure the Kodexx One MCP server manually in Cline."
+msgstr "A Kodexx One MCP szerver kézi konfigurálása a Cline-ban."
 
 #. js-lingui-id: qA9AGQ
 #: src/modules/settings/domains/components/SettingsDomainRecords.tsx
@@ -6477,8 +6477,8 @@ msgstr "Számlálás alapja"
 
 #. js-lingui-id: EEqRLn
 #: src/modules/settings/workspace/components/ClickTrackingSwitch.tsx
-msgid "Count clicks by routing campaign links through Twenty before the original page."
-msgstr "A kattintások számlálásához a kampány hivatkozásait az eredeti oldal előtt a Twenty-n keresztül irányítsa."
+msgid "Count clicks by routing campaign links through Kodexx One before the original page."
+msgstr "A kattintások számlálásához a kampány hivatkozásait az eredeti oldal előtt a Kodexx One-n keresztül irányítsa."
 
 #. js-lingui-id: vQJINq
 #: src/modules/object-record/record-board/record-board-column/utils/getAggregateOperationLabel.ts
@@ -9784,8 +9784,8 @@ msgstr "Hiba a csomagváltás törlésekor."
 
 #. js-lingui-id: QmR+2U
 #: src/modules/settings/billing/hooks/useEndSubscriptionTrialPeriod.ts
-msgid "Error while ending trial period. Please contact Twenty team."
-msgstr "Hiba a próbaidőszak befejezésekor. Kérjük, vegye fel a kapcsolatot a Twenty csapatával."
+msgid "Error while ending trial period. Please contact Kodexx One team."
+msgstr "Hiba a próbaidőszak befejezésekor. Kérjük, vegye fel a kapcsolatot a Kodexx One csapatával."
 
 #. js-lingui-id: 5g78zo
 #: src/pages/settings/members/SettingsWorkspaceMember.tsx
@@ -12015,8 +12015,8 @@ msgstr "Magas"
 
 #. js-lingui-id: 1ETc0T
 #: src/pages/settings/community/SettingsCommunity.tsx
-msgid "Hire a partner to help you implement and customize Twenty."
-msgstr "Fogadj fel egy partnert, hogy segítsen a Twenty bevezetésében és testreszabásában."
+msgid "Hire a partner to help you implement and customize Kodexx One."
+msgstr "Fogadj fel egy partnert, hogy segítsen a Kodexx One bevezetésében és testreszabásában."
 
 #. js-lingui-id: i0qMbr
 #: src/modules/navigation/hooks/useMobileNavigationBarItems.ts
@@ -14910,7 +14910,7 @@ msgstr "Modellinformációk"
 
 #. js-lingui-id: iaurWj
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Model used when you chat with Twenty"
+msgid "Model used when you chat with Kodexx One"
 msgstr "A Twentyvel való csevegéskor használt modell"
 
 #. js-lingui-id: //nm2/
@@ -17035,8 +17035,8 @@ msgstr "Futtatásonként egy"
 
 #. js-lingui-id: 1WZTTl
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
-msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Twenty on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
-msgstr "Egy előfizetés egy szervezeti kulcsot biztosít, amely egy éles példányt és egy lehetséges staging- vagy tesztpéldányt működtet. Staging- vagy tesztkörnyezet futtatásához telepítse a Twenty-t egy második szerverre, aktiválja ugyanazzal a szervezeti kulccsal, majd regisztrálja azt a szervert fejlesztői példányként. A fejlesztői példányok további számlázás nélkül engedélyezik a prémium funkciókat, és nem számítanak bele az éles helyek számába."
+msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Kodexx One on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
+msgstr "Egy előfizetés egy szervezeti kulcsot biztosít, amely egy éles példányt és egy lehetséges staging- vagy tesztpéldányt működtet. Staging- vagy tesztkörnyezet futtatásához telepítse a Kodexx One-t egy második szerverre, aktiválja ugyanazzal a szervezeti kulccsal, majd regisztrálja azt a szervert fejlesztői példányként. A fejlesztői példányok további számlázás nélkül engedélyezik a prémium funkciókat, és nem számítanak bele az éles helyek számába."
 
 #. js-lingui-id: JEtonz
 #: src/modules/settings/event-logs/components/SettingsLogs.tsx
@@ -17185,8 +17185,8 @@ msgstr "Beszélgetések megnyitása itt"
 
 #. js-lingui-id: n0vVgf
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Claude with the Twenty connector name and MCP URL prefilled."
-msgstr "Nyissa meg a Claude-ot a Twenty connector nevével és az MCP URL-lel előre kitöltve."
+msgid "Open Claude with the Kodexx One connector name and MCP URL prefilled."
+msgstr "Nyissa meg a Claude-ot a Kodexx One connector nevével és az MCP URL-lel előre kitöltve."
 
 #. js-lingui-id: uIKeEf
 #: src/modules/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepAiAgentConversationButton.tsx
@@ -17195,8 +17195,8 @@ msgstr "Beszélgetés megnyitása"
 
 #. js-lingui-id: +n2jpB
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Cursor's MCP installer with the Twenty remote server config."
-msgstr "Nyissa meg a Cursor MCP telepítőjét a Twenty távoli szerver konfigurációjával."
+msgid "Open Cursor's MCP installer with the Kodexx One remote server config."
+msgstr "Nyissa meg a Cursor MCP telepítőjét a Kodexx One távoli szerver konfigurációjával."
 
 #. js-lingui-id: pZZH4Q
 #: src/modules/auth/sign-in-up/components/EmailVerificationSent.tsx
@@ -17271,8 +17271,8 @@ msgstr "Rekordok megnyitása egy külön oldalon"
 
 #. js-lingui-id: q170S2
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Replit with the Twenty remote server config."
-msgstr "Nyissa meg a Replitet a Twenty távoli szerver konfigurációjával."
+msgid "Open Replit with the Kodexx One remote server config."
+msgstr "Nyissa meg a Replitet a Kodexx One távoli szerver konfigurációjával."
 
 #. js-lingui-id: Yp+Hi/
 #: src/modules/settings/applications/components/SettingsApplicationActionButton.tsx
@@ -17286,8 +17286,8 @@ msgstr "Oldalsó panel megnyitása"
 
 #. js-lingui-id: sBd/cl
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Twenty's official ChatGPT integration for your workspace."
-msgstr "Nyissa meg a Twenty hivatalos ChatGPT integrációját a munkaterületéhez."
+msgid "Open Kodexx One's official ChatGPT integration for your workspace."
+msgstr "Nyissa meg a Kodexx One hivatalos ChatGPT integrációját a munkaterületéhez."
 
 #. js-lingui-id: tirDue
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -17687,8 +17687,8 @@ msgstr "Oldal neve"
 
 #. js-lingui-id: NRvxzv
 #: src/pages/not-found/NotFound.tsx
-msgid "Page Not Found | Twenty"
-msgstr "Az oldal nem található | Twenty"
+msgid "Page Not Found | Kodexx One"
+msgstr "Az oldal nem található | Kodexx One"
 
 #. js-lingui-id: oIhFvf
 #: src/modules/side-panel/pages/email-block-settings/components/EmailBlockInsertList.tsx
@@ -23084,11 +23084,11 @@ msgstr "Az AWS-régió a Bedrockhoz"
 #. js-lingui-id: HP7per
 #: src/modules/applications/utils/getStandardApplicationDescription.ts
 msgid ""
-"The base data model every Twenty workspace runs on.\n"
+"The base data model every Kodexx One workspace runs on.\n"
 "\n"
 "#### What \"foundation\" means\n"
 "\n"
-"Every Twenty workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
+"Every Kodexx One workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
 "\n"
 "#### Included objects\n"
 "- **People & Companies**: contact and account records\n"
@@ -23096,11 +23096,11 @@ msgid ""
 "- **Notes & Tasks**: activity and follow-ups\n"
 "- **Workflows & Dashboards**: automation and reporting\n"
 "\n"
-"Remove this app and the rest of Twenty has nothing to hang off.\n"
+"Remove this app and the rest of Kodexx One has nothing to hang off.\n"
 "\n"
 "#### Build your own app\n"
 "\n"
-"Extend Twenty with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
+"Extend Kodexx One with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -23115,11 +23115,11 @@ msgid ""
 "\n"
 "See the [Getting Started guide](https://twenty.com/developers/extend/apps/getting-started) for the full walkthrough, and [Building Apps](https://twenty.com/developers/extend/apps/building) for the `defineApplication` / `defineEntity` APIs."
 msgstr ""
-"Az az alapadatmodell, amelyre minden Twenty-munkaterület épül.\n"
+"Az az alapadatmodell, amelyre minden Kodexx One-munkaterület épül.\n"
 "\n"
 "#### Mit jelent az \"alap\"\n"
 "\n"
-"Minden Twenty-munkaterület ezzel az objektumkészlettel indul. Ezek határozzák meg a CRM-ed felépítését, beleértve a kapcsolatokat, a tevékenységeket és a jelentéskészítést. Minden más, beleértve a piactéri alkalmazásokat, az AI-ügynököket és az egyéni objektumokat, ezekhez csatlakozik.\n"
+"Minden Kodexx One-munkaterület ezzel az objektumkészlettel indul. Ezek határozzák meg a CRM-ed felépítését, beleértve a kapcsolatokat, a tevékenységeket és a jelentéskészítést. Minden más, beleértve a piactéri alkalmazásokat, az AI-ügynököket és az egyéni objektumokat, ezekhez csatlakozik.\n"
 "\n"
 "#### Tartalmazott objektumok\n"
 "- **Személyek és vállalatok**: kapcsolattartó- és vállalati rekordok\n"
@@ -23127,11 +23127,11 @@ msgstr ""
 "- **Jegyzetek és feladatok**: tevékenységek és utánkövetések\n"
 "- **Munkafolyamatok és irányítópultok**: automatizálás és jelentéskészítés\n"
 "\n"
-"Ha eltávolítod ezt az alkalmazást, nem marad semmi, amihez a Twenty többi része kapcsolódhat.\n"
+"Ha eltávolítod ezt az alkalmazást, nem marad semmi, amihez a Kodexx One többi része kapcsolódhat.\n"
 "\n"
 "#### Készíts saját alkalmazást\n"
 "\n"
-"Bővítsd a Twenty-t saját objektumokkal, mezőkkel, logikai függvényekkel vagy AI-képességekkel. Hozz létre egy új alkalmazásvázat egyetlen paranccsal:\n"
+"Bővítsd a Kodexx One-t saját objektumokkal, mezőkkel, logikai függvényekkel vagy AI-képességekkel. Hozz létre egy új alkalmazásvázat egyetlen paranccsal:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -24526,23 +24526,23 @@ msgstr "Türkiz"
 
 #. js-lingui-id: 8pmRvi
 #: src/pages/onboarding/SyncEmails.tsx
-msgid "Twenty adds the people you email and meet, and keeps them up to date without manual data entry."
-msgstr "A Twenty hozzáadja azokat az embereket, akikkel e-mailt vált és találkozik, és manuális adatbevitel nélkül naprakészen tartja őket."
+msgid "Kodexx One adds the people you email and meet, and keeps them up to date without manual data entry."
+msgstr "A Kodexx One hozzáadja azokat az embereket, akikkel e-mailt vált és találkozik, és manuális adatbevitel nélkül naprakészen tartja őket."
 
 #. js-lingui-id: JnaRPe
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/components/ColumnGrid.tsx
-msgid "Twenty fields"
-msgstr "Twenty mezők"
+msgid "Kodexx One fields"
+msgstr "Kodexx One mezők"
 
 #. js-lingui-id: pNo8xt
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Twenty fills each level with the best model that meets your requirements"
-msgstr "A Twenty minden szintet az igényeinek megfelelő legjobb modellel tölt fel"
+msgid "Kodexx One fills each level with the best model that meets your requirements"
+msgstr "A Kodexx One minden szintet az igényeinek megfelelő legjobb modellel tölt fel"
 
 #. js-lingui-id: qUadjH
 #: src/modules/onboarding/components/OnboardingInviteTeamSkipDialog.tsx
-msgid "Twenty works better with your team"
-msgstr "A Twenty jobban működik a csapatával"
+msgid "Kodexx One works better with your team"
+msgstr "A Kodexx One jobban működik a csapatával"
 
 #. js-lingui-id: YIjS4q
 #: src/modules/ai/components/SettingsAgentModelCapabilities.tsx
@@ -26428,7 +26428,7 @@ msgstr ""
 
 #. js-lingui-id: nTuObL
 #: src/pages/auth/SignInUp.tsx
-msgid "Welcome to Twenty"
+msgid "Welcome to Kodexx One"
 msgstr "Üdvözöljük a Twentyben"
 
 #. js-lingui-id: t8ZvkC

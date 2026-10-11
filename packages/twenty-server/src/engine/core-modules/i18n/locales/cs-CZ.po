@@ -197,8 +197,8 @@ msgstr "Pečlivě vybrané publikum lidí"
 
 #. js-lingui-id: TF/ZV2
 #: src/engine/core-modules/billing/reminders/services/billing-reminder.service.ts
-msgid "A heads up before your Twenty trial ends"
-msgstr "Upozornění před ukončením vašeho zkušebního období Twenty"
+msgid "A heads up before your Kodexx One trial ends"
+msgstr "Upozornění před ukončením vašeho zkušebního období Kodexx One"
 
 #. js-lingui-id: 6yZjO1
 #: src/engine/core-modules/application/application.exception.ts
@@ -6832,8 +6832,8 @@ msgstr "Spojovací tabulka propojující přiřazení zpráv kanálu zpráv se s
 
 #. js-lingui-id: PviVyk
 #: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
-msgid "Join your team on Twenty"
-msgstr "Připojte se k svému týmu na Twenty"
+msgid "Join your team on Kodexx One"
+msgstr "Připojte se k svému týmu na Kodexx One"
 
 #. js-lingui-id: +KEn4d
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-call-recording-standard-flat-field-metadata.util.ts
@@ -11662,8 +11662,8 @@ msgstr "Systémová pole nelze aktualizovat"
 
 #. js-lingui-id: aK2k19
 #: src/engine/metadata-modules/index-metadata/services/index-metadata.service.ts
-msgid "System indexes are required for Twenty to work and cannot be deleted."
-msgstr "Systémové indexy jsou nezbytné pro fungování Twenty a nelze je odstranit."
+msgid "System indexes are required for Kodexx One to work and cannot be deleted."
+msgstr "Systémové indexy jsou nezbytné pro fungování Kodexx One a nelze je odstranit."
 
 #. js-lingui-id: /ojawH
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
@@ -12700,8 +12700,8 @@ msgstr "Tomuto klíči API není přiřazena žádná role."
 #. js-lingui-id: zISk4k
 #: src/engine/core-modules/application/application-registration/application-registration.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
-msgid "This app requires a newer version of the Twenty server. Please upgrade your server or use a compatible app version."
-msgstr "Tato aplikace vyžaduje novější verzi serveru Twenty. Aktualizujte prosím svůj server nebo použijte kompatibilní verzi aplikace."
+msgid "This app requires a newer version of the Kodexx One server. Please upgrade your server or use a compatible app version."
+msgstr "Tato aplikace vyžaduje novější verzi serveru Kodexx One. Aktualizujte prosím svůj server nebo použijte kompatibilní verzi aplikace."
 
 #. js-lingui-id: y2nks/
 #: src/engine/core-modules/application/application.exception.ts
@@ -14893,8 +14893,8 @@ msgstr "Středa"
 
 #. js-lingui-id: TVkCrJ
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
-msgid "Welcome to Twenty: Please Confirm Your Email"
-msgstr "Vítejte v Twenty: Prosím potvrďte svůj e-mail"
+msgid "Welcome to Kodexx One: Please Confirm Your Email"
+msgstr "Vítejte v Kodexx One: Prosím potvrďte svůj e-mail"
 
 #. js-lingui-id: lKboI8
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-record-share-standard-flat-field-metadata.util.ts
@@ -16048,13 +16048,13 @@ msgstr "Člen vašeho týmu odpovědný za správu firemního účtu"
 
 #. js-lingui-id: sOfbGC
 #: src/engine/core-modules/billing/reminders/services/billing-reminder.service.ts
-msgid "Your Twenty plan renews soon"
-msgstr "Váš tarif Twenty bude brzy obnoven"
+msgid "Your Kodexx One plan renews soon"
+msgstr "Váš tarif Kodexx One bude brzy obnoven"
 
 #. js-lingui-id: qW+K5e
 #: src/engine/core-modules/billing/reminders/services/billing-reminder.service.ts
-msgid "Your Twenty trial is ending soon"
-msgstr "Vaše zkušební období Twenty brzy skončí"
+msgid "Your Kodexx One trial is ending soon"
+msgstr "Vaše zkušební období Kodexx One brzy skončí"
 
 #. js-lingui-id: pOQQ3U
 #: src/engine/core-modules/two-factor-authentication/services/two-factor-authentication-recovery.service.ts

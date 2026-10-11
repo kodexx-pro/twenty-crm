@@ -75,7 +75,4 @@ export const THEME_COMMON = {
   sidePanelWidth: '500px',
   clickableElementBackgroundTransition: 'background 0.1s ease',
   lastLayerZIndex: 2147483647,
-  buttons: {
-    secondaryTextColor: 'color(display-p3 0.63 0.69 1)',
-  },
 };

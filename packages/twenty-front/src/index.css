@@ -1,8 +1,16 @@
 @import './viewport-zoom.css';
 
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/outfit-latin-wght-normal.woff2') format('woff2');
+}
+
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--t-font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--t-background-tertiary);
@@ -62,4 +70,13 @@ form {
 /* https://stackoverflow.com/questions/44543157/how-to-hide-the-google-invisible-recaptcha-badge */
 .grecaptcha-badge {
   visibility: hidden !important;
+}
+
+::selection {
+  background: var(--t-accent-tertiary);
+  color: var(--t-font-color-primary);
+}
+input,
+textarea {
+  caret-color: var(--t-accent-accent11);
 }

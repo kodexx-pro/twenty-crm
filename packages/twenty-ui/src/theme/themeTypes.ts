@@ -111,6 +111,9 @@ export type ThemeType = {
   lastLayerZIndex: number;
   buttons: {
     secondaryTextColor: string;
+    primaryBackground: string;
+    primaryHover: string;
+    primaryTextColor: string;
   };
   accent: {
     primary: string;

@@ -171,8 +171,8 @@ export const useNavigationMenuItemAddOptions = ({
           onClick: () => {
             addItem({
               type: NavigationMenuItemType.LINK,
-              name: 'Twenty',
-              link: 'https://twenty.com',
+              name: 'Kodexx One',
+              link: window.location.origin,
               color: DEFAULT_NAVIGATION_MENU_ITEM_COLOR_LINK,
             });
           },

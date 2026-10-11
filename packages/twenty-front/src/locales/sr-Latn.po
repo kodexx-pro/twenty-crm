@@ -2028,38 +2028,38 @@ msgstr "Dodaj članove tima"
 
 #. js-lingui-id: FKGcEL
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server as a remote context server in Zed."
-msgstr "Dodaj Twenty MCP server kao udaljeni kontekst server u Zed."
+msgid "Add the Kodexx One MCP server as a remote context server in Zed."
+msgstr "Dodaj Kodexx One MCP server kao udaljeni kontekst server u Zed."
 
 #. js-lingui-id: iA2nHX
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Augment Code settings."
-msgstr "Dodaj Twenty MCP server iz podešavanja Augment Code."
+msgid "Add the Kodexx One MCP server from Augment Code settings."
+msgstr "Dodaj Kodexx One MCP server iz podešavanja Augment Code."
 
 #. js-lingui-id: l+NzAk
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server from Raycast's MCP commands or settings."
-msgstr "Dodaj Twenty MCP server iz Raycast MCP komandi ili podešavanja."
+msgid "Add the Kodexx One MCP server from Raycast's MCP commands or settings."
+msgstr "Dodaj Kodexx One MCP server iz Raycast MCP komandi ili podešavanja."
 
 #. js-lingui-id: j6G/yI
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server in Gemini CLI settings."
-msgstr "Dodaj Twenty MCP server u podešavanjima Gemini CLI."
+msgid "Add the Kodexx One MCP server in Gemini CLI settings."
+msgstr "Dodaj Kodexx One MCP server u podešavanjima Gemini CLI."
 
 #. js-lingui-id: /OyhlM
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty MCP server to your LibreChat configuration file."
-msgstr "Dodaj Twenty MCP server u svoju LibreChat konfiguracionu datoteku."
+msgid "Add the Kodexx One MCP server to your LibreChat configuration file."
+msgstr "Dodaj Kodexx One MCP server u svoju LibreChat konfiguracionu datoteku."
 
 #. js-lingui-id: K0DXoj
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add the Twenty remote server with LM Studio's install link."
-msgstr "Dodaj Twenty udaljeni server pomoću LM Studio linka za instalaciju."
+msgid "Add the Kodexx One remote server with LM Studio's install link."
+msgstr "Dodaj Kodexx One udaljeni server pomoću LM Studio linka za instalaciju."
 
 #. js-lingui-id: BTFMKE
 #: src/pages/settings/communications/SettingsWorkspaceCommunicationGroupChannelDetail.tsx
-msgid "Add these records at your DNS provider. Twenty checks them automatically."
-msgstr "Dodajte ove zapise kod svog DNS provajdera. Twenty ih automatski proverava."
+msgid "Add these records at your DNS provider. Kodexx One checks them automatically."
+msgstr "Dodajte ove zapise kod svog DNS provajdera. Kodexx One ih automatski proverava."
 
 #. js-lingui-id: 5+ttxv
 #: src/modules/settings/accounts/components/SettingsAccountsBlocklistInput.tsx
@@ -2078,8 +2078,8 @@ msgstr "Dodaj temu"
 
 #. js-lingui-id: 4D/zWv
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Add Twenty as a Streamable HTTP extension in Goose."
-msgstr "Dodaj Twenty kao Streamable HTTP ekstenziju u Goose."
+msgid "Add Kodexx One as a Streamable HTTP extension in Goose."
+msgstr "Dodaj Kodexx One kao Streamable HTTP ekstenziju u Goose."
 
 #. js-lingui-id: XnwceV
 #: src/pages/settings/applications/components/SettingsApplicationRegistrationRedirectURIsInput.tsx
@@ -3848,8 +3848,8 @@ msgstr "Automatski instaliraj ovu aplikaciju na svaki novokreirani radni prostor
 
 #. js-lingui-id: MHsVk5
 #: src/pages/settings/ai/components/SettingsAiModelTiersPreview.tsx
-msgid "Automatically selected by Twenty for this mode."
-msgstr "Twenty ga automatski bira za ovaj režim."
+msgid "Automatically selected by Kodexx One for this mode."
+msgstr "Kodexx One ga automatski bira za ovaj režim."
 
 #. js-lingui-id: XFGV21
 #: src/pages/settings/applications/tabs/SettingsApplicationAutoUpdateSection.tsx
@@ -4064,8 +4064,8 @@ msgstr "Period naplate"
 
 #. js-lingui-id: xF/NXI
 #: src/modules/settings/billing/hooks/useBillingPortalSession.ts
-msgid "Billing portal session error. Please retry or contact Twenty team"
-msgstr "Greška sesije portala za naplatu. Pokušajte ponovo ili kontaktirajte Twenty tim"
+msgid "Billing portal session error. Please retry or contact Kodexx One team"
+msgstr "Greška sesije portala za naplatu. Pokušajte ponovo ili kontaktirajte Kodexx One tim"
 
 #. js-lingui-id: H++SIW
 #: src/modules/settings/billing/hooks/useBillingSubscriptionChangeWording.ts
@@ -4280,8 +4280,8 @@ msgstr "od {author}"
 
 #. js-lingui-id: 8Pfllj
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
-msgid "By using Twenty, you agree to the"
-msgstr "Korišćenjem Twenty, slažete se sa"
+msgid "By using Kodexx One, you agree to the"
+msgstr "Korišćenjem Kodexx One, slažete se sa"
 
 #. js-lingui-id: Yx41df
 #: src/modules/auth/sign-in-up/components/FooterNote.tsx
@@ -4899,8 +4899,8 @@ msgstr "Proverava se samo kada se sačuva zapis kome ovo pravilo pripada. Uređi
 #. js-lingui-id: SxwQE8
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
 #: src/modules/settings/billing/hooks/useHandleCheckoutSession.ts
-msgid "Checkout session error. Please retry or contact Twenty team"
-msgstr "Greška u sesiji naplate. Molimo da pokušate ponovo ili kontaktirajte Twenty tim"
+msgid "Checkout session error. Please retry or contact Kodexx One team"
+msgstr "Greška u sesiji naplate. Molimo da pokušate ponovo ili kontaktirajte Kodexx One tim"
 
 #. js-lingui-id: SviKkE
 #: src/modules/localization/hooks/useLocaleOptions.ts
@@ -5721,13 +5721,13 @@ msgstr "Konfigurišite udaljeni server u Amazon Q Developer MCP podešavanjima."
 
 #. js-lingui-id: g1/8jH
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cascade."
-msgstr "Ručno konfigurišite Twenty MCP server u Cascade."
+msgid "Configure the Kodexx One MCP server manually in Cascade."
+msgstr "Ručno konfigurišite Kodexx One MCP server u Cascade."
 
 #. js-lingui-id: XiyvRh
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Configure the Twenty MCP server manually in Cline."
-msgstr "Ručno konfigurišite Twenty MCP server u Cline."
+msgid "Configure the Kodexx One MCP server manually in Cline."
+msgstr "Ručno konfigurišite Kodexx One MCP server u Cline."
 
 #. js-lingui-id: qA9AGQ
 #: src/modules/settings/domains/components/SettingsDomainRecords.tsx
@@ -6477,8 +6477,8 @@ msgstr "Brojanje po"
 
 #. js-lingui-id: EEqRLn
 #: src/modules/settings/workspace/components/ClickTrackingSwitch.tsx
-msgid "Count clicks by routing campaign links through Twenty before the original page."
-msgstr "Brojite klikove usmeravanjem veza kampanje kroz Twenty pre originalne stranice."
+msgid "Count clicks by routing campaign links through Kodexx One before the original page."
+msgstr "Brojite klikove usmeravanjem veza kampanje kroz Kodexx One pre originalne stranice."
 
 #. js-lingui-id: vQJINq
 #: src/modules/object-record/record-board/record-board-column/utils/getAggregateOperationLabel.ts
@@ -9784,8 +9784,8 @@ msgstr "Greška pri otkazivanju promene plana."
 
 #. js-lingui-id: QmR+2U
 #: src/modules/settings/billing/hooks/useEndSubscriptionTrialPeriod.ts
-msgid "Error while ending trial period. Please contact Twenty team."
-msgstr "Greška prilikom završetka probnog perioda. Molimo vas kontaktirajte Twenty tim."
+msgid "Error while ending trial period. Please contact Kodexx One team."
+msgstr "Greška prilikom završetka probnog perioda. Molimo vas kontaktirajte Kodexx One tim."
 
 #. js-lingui-id: 5g78zo
 #: src/pages/settings/members/SettingsWorkspaceMember.tsx
@@ -12015,8 +12015,8 @@ msgstr "Visoko"
 
 #. js-lingui-id: 1ETc0T
 #: src/pages/settings/community/SettingsCommunity.tsx
-msgid "Hire a partner to help you implement and customize Twenty."
-msgstr "Angažujte partnera koji će vam pomoći da primenite i prilagodite Twenty."
+msgid "Hire a partner to help you implement and customize Kodexx One."
+msgstr "Angažujte partnera koji će vam pomoći da primenite i prilagodite Kodexx One."
 
 #. js-lingui-id: i0qMbr
 #: src/modules/navigation/hooks/useMobileNavigationBarItems.ts
@@ -14910,8 +14910,8 @@ msgstr "Informacije o modelu"
 
 #. js-lingui-id: iaurWj
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Model used when you chat with Twenty"
-msgstr "Model koji se koristi kada ćaskate sa Twenty"
+msgid "Model used when you chat with Kodexx One"
+msgstr "Model koji se koristi kada ćaskate sa Kodexx One"
 
 #. js-lingui-id: //nm2/
 #: src/pages/settings/admin-panel/SettingsAdminAiProviderDetail.tsx
@@ -17035,8 +17035,8 @@ msgstr "Jedan po pokretanju"
 
 #. js-lingui-id: 1WZTTl
 #: src/pages/settings/enterprise/SettingsEnterprise.tsx
-msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Twenty on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
-msgstr "Jedna pretplata obezbeđuje jedan ključ za organizaciju koji pokreće jednu produkcionu instancu i jednu potencijalnu staging ili test instancu. Da biste pokrenuli staging ili test okruženje, instalirajte Twenty na drugi server, aktivirajte ga istim ključem za organizaciju, a zatim registrujte taj server kao razvojnu instancu. Razvojne instance otključavaju premium funkcije bez dodatne naplate i ne računaju se u vaša produkciona mesta."
+msgid "One subscription provides one Organization key that powers one production instance and one potential staging or test instance. To run a staging or test environment, install Kodexx One on a second server, activate it with this same Organization key, then register that server as a development instance. Development instances unlock premium features without extra billing and do not count toward your production seats."
+msgstr "Jedna pretplata obezbeđuje jedan ključ za organizaciju koji pokreće jednu produkcionu instancu i jednu potencijalnu staging ili test instancu. Da biste pokrenuli staging ili test okruženje, instalirajte Kodexx One na drugi server, aktivirajte ga istim ključem za organizaciju, a zatim registrujte taj server kao razvojnu instancu. Razvojne instance otključavaju premium funkcije bez dodatne naplate i ne računaju se u vaša produkciona mesta."
 
 #. js-lingui-id: JEtonz
 #: src/modules/settings/event-logs/components/SettingsLogs.tsx
@@ -17185,8 +17185,8 @@ msgstr "Otvori četove u"
 
 #. js-lingui-id: n0vVgf
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Claude with the Twenty connector name and MCP URL prefilled."
-msgstr "Otvorite Claude sa unapred popunjenim Twenty imenom konektora i MCP URL-om."
+msgid "Open Claude with the Kodexx One connector name and MCP URL prefilled."
+msgstr "Otvorite Claude sa unapred popunjenim Kodexx One imenom konektora i MCP URL-om."
 
 #. js-lingui-id: uIKeEf
 #: src/modules/workflow/workflow-steps/workflow-actions/ai-agent-action/components/WorkflowRunStepAiAgentConversationButton.tsx
@@ -17195,8 +17195,8 @@ msgstr "Otvori razgovor"
 
 #. js-lingui-id: +n2jpB
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Cursor's MCP installer with the Twenty remote server config."
-msgstr "Otvorite Cursor MCP instalator sa Twenty konfiguracijom udaljenog servera."
+msgid "Open Cursor's MCP installer with the Kodexx One remote server config."
+msgstr "Otvorite Cursor MCP instalator sa Kodexx One konfiguracijom udaljenog servera."
 
 #. js-lingui-id: pZZH4Q
 #: src/modules/auth/sign-in-up/components/EmailVerificationSent.tsx
@@ -17271,8 +17271,8 @@ msgstr "Otvarajte zapise na posebnoj stranici"
 
 #. js-lingui-id: q170S2
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Replit with the Twenty remote server config."
-msgstr "Otvorite Replit sa Twenty konfiguracijom udaljenog servera."
+msgid "Open Replit with the Kodexx One remote server config."
+msgstr "Otvorite Replit sa Kodexx One konfiguracijom udaljenog servera."
 
 #. js-lingui-id: Yp+Hi/
 #: src/modules/settings/applications/components/SettingsApplicationActionButton.tsx
@@ -17286,8 +17286,8 @@ msgstr "Otvori bočni panel."
 
 #. js-lingui-id: sBd/cl
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
-msgid "Open Twenty's official ChatGPT integration for your workspace."
-msgstr "Otvorite zvaničnu Twenty ChatGPT integraciju za svoj radni prostor."
+msgid "Open Kodexx One's official ChatGPT integration for your workspace."
+msgstr "Otvorite zvaničnu Kodexx One ChatGPT integraciju za svoj radni prostor."
 
 #. js-lingui-id: tirDue
 #: src/modules/log-console/constants/LogConsoleSources.tsx
@@ -17687,8 +17687,8 @@ msgstr "Naziv stranice"
 
 #. js-lingui-id: NRvxzv
 #: src/pages/not-found/NotFound.tsx
-msgid "Page Not Found | Twenty"
-msgstr "Stranica nije pronađena | Twenty"
+msgid "Page Not Found | Kodexx One"
+msgstr "Stranica nije pronađena | Kodexx One"
 
 #. js-lingui-id: oIhFvf
 #: src/modules/side-panel/pages/email-block-settings/components/EmailBlockInsertList.tsx
@@ -23084,11 +23084,11 @@ msgstr "AWS region za Bedrock"
 #. js-lingui-id: HP7per
 #: src/modules/applications/utils/getStandardApplicationDescription.ts
 msgid ""
-"The base data model every Twenty workspace runs on.\n"
+"The base data model every Kodexx One workspace runs on.\n"
 "\n"
 "#### What \"foundation\" means\n"
 "\n"
-"Every Twenty workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
+"Every Kodexx One workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.\n"
 "\n"
 "#### Included objects\n"
 "- **People & Companies**: contact and account records\n"
@@ -23096,11 +23096,11 @@ msgid ""
 "- **Notes & Tasks**: activity and follow-ups\n"
 "- **Workflows & Dashboards**: automation and reporting\n"
 "\n"
-"Remove this app and the rest of Twenty has nothing to hang off.\n"
+"Remove this app and the rest of Kodexx One has nothing to hang off.\n"
 "\n"
 "#### Build your own app\n"
 "\n"
-"Extend Twenty with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
+"Extend Kodexx One with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -23115,11 +23115,11 @@ msgid ""
 "\n"
 "See the [Getting Started guide](https://twenty.com/developers/extend/apps/getting-started) for the full walkthrough, and [Building Apps](https://twenty.com/developers/extend/apps/building) for the `defineApplication` / `defineEntity` APIs."
 msgstr ""
-"Osnovni model podataka na kom radi svaki Twenty radni prostor.\n"
+"Osnovni model podataka na kom radi svaki Kodexx One radni prostor.\n"
 "\n"
 "#### Šta znači „osnova”\n"
 "\n"
-"Svaki Twenty radni prostor počinje sa ovim skupom objekata. Oni definišu oblik vašeg CRM-a, uključujući odnose, aktivnosti i izveštavanje. Sve ostalo, uključujući aplikacije sa marketplejsa, AI agente i prilagođene objekte, priključuje se na njih.\n"
+"Svaki Kodexx One radni prostor počinje sa ovim skupom objekata. Oni definišu oblik vašeg CRM-a, uključujući odnose, aktivnosti i izveštavanje. Sve ostalo, uključujući aplikacije sa marketplejsa, AI agente i prilagođene objekte, priključuje se na njih.\n"
 "\n"
 "#### Uključeni objekti\n"
 "- **Ljudi i kompanije**: zapisi o kontaktima i nalozima\n"
@@ -23127,11 +23127,11 @@ msgstr ""
 "- **Beleške i zadaci**: aktivnosti i praćenja\n"
 "- **Radni tokovi i kontrolne table**: automatizacija i izveštavanje\n"
 "\n"
-"Uklonite ovu aplikaciju i ostatak Twenty neće imati na šta da se nadoveže.\n"
+"Uklonite ovu aplikaciju i ostatak Kodexx One neće imati na šta da se nadoveže.\n"
 "\n"
 "#### Napravite sopstvenu aplikaciju\n"
 "\n"
-"Proširite Twenty sopstvenim objektima, poljima, logičkim funkcijama ili AI veštinama. Postavite skelet nove aplikacije jednom komandom:\n"
+"Proširite Kodexx One sopstvenim objektima, poljima, logičkim funkcijama ili AI veštinama. Postavite skelet nove aplikacije jednom komandom:\n"
 "\n"
 "```bash\n"
 "npx create-twenty-app@latest my-twenty-app\n"
@@ -24526,23 +24526,23 @@ msgstr "Tirkiz"
 
 #. js-lingui-id: 8pmRvi
 #: src/pages/onboarding/SyncEmails.tsx
-msgid "Twenty adds the people you email and meet, and keeps them up to date without manual data entry."
-msgstr "Twenty dodaje osobe kojima šaljete imejl i koje upoznajete i održava njihove podatke ažurnim bez ručnog unosa podataka."
+msgid "Kodexx One adds the people you email and meet, and keeps them up to date without manual data entry."
+msgstr "Kodexx One dodaje osobe kojima šaljete imejl i koje upoznajete i održava njihove podatke ažurnim bez ručnog unosa podataka."
 
 #. js-lingui-id: JnaRPe
 #: src/modules/spreadsheet-import/steps/components/MatchColumnsStep/components/ColumnGrid.tsx
-msgid "Twenty fields"
-msgstr "Twenty polja"
+msgid "Kodexx One fields"
+msgstr "Kodexx One polja"
 
 #. js-lingui-id: pNo8xt
 #: src/pages/settings/ai/components/SettingsAiModelsTab.tsx
-msgid "Twenty fills each level with the best model that meets your requirements"
-msgstr "Twenty popunjava svaki nivo najboljim modelom koji ispunjava vaše zahteve"
+msgid "Kodexx One fills each level with the best model that meets your requirements"
+msgstr "Kodexx One popunjava svaki nivo najboljim modelom koji ispunjava vaše zahteve"
 
 #. js-lingui-id: qUadjH
 #: src/modules/onboarding/components/OnboardingInviteTeamSkipDialog.tsx
-msgid "Twenty works better with your team"
-msgstr "Twenty bolje funkcioniše sa vašim timom"
+msgid "Kodexx One works better with your team"
+msgstr "Kodexx One bolje funkcioniše sa vašim timom"
 
 #. js-lingui-id: YIjS4q
 #: src/modules/ai/components/SettingsAgentModelCapabilities.tsx
@@ -26428,8 +26428,8 @@ msgstr "nedelje"
 
 #. js-lingui-id: nTuObL
 #: src/pages/auth/SignInUp.tsx
-msgid "Welcome to Twenty"
-msgstr "Dobrodošli u Twenty"
+msgid "Welcome to Kodexx One"
+msgstr "Dobrodošli u Kodexx One"
 
 #. js-lingui-id: t8ZvkC
 #: src/modules/onboarding/constants/WelcomeTitleMessage.ts

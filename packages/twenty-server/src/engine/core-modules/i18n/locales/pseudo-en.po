@@ -192,7 +192,7 @@ msgstr ""
 
 #. js-lingui-id: TF/ZV2
 #: src/engine/core-modules/billing/reminders/services/billing-reminder.service.ts
-msgid "A heads up before your Twenty trial ends"
+msgid "A heads up before your Kodexx One trial ends"
 msgstr ""
 
 #. js-lingui-id: 6yZjO1
@@ -6827,7 +6827,7 @@ msgstr ""
 
 #. js-lingui-id: PviVyk
 #: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
-msgid "Join your team on Twenty"
+msgid "Join your team on Kodexx One"
 msgstr ""
 
 #. js-lingui-id: +KEn4d
@@ -11657,7 +11657,7 @@ msgstr ""
 
 #. js-lingui-id: aK2k19
 #: src/engine/metadata-modules/index-metadata/services/index-metadata.service.ts
-msgid "System indexes are required for Twenty to work and cannot be deleted."
+msgid "System indexes are required for Kodexx One to work and cannot be deleted."
 msgstr ""
 
 #. js-lingui-id: /ojawH
@@ -12695,7 +12695,7 @@ msgstr ""
 #. js-lingui-id: zISk4k
 #: src/engine/core-modules/application/application-registration/application-registration.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
-msgid "This app requires a newer version of the Twenty server. Please upgrade your server or use a compatible app version."
+msgid "This app requires a newer version of the Kodexx One server. Please upgrade your server or use a compatible app version."
 msgstr ""
 
 #. js-lingui-id: y2nks/
@@ -14888,7 +14888,7 @@ msgstr ""
 
 #. js-lingui-id: TVkCrJ
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
-msgid "Welcome to Twenty: Please Confirm Your Email"
+msgid "Welcome to Kodexx One: Please Confirm Your Email"
 msgstr ""
 
 #. js-lingui-id: lKboI8
@@ -16043,12 +16043,12 @@ msgstr ""
 
 #. js-lingui-id: sOfbGC
 #: src/engine/core-modules/billing/reminders/services/billing-reminder.service.ts
-msgid "Your Twenty plan renews soon"
+msgid "Your Kodexx One plan renews soon"
 msgstr ""
 
 #. js-lingui-id: qW+K5e
 #: src/engine/core-modules/billing/reminders/services/billing-reminder.service.ts
-msgid "Your Twenty trial is ending soon"
+msgid "Your Kodexx One trial is ending soon"
 msgstr ""
 
 #. js-lingui-id: pOQQ3U

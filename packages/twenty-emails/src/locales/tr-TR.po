@@ -80,8 +80,8 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
-msgid "Connect to Twenty"
-msgstr "Twenty'e bağlan"
+msgid "Connect to Kodexx One"
+msgstr "Kodexx One'e bağlan"
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
@@ -144,8 +144,8 @@ msgstr "Bunu siz yapmadıysanız çalışma alanı yöneticinizle iletişime ge�
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
-msgid "If Twenty is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
-msgstr "Twenty sizin için işe yarıyorsa, her şey hazır — yapmanız gereken bir şey yok. Eğer size uygun değilse, o zamana kadar tek tıklamayla iptal edebilir ve hiçbir ücret ödemezsiniz."
+msgid "If Kodexx One is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
+msgstr "Kodexx One sizin için işe yarıyorsa, her şey hazır — yapmanız gereken bir şey yok. Eğer size uygun değilse, o zamana kadar tek tıklamayla iptal edebilir ve hiçbir ücret ödemezsiniz."
 
 #. js-lingui-explicit-id
 #: src/emails/two-factor-authentication-recovery-code-issued.email.tsx
@@ -169,8 +169,8 @@ msgstr "Hiçbir şey yapmazsanız, çalışma alanınızı duraklatacağız ve f
 
 #. js-lingui-explicit-id
 #: src/emails/clean-suspended-workspace.email.tsx
-msgid "If you'd ever like to give Twenty another try, you can start a fresh workspace in minutes — we'd love to have you back."
-msgstr "Eğer Twenty'ye bir gün yeniden şans vermek isterseniz, birkaç dakika içinde yeni bir çalışma alanı başlatabilirsiniz — sizi tekrar aramızda görmekten memnuniyet duyarız."
+msgid "If you'd ever like to give Kodexx One another try, you can start a fresh workspace in minutes — we'd love to have you back."
+msgstr "Eğer Kodexx One'ye bir gün yeniden şans vermek isterseniz, birkaç dakika içinde yeni bir çalışma alanı başlatabilirsiniz — sizi tekrar aramızda görmekten memnuniyet duyarız."
 
 #. js-lingui-explicit-id
 #: src/emails/server-admin-access-changed.email.tsx
@@ -189,8 +189,8 @@ msgstr "Verileri kaldırıldı ve artık geri getirilemez."
 
 #. js-lingui-explicit-id
 #: src/emails/send-invite-link.email.tsx
-msgid "Join your team on Twenty"
-msgstr "Takımına Twenty üzerinden katıl"
+msgid "Join your team on Kodexx One"
+msgstr "Takımına Kodexx One üzerinden katıl"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-subscription-renewing.email.tsx
@@ -225,8 +225,8 @@ msgstr "Çalışma alanını yeniden etkinleştir"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Read Twenty's user guide"
-msgstr "Twenty'nin kullanıcı rehberini okuyun"
+msgid "Read Kodexx One's user guide"
+msgstr "Kodexx One'nin kullanıcı rehberini okuyun"
 
 #. js-lingui-explicit-id
 #: src/emails/password-reset-link.email.tsx
@@ -326,18 +326,18 @@ msgstr "E-postayı Doğrula"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's developer documentation"
-msgstr "Twenty'nin geliştirici dokümantasyonunu ziyaret edin"
+msgid "Visit Kodexx One's developer documentation"
+msgstr "Kodexx One'nin geliştirici dokümantasyonunu ziyaret edin"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's GitHub repository"
-msgstr "Twenty'nin GitHub deposunu ziyaret edin"
+msgid "Visit Kodexx One's GitHub repository"
+msgstr "Kodexx One'nin GitHub deposunu ziyaret edin"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's website"
-msgstr "Twenty'nin web sitesini ziyaret edin"
+msgid "Visit Kodexx One's website"
+msgstr "Kodexx One'nin web sitesini ziyaret edin"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
@@ -351,8 +351,8 @@ msgstr "Web Sitesi"
 
 #. js-lingui-explicit-id
 #: src/components/WhatIsTwenty.tsx
-msgid "What is Twenty?"
-msgstr "Twenty nedir?"
+msgid "What is Kodexx One?"
+msgstr "Kodexx One nedir?"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-subscription-renewing.email.tsx

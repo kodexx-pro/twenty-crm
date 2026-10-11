@@ -1,21 +1,26 @@
-import { COLOR_TOKENS } from './color';
+import { token } from './token';
+
+const scale = {
+  accent1: token({ light: '#f5fcf8', dark: '#101d16' }),
+  accent2: token({ light: '#ecfaf2', dark: '#14251b' }),
+  accent3: token({ light: '#ddf6e8', dark: '#183222' }),
+  accent4: token({ light: '#c8efd9', dark: '#1e412b' }),
+  accent5: token({ light: '#a9e5c3', dark: '#245234' }),
+  accent6: token({ light: '#85d8a9', dark: '#2b6440' }),
+  accent7: token({ light: '#61c78e', dark: '#33794b' }),
+  accent8: token({ light: '#38ad71', dark: '#3d925a' }),
+  accent9: token({ light: '#238653', dark: '#30a46c' }),
+  accent10: token({ light: '#1d7347', dark: '#4cbd82' }),
+  accent11: token({ light: '#19633d', dark: '#82dca9' }),
+  accent12: token({ light: '#153d2a', dark: '#c4f4d8' }),
+};
+
 export const ACCENT_TOKENS = {
-  primary: COLOR_TOKENS.blue5,
-  secondary: COLOR_TOKENS.blue5,
-  tertiary: COLOR_TOKENS.blue3,
-  quaternary: COLOR_TOKENS.blue2,
-  accent3570: COLOR_TOKENS.blue8,
-  accent4060: COLOR_TOKENS.blue8,
-  accent1: COLOR_TOKENS.blue1,
-  accent2: COLOR_TOKENS.blue2,
-  accent3: COLOR_TOKENS.blue3,
-  accent4: COLOR_TOKENS.blue4,
-  accent5: COLOR_TOKENS.blue5,
-  accent6: COLOR_TOKENS.blue6,
-  accent7: COLOR_TOKENS.blue7,
-  accent8: COLOR_TOKENS.blue8,
-  accent9: COLOR_TOKENS.blue9,
-  accent10: COLOR_TOKENS.blue10,
-  accent11: COLOR_TOKENS.blue11,
-  accent12: COLOR_TOKENS.blue12,
+  primary: scale.accent5,
+  secondary: scale.accent5,
+  tertiary: scale.accent3,
+  quaternary: scale.accent2,
+  accent3570: scale.accent8,
+  accent4060: scale.accent8,
+  ...scale,
 };

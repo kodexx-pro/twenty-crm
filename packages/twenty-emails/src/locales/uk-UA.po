@@ -80,8 +80,8 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
-msgid "Connect to Twenty"
-msgstr "Підключитися до Twenty"
+msgid "Connect to Kodexx One"
+msgstr "Підключитися до Kodexx One"
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
@@ -144,8 +144,8 @@ msgstr "Якщо це були не ви, зверніться до адміні
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
-msgid "If Twenty is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
-msgstr "Якщо Twenty вам підходить, усе вже налаштовано — нічого робити не потрібно. Якщо це не ваш варіант, ви можете скасувати підписку в один клік до цього часу, і з вас нічого не спишуть."
+msgid "If Kodexx One is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
+msgstr "Якщо Kodexx One вам підходить, усе вже налаштовано — нічого робити не потрібно. Якщо це не ваш варіант, ви можете скасувати підписку в один клік до цього часу, і з вас нічого не спишуть."
 
 #. js-lingui-explicit-id
 #: src/emails/two-factor-authentication-recovery-code-issued.email.tsx
@@ -169,8 +169,8 @@ msgstr "Якщо ви нічого не зробите, ми призупини�
 
 #. js-lingui-explicit-id
 #: src/emails/clean-suspended-workspace.email.tsx
-msgid "If you'd ever like to give Twenty another try, you can start a fresh workspace in minutes — we'd love to have you back."
-msgstr "Якщо ви колись захочете знову спробувати Twenty, ви зможете запустити новий робочий простір за кілька хвилин — ми будемо раді вашому поверненню."
+msgid "If you'd ever like to give Kodexx One another try, you can start a fresh workspace in minutes — we'd love to have you back."
+msgstr "Якщо ви колись захочете знову спробувати Kodexx One, ви зможете запустити новий робочий простір за кілька хвилин — ми будемо раді вашому поверненню."
 
 #. js-lingui-explicit-id
 #: src/emails/server-admin-access-changed.email.tsx
@@ -189,8 +189,8 @@ msgstr "Його дані було видалено, і їх більше нем
 
 #. js-lingui-explicit-id
 #: src/emails/send-invite-link.email.tsx
-msgid "Join your team on Twenty"
-msgstr "Приєднуйтесь до своєї команди на Twenty"
+msgid "Join your team on Kodexx One"
+msgstr "Приєднуйтесь до своєї команди на Kodexx One"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-subscription-renewing.email.tsx
@@ -225,8 +225,8 @@ msgstr "Повторно активувати робочий простір"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Read Twenty's user guide"
-msgstr "Прочитайте керівництво користувача Twenty"
+msgid "Read Kodexx One's user guide"
+msgstr "Прочитайте керівництво користувача Kodexx One"
 
 #. js-lingui-explicit-id
 #: src/emails/password-reset-link.email.tsx
@@ -326,18 +326,18 @@ msgstr "Підтвердіть Email"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's developer documentation"
-msgstr "Відвідайте документацію для розробників Twenty"
+msgid "Visit Kodexx One's developer documentation"
+msgstr "Відвідайте документацію для розробників Kodexx One"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's GitHub repository"
-msgstr "Відвідайте репозиторій Twenty на GitHub"
+msgid "Visit Kodexx One's GitHub repository"
+msgstr "Відвідайте репозиторій Kodexx One на GitHub"
 
 #. js-lingui-explicit-id
 #: src/components/Footer.tsx
-msgid "Visit Twenty's website"
-msgstr "Відвідайте сайт Twenty"
+msgid "Visit Kodexx One's website"
+msgstr "Відвідайте сайт Kodexx One"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
@@ -351,8 +351,8 @@ msgstr "Вебсайт"
 
 #. js-lingui-explicit-id
 #: src/components/WhatIsTwenty.tsx
-msgid "What is Twenty?"
-msgstr "Що таке Twenty?"
+msgid "What is Kodexx One?"
+msgstr "Що таке Kodexx One?"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-subscription-renewing.email.tsx
