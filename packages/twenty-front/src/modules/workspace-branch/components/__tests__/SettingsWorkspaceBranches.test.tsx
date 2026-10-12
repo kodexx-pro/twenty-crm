@@ -6,6 +6,8 @@ import { type createElement } from 'react';
 
 import { SettingsWorkspaceBranches } from '@/workspace-branch/components/SettingsWorkspaceBranches';
 import { type WorkspaceBranchAccess } from '@/workspace-branch/types/WorkspaceBranch';
+import { messages as brazilianPortugueseMessages } from '~/locales/generated/pt-BR';
+import { messages as portugueseMessages } from '~/locales/generated/pt-PT';
 
 let mockAllowed = true;
 let mockAccess: WorkspaceBranchAccess;
@@ -90,6 +92,34 @@ jest.mock('@/ui/input/components/Select', () => {
       ),
   };
 });
+
+it.each([
+  ['pt-BR', brazilianPortugueseMessages],
+  ['pt-PT', portugueseMessages],
+] as const)(
+  'renders branch settings and preparation results in %s',
+  async (locale, messages) => {
+    i18n.loadAndActivate({ locale, messages });
+    const user = userEvent.setup();
+    renderSettings();
+    expect(screen.getByText('Isolar registros por filial')).toBeInTheDocument();
+    expect(screen.getByText('Permissões por filial')).toBeInTheDocument();
+    expect(screen.getByText('Registros existentes')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Adicionar filial' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Salvar filiais' }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Filial de destino')).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('button', { name: 'Preparar estrutura dos objetos' }),
+    );
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      '2 objetos preparados; 0 registros atribuídos.',
+    );
+  },
+);
 
 beforeEach(() => {
   jest.clearAllMocks();

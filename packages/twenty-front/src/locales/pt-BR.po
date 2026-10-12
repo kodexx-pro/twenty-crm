@@ -27379,3 +27379,143 @@ msgstr "Provedores personalizados não estão habilitados nesta instância."
 
 msgid "Could not check custom provider access. Reload the page to try again."
 msgstr "Não foi possível verificar o acesso aos provedores personalizados. Recarregue a página para tentar novamente."
+
+
+msgid "Optional isolation for all business records, including clients and contacts. Existing object permissions still apply."
+msgstr "Isolamento opcional de todos os registros, incluindo clientes e contatos. As permissões dos objetos continuam sendo aplicadas."
+
+
+msgid "Loading branches…"
+msgstr "Carregando filiais…"
+
+
+msgid "Unable to load branches."
+msgstr "Não foi possível carregar as filiais."
+
+
+msgid "Read"
+msgstr "Visualizar"
+
+
+msgid "Isolate records by branch"
+msgstr "Isolar registros por filial"
+
+
+msgid "Keep this disabled to use the current shared workspace. Activation requires every existing record to be classified and validated by the server."
+msgstr "Mantenha esta opção desativada para compartilhar os registros no workspace. Para ativá-la, todos os registros existentes precisam ter uma filial definida e ser validados pelo servidor."
+
+
+msgid "Branch name"
+msgstr "Nome da filial"
+
+
+msgid "Add branch"
+msgstr "Adicionar filial"
+
+
+msgid "Branch permissions"
+msgstr "Permissões por filial"
+
+
+msgid "No permission is granted automatically. Deactivating a branch suspends access while preserving its records."
+msgstr "Nenhuma permissão é concedida automaticamente. Desativar uma filial suspende o acesso e mantém seus registros."
+
+
+msgid "Moving existing records between branches is not available yet."
+msgstr "Ainda não é possível transferir registros entre filiais."
+
+
+msgid "Employee"
+msgstr "Funcionário"
+
+
+msgid "Select an employee"
+msgstr "Selecione um funcionário"
+
+
+msgid "Branch"
+msgstr "Filial"
+
+
+msgid "Select a branch"
+msgstr "Selecione uma filial"
+
+
+msgid "Unnamed branch"
+msgstr "Filial sem nome"
+
+
+msgid "Add employee permission"
+msgstr "Adicionar permissão para funcionário"
+
+
+msgid "Object structure"
+msgstr "Estrutura dos objetos"
+
+
+msgid "Prepare protected branch fields and indexes for new objects without assigning records or disabling isolation."
+msgstr "Prepare os campos protegidos de filial e os índices dos novos objetos, sem atribuir registros nem desativar o isolamento."
+
+
+msgid "Unable to prepare object structure."
+msgstr "Não foi possível preparar a estrutura dos objetos."
+
+
+msgid "Prepare object structure"
+msgstr "Preparar estrutura dos objetos"
+
+
+msgid "Existing records"
+msgstr "Registros existentes"
+
+
+msgid "Save your branches first. This assigns every unclassified business record to the chosen branch; records already assigned keep their branch."
+msgstr "Salve as filiais primeiro. Todos os registros sem filial serão atribuídos à filial escolhida. Os registros já classificados manterão sua filial."
+
+
+msgid "Destination branch"
+msgstr "Filial de destino"
+
+
+msgid "Select a saved branch"
+msgstr "Selecione uma filial salva"
+
+
+msgid "Assign all unclassified existing records to this branch."
+msgstr "Atribuir todos os registros existentes sem filial a esta filial."
+
+
+msgid "Unable to prepare existing records."
+msgstr "Não foi possível preparar os registros existentes."
+
+
+msgid "Prepare existing records"
+msgstr "Preparar registros existentes"
+
+
+msgid "{0} objects prepared; {1} records assigned."
+msgstr "{0} objetos preparados; {1} registros atribuídos."
+
+
+msgid "Branch settings saved."
+msgstr "Configurações de filiais salvas."
+
+
+msgid "Unable to save branch settings. Reload and try again."
+msgstr "Não foi possível salvar as configurações de filiais. Recarregue a página e tente novamente."
+
+
+msgid "Save branches"
+msgstr "Salvar filiais"
+
+
+msgid "No branch access. Contact your administrator."
+msgstr "Você não tem acesso a nenhuma filial. Entre em contato com o administrador."
+
+
+msgid "All permitted branches"
+msgstr "Todas as filiais permitidas"
+
+
+msgid "Unable to switch branches. Allow browser storage and try again."
+msgstr "Não foi possível trocar de filial. Permita o armazenamento no navegador e tente novamente."
