@@ -6,9 +6,11 @@ export const useIsCurrentLocationOnDefaultDomain = () => {
   const isMultiWorkspaceEnabled = useAtomStateValue(
     isMultiWorkspaceEnabledState,
   );
-  const { defaultDomain } = useReadDefaultDomainFromConfiguration();
+  const { defaultDomain, frontDomain } =
+    useReadDefaultDomainFromConfiguration();
   const isDefaultDomain = isMultiWorkspaceEnabled
-    ? window.location.hostname === defaultDomain
+    ? window.location.hostname === defaultDomain ||
+      window.location.hostname === frontDomain
     : true;
 
   return {

@@ -72,3 +72,5 @@ jobs:
           src/modules/settings/admin-panel/components/__tests__/SettingsAdministrationNavigation.test.tsx
           src/modules/side-panel/pages/record-creation-form-settings/components/__tests__/SidePanelRecordCreationFormSettingsPage.test.tsx
           src/modules/object-record/record-form/hooks/__tests__/useRecordFormSettings.test.ts
+          src/modules/domain-manager/hooks/__tests__/useAuthenticationDomain.test.tsx
+          src/modules/auth/hooks/__tests__/useAuth.test.tsx

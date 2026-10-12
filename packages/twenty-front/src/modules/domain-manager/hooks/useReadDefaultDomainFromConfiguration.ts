@@ -14,5 +14,6 @@ export const useReadDefaultDomainFromConfiguration = () => {
 
   return {
     defaultDomain,
+    frontDomain: domainConfiguration.frontDomain,
   };
 };
