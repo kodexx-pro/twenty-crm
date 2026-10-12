@@ -15,7 +15,12 @@ import { WorkspaceLogoUploader } from '@/settings/workspace/components/Workspace
 import { SettingsWorkspaceBranches } from '@/workspace-branch/components/SettingsWorkspaceBranches';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { Section } from 'twenty-ui/components/layout';
-import { IconHistory, IconKey, IconSettings2 } from 'twenty-ui/icon';
+import {
+  IconHistory,
+  IconKey,
+  IconSettings,
+  IconSettings2,
+} from 'twenty-ui/icon';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const SETTINGS_GENERAL_TABS_INSTANCE_ID = 'settings-general-tabs';
@@ -23,6 +28,7 @@ const SETTINGS_GENERAL_TABS_INSTANCE_ID = 'settings-general-tabs';
 const GENERAL_TAB_GENERAL = 'general';
 const GENERAL_TAB_SECURITY = 'security';
 const GENERAL_TAB_LOGS = 'logs';
+const GENERAL_TAB_BRANCHES = 'branches';
 
 export const SettingsGeneral = () => {
   const { t } = useLingui();
@@ -34,6 +40,7 @@ export const SettingsGeneral = () => {
   const hasSecurityPermission = useHasPermissionFlag(
     PermissionFlagType.SECURITY,
   );
+  const hasRolesPermission = useHasPermissionFlag(PermissionFlagType.ROLES);
 
   const tabs = [
     {
@@ -41,6 +48,9 @@ export const SettingsGeneral = () => {
       title: t`General`,
       Icon: IconSettings2,
     },
+    ...(hasRolesPermission
+      ? [{ id: GENERAL_TAB_BRANCHES, title: t`Branches`, Icon: IconSettings }]
+      : []),
     ...(hasSecurityPermission
       ? [
           { id: GENERAL_TAB_SECURITY, title: t`Security`, Icon: IconKey },
@@ -55,6 +65,9 @@ export const SettingsGeneral = () => {
   );
 
   const renderActiveTabContent = () => {
+    if (activeTabId === GENERAL_TAB_BRANCHES) {
+      return <SettingsWorkspaceBranches />;
+    }
     if (activeTabId === GENERAL_TAB_SECURITY) {
       return <SettingsSecuritySettings />;
     }
@@ -81,7 +94,6 @@ export const SettingsGeneral = () => {
             <SettingsWorkspaceDomainCard />
           </Section.Root>
         )}
-        <SettingsWorkspaceBranches />
         <Section.Root>
           <DeleteWorkspace />
         </Section.Root>
@@ -93,7 +105,7 @@ export const SettingsGeneral = () => {
     <SettingsPageLayout
       title={t`General`}
       secondaryBar={
-        hasSecurityPermission ? (
+        tabs.length > 1 ? (
           <SettingsTabBar
             aria-label={t`General settings`}
             tabs={tabs}

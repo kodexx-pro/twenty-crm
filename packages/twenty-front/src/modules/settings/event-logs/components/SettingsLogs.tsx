@@ -173,13 +173,7 @@ export const SettingsLogs = () => {
           <Button
             size="sm"
             startIcon={<IconArrowUp />}
-            onClick={() =>
-              navigateSettings(
-                isBillingEnabled
-                  ? SettingsPath.BillingPlans
-                  : SettingsPath.AdminPanelOrganization,
-              )
-            }
+            onClick={() => navigateSettings(SettingsPath.BillingPlans)}
             variant="solid"
             color="accent"
           >{t`Upgrade`}</Button>
@@ -190,6 +184,13 @@ export const SettingsLogs = () => {
 
   const renderResults = () => {
     if (!isApplicationLog && !hasAuditLogsEntitlement) {
+      if (!isBillingEnabled) {
+        return (
+          <SettingsEmptyPlaceholder>
+            {t`Audit logs are not enabled for this instance.`}
+          </SettingsEmptyPlaceholder>
+        );
+      }
       return renderUpgradeCard();
     }
 

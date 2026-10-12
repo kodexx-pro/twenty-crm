@@ -682,7 +682,7 @@ describe('SidePanelRecordCreationFormPage', () => {
 
     renderPage();
 
-    await user.click(screen.getByRole('button', { name: 'Edit' }));
+    await user.click(screen.getByRole('button', { name: 'Configure form' }));
 
     expect(openRecordCreationFormSettingsInSidePanel).toHaveBeenCalledWith(
       COMPANY_OBJECT,
@@ -695,7 +695,7 @@ describe('SidePanelRecordCreationFormPage', () => {
     renderPage();
 
     expect(
-      screen.queryByRole('button', { name: 'Edit' }),
+      screen.queryByRole('button', { name: 'Configure form' }),
     ).not.toBeInTheDocument();
   });
 });

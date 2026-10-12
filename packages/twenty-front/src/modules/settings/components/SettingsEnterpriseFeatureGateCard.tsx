@@ -1,4 +1,3 @@
-import { currentUserState } from '@/auth/states/currentUserState';
 import { billingState } from '@/client-config/states/billingState';
 import { SettingsOptionCardContentButton } from '@/settings/components/SettingsOptions/SettingsOptionCardContentButton';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -17,16 +16,12 @@ export const SettingsEnterpriseFeatureGateCard = ({
   description: string;
   buttonTitle: string;
 }) => {
-  const currentUser = useAtomStateValue(currentUserState);
   const billing = useAtomStateValue(billingState);
   const navigateSettings = useNavigateSettings();
 
   const isBillingEnabled = billing?.isBillingEnabled ?? false;
-  const canAccessAdminPanel = currentUser?.canAccessFullAdminPanel === true;
-  const canDisplayUpgradeButton = isBillingEnabled || canAccessAdminPanel;
-  const upgradeSettingsPath = isBillingEnabled
-    ? SettingsPath.BillingPlans
-    : SettingsPath.AdminPanelOrganization;
+
+  if (!isBillingEnabled) return null;
 
   return (
     <Card.Root rounded>
@@ -35,17 +30,15 @@ export const SettingsEnterpriseFeatureGateCard = ({
         title={title}
         description={description}
         Button={
-          canDisplayUpgradeButton ? (
-            <Button
-              size="sm"
-              startIcon={<IconArrowUp />}
-              onClick={() => navigateSettings(upgradeSettingsPath)}
-              variant="solid"
-              color="accent"
-            >
-              {buttonTitle}
-            </Button>
-          ) : undefined
+          <Button
+            size="sm"
+            startIcon={<IconArrowUp />}
+            onClick={() => navigateSettings(SettingsPath.BillingPlans)}
+            variant="solid"
+            color="accent"
+          >
+            {buttonTitle}
+          </Button>
         }
       />
     </Card.Root>

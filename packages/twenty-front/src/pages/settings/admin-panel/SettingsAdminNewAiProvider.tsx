@@ -18,7 +18,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { slugify } from 'transliteration';
 import { type AiSdkPackage, isDataResidency } from 'twenty-shared/ai';
 import { SettingsPath } from 'twenty-shared/types';
@@ -268,22 +268,7 @@ export const SettingsAdminNewAiProvider = () => {
       >
         <SettingsPageContainer>
           {!hasCustomAiProviderAccess && (
-            <InlineBanner
-              layout="compact"
-              status="error"
-              action={
-                <InlineBanner.Action
-                  href={getSettingsPath(SettingsPath.AdminPanelOrganization)}
-                  nativeButton={false}
-                  role="link"
-                  render={
-                    <Link
-                      to={getSettingsPath(SettingsPath.AdminPanelOrganization)}
-                    />
-                  }
-                >{t`Activate`}</InlineBanner.Action>
-              }
-            >
+            <InlineBanner layout="compact" status="error">
               {customAiProviderGateDescription}
             </InlineBanner>
           )}

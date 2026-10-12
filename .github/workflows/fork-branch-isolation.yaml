@@ -69,3 +69,6 @@ jobs:
           src/modules/workspace-branch
           src/modules/side-panel/pages/record-creation-form/components/__tests__/SidePanelRecordCreationFormPage.test.tsx
           src/modules/record-export/utils/__tests__/createRecordExportConnection.test.ts
+          src/modules/settings/admin-panel/components/__tests__/SettingsAdministrationNavigation.test.tsx
+          src/modules/side-panel/pages/record-creation-form-settings/components/__tests__/SidePanelRecordCreationFormSettingsPage.test.tsx
+          src/modules/object-record/record-form/hooks/__tests__/useRecordFormSettings.test.ts

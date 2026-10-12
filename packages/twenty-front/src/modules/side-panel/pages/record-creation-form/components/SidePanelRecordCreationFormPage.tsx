@@ -547,7 +547,7 @@ const SidePanelRecordCreationForm = ({
                           objectMetadataItem,
                         )
                   }
-                >{t`Edit`}</Button>,
+                >{t`Configure form`}</Button>,
               ]
             : []),
           <Button

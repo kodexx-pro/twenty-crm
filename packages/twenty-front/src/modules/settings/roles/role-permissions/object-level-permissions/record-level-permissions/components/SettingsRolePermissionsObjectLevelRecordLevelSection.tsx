@@ -41,6 +41,8 @@ export const SettingsRolePermissionsObjectLevelRecordLevelSection = ({
   const billing = useAtomStateValue(billingState);
   const isBillingEnabled = billing?.isBillingEnabled ?? false;
 
+  if (!hasOrganizationPlan && !isBillingEnabled) return null;
+
   if (!hasOrganizationPlan) {
     return (
       <Section.Root>
@@ -59,13 +61,7 @@ export const SettingsRolePermissionsObjectLevelRecordLevelSection = ({
                 <Button
                   size="sm"
                   startIcon={<IconArrowUp />}
-                  onClick={() =>
-                    navigateSettings(
-                      isBillingEnabled
-                        ? SettingsPath.BillingPlans
-                        : SettingsPath.AdminPanelOrganization,
-                    )
-                  }
+                  onClick={() => navigateSettings(SettingsPath.BillingPlans)}
                   variant="solid"
                   color="accent"
                 >{t`Upgrade`}</Button>

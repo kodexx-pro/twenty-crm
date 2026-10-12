@@ -27355,3 +27355,27 @@ msgstr "Aumentar zoom"
 #: src/modules/settings/data-model/graph-overview/components/SettingsDataModelOverview.tsx
 msgid "Zoom out"
 msgstr "Diminuir zoom"
+
+msgid "Branches"
+msgstr "Filiais"
+
+msgid "Centered dialog"
+msgstr "Modal centralizado"
+
+msgid "Multi-step dialog"
+msgstr "Modal com etapas"
+
+msgid "Use workspace default"
+msgstr "Usar padrão do workspace"
+
+msgid "Configure form"
+msgstr "Configurar formulário"
+
+msgid "Audit logs are not enabled for this instance."
+msgstr "Os logs de auditoria não estão habilitados nesta instância."
+
+msgid "Custom providers are not enabled for this instance."
+msgstr "Provedores personalizados não estão habilitados nesta instância."
+
+msgid "Could not check custom provider access. Reload the page to try again."
+msgstr "Não foi possível verificar o acesso aos provedores personalizados. Recarregue a página para tentar novamente."

@@ -53,6 +53,9 @@ export const OrganizationAdornment = ({
 }: OrganizationAdornmentProps) => {
   const billing = useAtomStateValue(billingState);
   const isBillingEnabled = billing?.isBillingEnabled ?? false;
+
+  if (!isBillingEnabled) return null;
+
   const label = t`Organization`;
   const className = cx(pillClassName, iconOnly && iconOnlyPillClassName);
   const content = iconOnly ? (
@@ -63,7 +66,7 @@ export const OrganizationAdornment = ({
       {label}
     </>
   );
-  const adornment = isBillingEnabled ? (
+  const adornment = (
     <Link
       className={cx(className, pillLinkClassName)}
       to={getSettingsPath(SettingsPath.BillingPlans)}
@@ -71,14 +74,6 @@ export const OrganizationAdornment = ({
     >
       {content}
     </Link>
-  ) : (
-    <span
-      className={className}
-      role={iconOnly ? 'img' : undefined}
-      aria-label={iconOnly ? label : undefined}
-    >
-      {content}
-    </span>
   );
   const resolvedTooltipContent =
     tooltipContent ?? (iconOnly ? label : undefined);

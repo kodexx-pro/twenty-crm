@@ -16,7 +16,7 @@ import { t } from '@lingui/core/macro';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 import { InlineBanner, useToast } from 'twenty-ui/components/feedback';
@@ -343,22 +343,7 @@ export const SettingsAdminNewAiModel = () => {
       >
         <SettingsPageContainer>
           {!hasCustomAiProviderAccess && (
-            <InlineBanner
-              layout="compact"
-              status="error"
-              action={
-                <InlineBanner.Action
-                  href={getSettingsPath(SettingsPath.AdminPanelOrganization)}
-                  nativeButton={false}
-                  role="link"
-                  render={
-                    <Link
-                      to={getSettingsPath(SettingsPath.AdminPanelOrganization)}
-                    />
-                  }
-                >{t`Activate`}</InlineBanner.Action>
-              }
-            >
+            <InlineBanner layout="compact" status="error">
               {customAiProviderGateDescription}
             </InlineBanner>
           )}
