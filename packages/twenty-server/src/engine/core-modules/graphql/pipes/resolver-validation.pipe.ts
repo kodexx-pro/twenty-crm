@@ -25,7 +25,8 @@ export class ResolverValidationPipe implements PipeTransform {
   async transform(value: unknown, metadata: ArgumentMetadata) {
     const { metatype } = metadata;
 
-    if (!metatype || !this.toValidate(metatype)) {
+    // GraphQL context and auth decorators contain server objects, not input DTOs.
+    if (metadata.type === 'custom' || !metatype || !this.toValidate(metatype)) {
       return value;
     }
 

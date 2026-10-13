@@ -42,6 +42,7 @@ jobs:
         run: >-
           node ../../node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand
           src/engine/core-modules/workspace-branch
+          src/engine/core-modules/graphql/pipes/__tests__/resolver-validation.pipe.spec.ts
           src/engine/core-modules/file/services/__tests__/file-branch-access.service.spec.ts
           src/engine/twenty-orm/utils/__tests__/build-row-access-policy.util.spec.ts
           src/engine/twenty-orm/utils/__tests__/workspace-branch-audit-access.util.spec.ts

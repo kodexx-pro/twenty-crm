@@ -29,6 +29,7 @@ import { IndexMetadataEntity } from 'src/engine/metadata-modules/index-metadata/
 import { IndexMetadataService } from 'src/engine/metadata-modules/index-metadata/services/index-metadata.service';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { getWorkspaceSchemaName } from 'src/engine/workspace-datasource/utils/get-workspace-schema-name.util';
+import { WorkspaceMigrationBuilderException } from 'src/engine/workspace-manager/workspace-migration/exceptions/workspace-migration-builder-exception';
 
 const quoteIdentifier = (identifier: string) =>
   `"${identifier.replace(/"/g, '""')}"`;
@@ -271,23 +272,40 @@ export class WorkspaceBranchProvisioningService implements WorkspaceBranchActiva
       (object) =>
         !existingFields.some((field) => field.objectMetadataId === object.id),
     );
-    await this.fieldMetadataService.createManyFields({
-      workspaceId,
-      isSystemBuild: true,
-      createFieldInputs: missing.map((object) => ({
-        objectMetadataId: object.id,
-        type: FieldMetadataType.UUID,
-        name: 'branchId',
-        label: 'Filial',
-        description: 'Protected branch ownership',
-        icon: 'IconBuilding',
-        isSystem: true,
-        isActive: true,
-        isUIEditable: false,
-        isNullable: true,
-        isUnique: false,
-      })),
-    });
+    try {
+      await this.fieldMetadataService.createManyFields({
+        workspaceId,
+        isSystemBuild: true,
+        createFieldInputs: missing.map((object) => ({
+          objectMetadataId: object.id,
+          type: FieldMetadataType.UUID,
+          name: 'branchId',
+          label: 'Filial',
+          description: 'Protected branch ownership',
+          icon: 'IconBuilding',
+          isSystem: true,
+          isActive: true,
+          isUIEditable: false,
+          isNullable: true,
+          isUnique: false,
+        })),
+      });
+    } catch (error) {
+      if (!(error instanceof WorkspaceMigrationBuilderException)) throw error;
+
+      // Keep the validator's reasons visible instead of logging report: [Object].
+      const reasons = Object.values(
+        error.failedWorkspaceMigrationBuildResult.report,
+      ).flatMap((failures) =>
+        failures.flatMap((failure) =>
+          failure.errors.map((validationError) => validationError.message),
+        ),
+      );
+
+      throw new BadRequestException(
+        `Could not prepare branch ownership: ${reasons.join('; ') || error.message}`,
+      );
+    }
 
     const preparedFields = await this.dataSource
       .getRepository(FieldMetadataEntity)

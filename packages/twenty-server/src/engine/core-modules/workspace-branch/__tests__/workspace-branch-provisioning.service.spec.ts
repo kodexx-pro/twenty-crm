@@ -9,6 +9,8 @@ import { type FieldMetadataService } from 'src/engine/metadata-modules/field-met
 import { IndexMetadataEntity } from 'src/engine/metadata-modules/index-metadata/index-metadata.entity';
 import { type IndexMetadataService } from 'src/engine/metadata-modules/index-metadata/services/index-metadata.service';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
+import { WorkspaceMigrationBuilderException } from 'src/engine/workspace-manager/workspace-migration/exceptions/workspace-migration-builder-exception';
+import { type OrchestratorFailureReport } from 'src/engine/workspace-manager/workspace-migration/types/workspace-migration-orchestrator.type';
 
 const workspaceId = '20202020-1c25-4d02-bf25-6aeccf7ea419';
 const branchId = '20202020-81ee-42da-a281-668632f32fe7';
@@ -351,6 +353,38 @@ it('releases the preparation lock after metadata migration failure', async () =>
     'SELECT pg_advisory_unlock(hashtextextended($1, 0))',
     [`workspace-branch-prepare:${workspaceId}`],
   );
+  expect(runner.release).toHaveBeenCalled();
+});
+
+it('exposes metadata validation reasons without assigning records after a failed preparation', async () => {
+  const { service, setFields, createManyFields, runner, query } = fixture();
+
+  setFields([]);
+  createManyFields.mockRejectedValue(
+    new WorkspaceMigrationBuilderException({
+      status: 'fail',
+      report: {
+        fieldMetadata: [
+          {
+            type: 'create',
+            metadataName: 'fieldMetadata',
+            flatEntityMinimalInformation: { name: 'branchId' },
+            errors: [
+              {
+                code: 'NOT_AVAILABLE',
+                message: 'branchId is already used by another join column name',
+              },
+            ],
+          },
+        ],
+      } as OrchestratorFailureReport,
+    }),
+  );
+
+  await expect(service.prepare(workspaceId, branchId)).rejects.toThrow(
+    'Could not prepare branch ownership: branchId is already used by another join column name',
+  );
+  expect(query).not.toHaveBeenCalled();
   expect(runner.release).toHaveBeenCalled();
 });
 
