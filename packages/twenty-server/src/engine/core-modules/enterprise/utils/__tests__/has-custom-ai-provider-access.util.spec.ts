@@ -27,13 +27,13 @@ describe('hasCustomAiProviderAccess', () => {
     ).toBe(true);
   });
 
-  it('denies access one seat above the threshold', () => {
+  it('grants access above the former seat threshold without a license', () => {
     expect(
       hasCustomAiProviderAccess({
         ...selfHosted,
         seatCount: MAX_SEATS_WITHOUT_ENTERPRISE_KEY + 1,
       }),
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it('grants access above the threshold with a valid enterprise plan', () => {

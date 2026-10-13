@@ -188,6 +188,7 @@ export class ToolRegistryService {
       categories?: ToolCategory[];
       excludeTools?: Set<string>;
       application?: FlatApplication;
+      authContext?: ToolContext['authContext'];
     },
   ): Promise<ToolIndexEntry[]> {
     const context = this.buildContextFromToolContext({
@@ -198,6 +199,7 @@ export class ToolRegistryService {
       userWorkspaceId: options?.userWorkspaceId,
       locale: options?.locale,
       application: options?.application,
+      authContext: options?.authContext,
     });
 
     return this.getCatalog(context, {

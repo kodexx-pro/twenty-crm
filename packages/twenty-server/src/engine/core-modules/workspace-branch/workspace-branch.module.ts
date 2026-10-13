@@ -9,6 +9,7 @@ import { WORKSPACE_BRANCH_ACTIVATION_VALIDATOR } from 'src/engine/core-modules/w
 import { FieldMetadataModule } from 'src/engine/metadata-modules/field-metadata/field-metadata.module';
 import { IndexMetadataModule } from 'src/engine/metadata-modules/index-metadata/index-metadata.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
+import { WorkspaceBranchToolService } from 'src/engine/core-modules/workspace-branch/tools/workspace-branch-tool.service';
 
 @Module({
   imports: [
@@ -21,11 +22,12 @@ import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permi
     WorkspaceBranchService,
     WorkspaceBranchResolver,
     WorkspaceBranchProvisioningService,
+    WorkspaceBranchToolService,
     {
       provide: WORKSPACE_BRANCH_ACTIVATION_VALIDATOR,
       useExisting: WorkspaceBranchProvisioningService,
     },
   ],
-  exports: [WorkspaceBranchService],
+  exports: [WorkspaceBranchService, WorkspaceBranchToolService],
 })
 export class WorkspaceBranchModule {}

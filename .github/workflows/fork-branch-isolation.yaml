@@ -55,6 +55,18 @@ jobs:
           src/modules/timeline/repositories/__tests__/timeline-activity.repository.spec.ts
       - name: Server types
         run: yarn nx typecheck twenty-server --parallel=1
+      - name: Custom AI providers and encrypted configuration
+        working-directory: packages/twenty-server
+        run: >-
+          node ../../node_modules/jest/bin/jest.js --config jest.config.mjs --runInBand
+          src/engine/core-modules/twenty-config/storage/__tests__/config-storage-encryption.spec.ts
+          src/engine/core-modules/twenty-config/drivers/__tests__/database-config.driver.spec.ts
+          src/engine/core-modules/enterprise/services/__tests__/custom-ai-provider-access.service.spec.ts
+          src/engine/core-modules/enterprise/utils/__tests__/has-custom-ai-provider-access.util.spec.ts
+          src/database/commands/upgrade-version-command/2-47/__tests__/encrypt-sensitive-json-config.spec.ts
+          src/database/commands/upgrade-version-command/2-47/__tests__/encrypt-sensitive-json-config.postgres.spec.ts
+          src/engine/metadata-modules/ai/ai-models/services/__tests__/sdk-provider-factory.opencode.spec.ts
+          src/engine/core-modules/tool-provider/providers/__tests__/role-tool.provider.spec.ts
       - name: Email template compatibility
         working-directory: packages/twenty-server
         run: >-
@@ -74,3 +86,4 @@ jobs:
           src/modules/object-record/record-form/hooks/__tests__/useRecordFormSettings.test.ts
           src/modules/domain-manager/hooks/__tests__/useAuthenticationDomain.test.tsx
           src/modules/auth/hooks/__tests__/useAuth.test.tsx
+          src/pages/settings/admin-panel/__tests__/SettingsAdminNewAiProvider.test.tsx

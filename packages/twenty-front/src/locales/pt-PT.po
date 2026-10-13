@@ -27495,3 +27495,23 @@ msgstr "Todas as filiais permitidas"
 
 msgid "Unable to switch branches. Allow browser storage and try again."
 msgstr "Não foi possível trocar de filial. Permita o armazenamento no navegador e tente novamente."
+
+
+msgid "API protocol"
+msgstr "Protocolo da API"
+
+
+msgid "OpenAI-compatible (Chat Completions)"
+msgstr "Compatível com OpenAI (Chat Completions)"
+
+
+msgid "OpenAI (Responses)"
+msgstr "OpenAI (Responses)"
+
+
+msgid "Anthropic (Messages)"
+msgstr "Anthropic (Messages)"
+
+
+msgid "Base URL for your provider, without the endpoint path"
+msgstr "URL base do provedor, sem o caminho do endpoint"

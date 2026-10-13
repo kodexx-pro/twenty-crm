@@ -26,6 +26,7 @@ import { NavigationMenuItemModule } from 'src/engine/metadata-modules/navigation
 import { ObjectMetadataModule } from 'src/engine/metadata-modules/object-metadata/object-metadata.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { RoleModule } from 'src/engine/metadata-modules/role/role.module';
+import { WorkspaceBranchModule } from 'src/engine/core-modules/workspace-branch/workspace-branch.module';
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
 import { ViewFieldModule } from 'src/engine/metadata-modules/view-field/view-field.module';
 import { ViewFilterModule } from 'src/engine/metadata-modules/view-filter/view-filter.module';
@@ -60,6 +61,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
     NavigationMenuItemModule,
     WebhookModule,
     RoleModule,
+    WorkspaceBranchModule,
     UserRoleModule,
     EmailingModule,
     TypeOrmModule.forFeature([UserEntity, FileEntity]),

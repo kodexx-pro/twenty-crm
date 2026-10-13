@@ -157,7 +157,7 @@ export const SettingsAdminNewAiProvider = () => {
         values.apiKey.trim() && {
           apiKey: values.apiKey.trim(),
         }),
-      ...(isOpenAiCompatible &&
+      ...(!isBedrock &&
         values.baseUrl.trim() && {
           baseUrl: values.baseUrl.trim(),
         }),
@@ -210,7 +210,7 @@ export const SettingsAdminNewAiProvider = () => {
       return;
     }
 
-    if (isOpenAiCompatible && !values.baseUrl.trim()) {
+    if ((isOpenAiCompatible || isCustomMode) && !values.baseUrl.trim()) {
       form.setError('baseUrl', {
         type: 'manual',
         message: t`Base URL is required`,
@@ -307,6 +307,37 @@ export const SettingsAdminNewAiProvider = () => {
 
           {hasSelected && (
             <>
+              {isCustomMode && (
+                <Section.Root>
+                  <Section.Header title={t`API protocol`} />
+                  <Controller
+                    name="npm"
+                    control={form.control}
+                    render={({ field: { onChange, value } }) => (
+                      <Select
+                        dropdownId="ai-provider-api-protocol"
+                        value={value}
+                        onChange={onChange}
+                        options={[
+                          {
+                            value: '@ai-sdk/openai-compatible',
+                            label: t`OpenAI-compatible (Chat Completions)`,
+                          },
+                          {
+                            value: '@ai-sdk/openai',
+                            label: t`OpenAI (Responses)`,
+                          },
+                          {
+                            value: '@ai-sdk/anthropic',
+                            label: t`Anthropic (Messages)`,
+                          },
+                        ]}
+                        fullWidth
+                      />
+                    )}
+                  />
+                </Section.Root>
+              )}
               <Section.Root>
                 <Section.Header
                   title={t`Label`}
@@ -360,11 +391,11 @@ export const SettingsAdminNewAiProvider = () => {
                 </Section.Root>
               )}
 
-              {isOpenAiCompatible && (
+              {!isBedrock && (
                 <Section.Root>
                   <Section.Header
                     title={t`Base URL`}
-                    description={t`The API endpoint for your OpenAI-compatible provider`}
+                    description={t`Base URL for your provider, without the endpoint path`}
                   />
                   <Controller
                     name="baseUrl"

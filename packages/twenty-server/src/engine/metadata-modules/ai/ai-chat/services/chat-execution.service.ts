@@ -216,6 +216,7 @@ export class ChatExecutionService {
         locale,
         excludeTools: AI_CHAT_EXCLUDED_TOOL_NAMES,
         rolePermissionConfig: toolContext.rolePermissionConfig,
+        authContext: toolContext.authContext,
       },
     );
 

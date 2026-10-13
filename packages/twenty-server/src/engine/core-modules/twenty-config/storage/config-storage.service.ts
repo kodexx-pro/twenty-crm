@@ -67,6 +67,21 @@ export class ConfigStorageService implements ConfigStorageInterface {
     key: T,
   ): Promise<ConfigVariables[T] | undefined> {
     try {
+      const metadata = this.getConfigMetadata(key);
+      if (
+        metadata?.isSensitive === true &&
+        metadata.type === ConfigVariableType.JSON &&
+        typeof dbValue === 'string' &&
+        isEncryptedString(dbValue)
+      ) {
+        const plaintext =
+          this.secretEncryptionService.decryptVersionedOrThrow(dbValue);
+        return this.configValueConverter.convertDbValueToAppValue(
+          JSON.parse(plaintext),
+          key,
+        );
+      }
+
       const convertedValue = this.configValueConverter.convertDbValueToAppValue(
         dbValue,
         key,
@@ -106,6 +121,18 @@ export class ConfigStorageService implements ConfigStorageInterface {
         ) as unknown as KeyValuePairEntity['value'];
       }
 
+      const metadata = this.getConfigMetadata(key);
+      if (
+        convertedValue !== null &&
+        convertedValue !== undefined &&
+        metadata?.isSensitive === true &&
+        metadata.type === ConfigVariableType.JSON
+      ) {
+        return this.secretEncryptionService.encryptVersioned(
+          JSON.stringify(convertedValue) as PlaintextString,
+        ) as unknown as KeyValuePairEntity['value'];
+      }
+
       return convertedValue as KeyValuePairEntity['value'];
     } catch (error) {
       throw new ConfigVariableException(
@@ -127,9 +154,7 @@ export class ConfigStorageService implements ConfigStorageInterface {
         return undefined;
       }
 
-      this.logger.debug(
-        `Fetching config for ${key as string} in database: ${result?.value}`,
-      );
+      this.logger.debug(`Fetching config for ${key as string} in database`);
 
       return await this.convertAndDecrypt(result.value, key);
     } catch (error) {

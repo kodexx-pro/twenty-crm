@@ -4,6 +4,7 @@ import { FieldActorSource } from 'twenty-shared/types';
 import { type ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { type ToolProviderContext } from 'src/engine/core-modules/tool-provider/interfaces/tool-provider-context.type';
 import { RoleToolProvider } from 'src/engine/core-modules/tool-provider/providers/role-tool.provider';
+import { type WorkspaceBranchToolService } from 'src/engine/core-modules/workspace-branch/tools/workspace-branch-tool.service';
 import { type ObjectPermissionService } from 'src/engine/metadata-modules/object-permission/object-permission.service';
 import {
   PermissionsException,
@@ -79,6 +80,7 @@ const buildProvider = (options?: { hasRolesPermission?: boolean }) => {
   const provider = new RoleToolProvider(
     roleToolWorkspaceService,
     permissionsService as unknown as PermissionsService,
+    { generateTools: () => ({}) } as unknown as WorkspaceBranchToolService,
   );
 
   return {

@@ -15,6 +15,7 @@ import { type ToolOutput } from 'src/engine/core-modules/tool/types/tool-output.
 import { PermissionsService } from 'src/engine/metadata-modules/permissions/permissions.service';
 import { RoleToolWorkspaceService } from 'src/engine/metadata-modules/role/tools/services/role-tool.workspace-service';
 import { getRoleIdsFromRolePermissionConfig } from 'src/engine/twenty-orm/utils/get-role-ids-from-role-permission-config.util';
+import { WorkspaceBranchToolService } from 'src/engine/core-modules/workspace-branch/tools/workspace-branch-tool.service';
 
 @Injectable()
 export class RoleToolProvider implements ToolProvider {
@@ -23,6 +24,7 @@ export class RoleToolProvider implements ToolProvider {
   constructor(
     private readonly roleToolWorkspaceService: RoleToolWorkspaceService,
     private readonly permissionsService: PermissionsService,
+    private readonly workspaceBranchToolService: WorkspaceBranchToolService,
   ) {}
 
   async isAvailable(context: ToolProviderContext): Promise<boolean> {
@@ -61,10 +63,13 @@ export class RoleToolProvider implements ToolProvider {
       context.roleId,
     ]);
 
-    return this.roleToolWorkspaceService.generateRoleTools({
-      workspaceId: context.workspaceId,
-      callerRoleIds: [...callerRoleIds],
-      callerUserWorkspaceId: context.userWorkspaceId,
-    });
+    return {
+      ...this.roleToolWorkspaceService.generateRoleTools({
+        workspaceId: context.workspaceId,
+        callerRoleIds: [...callerRoleIds],
+        callerUserWorkspaceId: context.userWorkspaceId,
+      }),
+      ...this.workspaceBranchToolService.generateTools(context),
+    };
   }
 }
